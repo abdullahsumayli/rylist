@@ -11,6 +11,7 @@
   /* ----- نصوص واجهة البطاقات (ثنائية) ----- */
   var T = {
     available: { ar: "متاح", en: "Available" },
+    reserved: { ar: "محجوز", en: "Reserved" },
     sold: { ar: "مباع", en: "Sold" },
     soldPct: { ar: "مباع", en: "Sold" },
     view: { ar: "شاهد التفاصيل", en: "View details" },
@@ -58,8 +59,9 @@
     var city = isAr() ? p.cityAr : p.cityEn;
     var district = isAr() ? p.districtAr : p.districtEn;
     var type = isAr() ? p.typeAr : p.typeEn;
-    var isSold = p.status === "sold";
-    var statusTxt = isSold ? t("sold") : t("available");
+    var stKey = (p.status === "sold" || p.status === "reserved") ? p.status : "available";
+    var statusTxt = t(stKey);
+    var statusCls = { sold: "badge--sold", reserved: "badge--reserved" }[p.status] || "";
     var inquiry = isAr()
       ? "مرحبًا، أرغب بتفاصيل مشروع «" + p.titleAr + "» (كود " + p.code + ")."
       : "Hello, I’d like details about “" + p.titleEn + "” (code " + p.code + ").";
@@ -68,7 +70,7 @@
       '<article class="project-card">' +
         '<div class="project-card__media">' +
           '<img loading="lazy" src="' + p.img + '" alt="' + esc(title) + '">' +
-          '<span class="badge ' + (isSold ? "badge--sold" : "") + '">' + statusTxt + '</span>' +
+          '<span class="badge ' + statusCls + '">' + statusTxt + '</span>' +
         '</div>' +
         '<div class="project-card__body">' +
           '<div class="project-card__loc">' +
