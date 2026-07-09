@@ -43,7 +43,7 @@
   function fmtMeta(p) {
     var parts = [];
     if (p.area) parts.push(p.area + " " + (isAr() ? T.area.ar : T.area.en));
-    if (p.bedsMax > 0) parts.push(p.bedsMin + "–" + p.bedsMax + " " + (isAr() ? T.beds.ar : T.beds.en));
+    if (p.bedsMax > 0) parts.push((p.bedsMin === p.bedsMax ? String(p.bedsMin) : p.bedsMin + "–" + p.bedsMax) + " " + (isAr() ? T.beds.ar : T.beds.en));
     return parts.join(" · ");
   }
 
