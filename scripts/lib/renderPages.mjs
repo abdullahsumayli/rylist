@@ -5,7 +5,12 @@ function localizeHtml(html, locale, dir, siteUrl, pageName){
   const root = parse(html, { comment:true });
   const htmlEl = root.querySelector("html"); htmlEl.setAttribute("lang", locale); htmlEl.setAttribute("dir", dir);
   if(locale !== "ar"){
-    root.querySelectorAll(`[data-${locale}]`).forEach(el=>{ el.set_content(el.getAttribute(`data-${locale}`)); });
+    root.querySelectorAll(`[data-${locale}]`).forEach(el=>{
+      const tag = (el.rawTagName || "").toLowerCase();
+      // <meta> carries its text in the `content` attribute, not as children
+      if(tag === "meta"){ el.setAttribute("content", el.getAttribute(`data-${locale}`)); }
+      else { el.set_content(el.getAttribute(`data-${locale}`)); }
+    });
     root.querySelectorAll(`[data-${locale}-ph]`).forEach(el=>{ el.setAttribute("placeholder", el.getAttribute(`data-${locale}-ph`)); });
   }
   // hreflang + canonical
