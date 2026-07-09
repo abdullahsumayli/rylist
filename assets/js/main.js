@@ -34,10 +34,10 @@
 
   function fmtPrice(min, max) {
     if (!min && !max) return t("priceOnRequest");
-    function n(x) { var m = x / 1e6; return m % 1 === 0 ? m.toFixed(0) : m.toFixed(1); }
-    return isAr()
-      ? n(min) + " – " + n(max) + " مليون ريال"
-      : "SAR " + n(min) + "M – " + n(max) + "M";
+    var lo = min || max, hi = max || min;
+    function f(x) { return Number(x).toLocaleString("en-US"); }
+    var range = lo === hi ? f(lo) : f(lo) + " – " + f(hi);
+    return isAr() ? range + " ريال" : "SAR " + range;
   }
 
   function fmtMeta(p) {
