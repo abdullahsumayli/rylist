@@ -68,10 +68,6 @@
         '<div class="sold__bar"><span class="sold__fill" style="width:' + p.sold + '%"></span></div>' +
       '</div>'
     ) : '';
-    var inquiry = isAr()
-      ? "مرحبًا، أرغب بتفاصيل مشروع «" + p.titleAr + "» (كود " + p.code + ")."
-      : "Hello, I’d like details about “" + p.titleEn + "” (code " + p.code + ").";
-
     return '' +
       '<article class="project-card">' +
         '<div class="project-card__media">' +
@@ -90,7 +86,7 @@
           '<div class="project-card__foot">' +
             '<div class="project-card__price"><b>' + fmtPrice(p.priceMin, p.priceMax) + '</b>' +
               '<span class="project-card__code">' + t("code") + " " + p.code + '</span></div>' +
-            '<a class="link-arrow" href="' + waLink(inquiry) + '" target="_blank" rel="noopener">' + t("view") +
+            '<a class="link-arrow" href="projects/' + p.code + '.html">' + t("view") +
               '<span aria-hidden="true">' + (isAr() ? "←" : "→") + '</span></a>' +
           '</div>' +
         '</div>' +
