@@ -12,7 +12,7 @@ async function main(){
   const c = await fetchContent();
   fs.rmSync(OUT, { recursive:true, force:true }); fs.mkdirSync(OUT, { recursive:true });
   // انسخ الأصول الثابتة
-  for(const p of ["assets","favicon.svg","robots.txt",".nojekyll"]) if(fs.existsSync(p)) fs.cpSync(p, path.join(OUT,p), { recursive:true });
+  for(const p of ["assets","admin","favicon.svg","robots.txt",".nojekyll"]) if(fs.existsSync(p)) fs.cpSync(p, path.join(OUT,p), { recursive:true });
   writeDataJs(OUT, c);
   renderPages(OUT, c, SITE);
   renderProjectPages(OUT, c, SITE);
