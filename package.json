@@ -1,0 +1,7 @@
+{
+  "name": "rylist-site",
+  "private": true,
+  "type": "module",
+  "scripts": { "build": "node scripts/build.mjs" },
+  "devDependencies": { "@supabase/supabase-js": "^2.45.0", "node-html-parser": "^6.1.13" }
+}
