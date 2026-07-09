@@ -257,35 +257,6 @@
     });
   }
 
-  /* ----- نموذج «سجّل اهتمامك» → واتساب / بريد ----- */
-  function buildMessage(form) {
-    var d = new FormData(form);
-    var L = isAr()
-      ? { name: "الاسم", phone: "الجوال", interest: "الاهتمام", msg: "الرسالة", head: "طلب اهتمام — RYLIST" }
-      : { name: "Name", phone: "Phone", interest: "Interest", msg: "Message", head: "Interest request — RYLIST" };
-    return L.head + "\n" +
-      L.name + ": " + (d.get("name") || "-") + "\n" +
-      L.phone + ": " + (d.get("phone") || "-") + "\n" +
-      L.interest + ": " + (d.get("interest") || "-") + "\n" +
-      L.msg + ": " + (d.get("message") || "-");
-  }
-  function initForm() {
-    var form = document.getElementById("interestForm");
-    if (!form) return;
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      if (!form.reportValidity()) return;
-      window.open(waLink(buildMessage(form)), "_blank", "noopener");
-    });
-    var emailBtn = document.getElementById("emailBtn");
-    if (emailBtn) emailBtn.addEventListener("click", function () {
-      if (!form.reportValidity()) return;
-      var subject = isAr() ? "طلب اهتمام — RYLIST" : "Interest request — RYLIST";
-      location.href = "mailto:" + CONTACT.email + "?subject=" + encodeURIComponent(subject) +
-        "&body=" + encodeURIComponent(buildMessage(form));
-    });
-  }
-
   /* ----- روابط التواصل العامة (واتساب/بريد في الهيدر/الفوتر) ----- */
   function wireContactLinks() {
     document.querySelectorAll("[data-wa]").forEach(function (a) {
@@ -332,7 +303,6 @@
     renderStats();
     initMenu();
     initActiveNav();
-    initForm();
     initHomeSearch();
     wireContactLinks();
     setYear();

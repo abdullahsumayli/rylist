@@ -387,6 +387,10 @@ html[lang="ar"] .footer-col h4 { font-family: var(--font-ar-body); letter-spacin
 .footer-col ul { display: flex; flex-direction: column; gap: var(--sp-3); }
 .footer-col a { color: rgba(246,243,235,0.72); font-size: 0.9rem; transition: color .2s; }
 .footer-col a:hover { color: var(--bone); }
+.footer-social { margin-top: var(--sp-4); font-size: 0.85rem; color: rgba(246,243,235,0.6); }
+.footer-social a { color: rgba(246,243,235,0.72); }
+.footer-social a:hover { color: var(--bone); }
+.wa-float { position: fixed; inset-block-end: 20px; inset-inline-end: 20px; width: 52px; height: 52px; border-radius: 50%; background: #25D366; display: grid; place-items: center; z-index: 50; box-shadow: 0 4px 14px rgba(0,0,0,0.25); }
 .site-footer__bottom {
   border-top: 1px solid rgba(246,243,235,0.14); padding-block: var(--sp-6);
   display: flex; justify-content: space-between; gap: var(--sp-4); flex-wrap: wrap;
