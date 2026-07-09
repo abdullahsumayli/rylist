@@ -34,7 +34,13 @@ async function invokeAI(payload) {
     body: payload,
     headers: session ? { Authorization: `Bearer ${session.access_token}` } : {},
   });
-  if (error) throw new Error(error.message);
+  if (error) {
+    // supabase-js wraps a non-2xx response as FunctionsHttpError; the real
+    // message is in the Response body on error.context, not error.message.
+    let msg = error.message;
+    try { const body = await error.context?.json?.(); if (body?.error) msg = body.error; } catch { /* keep generic */ }
+    throw new Error(msg);
+  }
   if (data?.error) throw new Error(data.error);
   return data;
 }
