@@ -1,5 +1,6 @@
 import { sb } from "./db.js";
 import { LOCALES } from "./config.js";
+import { renderAIBar } from "./ai.js";
 
 // taxonomy cache (cities / property types) for select fields
 let TAX = null;
@@ -16,14 +17,16 @@ const ENUM_AR = {
 const tabLabel = (code) => (code === "ar" ? "ع" : code === "en" ? "EN" : "中文");
 
 // per-locale editor with language tabs (ع / EN / 中文)
+// returns { el, current(), setText(loc,text) } so ✨ (ai.js) can read/write values
 function localeTabs(field, value, onLocale) {
   const wrap = document.createElement("div");
   const tabs = document.createElement("div"); tabs.className = "langtabs";
   const pane = document.createElement("div");
   let cur = LOCALES[0].code;
+  let ta = null;
   const draw = () => {
     pane.innerHTML = "";
-    const ta = field.t === "i18n-rich" ? document.createElement("textarea") : document.createElement("input");
+    ta = field.t === "i18n-rich" ? document.createElement("textarea") : document.createElement("input");
     if (field.t === "i18n-rich") ta.rows = 6;
     ta.value = (value && value[cur]) || "";
     ta.oninput = () => onLocale(cur, ta.value);
@@ -35,7 +38,12 @@ function localeTabs(field, value, onLocale) {
     b.onclick = () => { cur = L.code; [...tabs.children].forEach((c) => c.classList.remove("on")); b.classList.add("on"); draw(); };
     tabs.appendChild(b);
   });
-  wrap.append(tabs, pane); draw(); return wrap;
+  wrap.append(tabs, pane); draw();
+  return {
+    el: wrap,
+    current: () => cur,
+    setText: (loc, text) => { onLocale(loc, text); if (loc === cur && ta) ta.value = text; },
+  };
 }
 
 export async function uploadImage(prefix, file) {
@@ -66,12 +74,14 @@ export async function renderForm(root, ent, row, onDone) {
     if (isI18n) {
       field.appendChild(label);
       const key = f.n.split(".")[1];
-      // AI mount point — Part B injects ✨ buttons here
+      draft.i18n[key] = draft.i18n[key] || {}; // linked object (so tab-switch keeps typed text on new rows)
+      const value = draft.i18n[key];
+      // AI mount point — filled by ai.js (Part B)
       const aibar = document.createElement("div"); aibar.className = "aibar"; aibar.id = "ai-" + key; aibar.dataset.field = f.n;
       field.appendChild(aibar);
-      field.appendChild(localeTabs(f, draft.i18n[key], (loc, val) => {
-        draft.i18n[key] = draft.i18n[key] || {}; draft.i18n[key][loc] = val;
-      }));
+      const tabs = localeTabs(f, value, (loc, val) => { value[loc] = val; });
+      field.appendChild(tabs.el);
+      renderAIBar(aibar, { field: f, ent, draft, tabs });
     } else if (f.t === "bool") {
       label.style.flexDirection = "row"; label.style.alignItems = "center"; label.style.gap = "8px";
       const input = document.createElement("input"); input.type = "checkbox"; input.checked = !!draft[f.n];
