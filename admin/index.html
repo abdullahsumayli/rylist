@@ -4,18 +4,26 @@
 <link rel="stylesheet" href="../assets/css/styles.css">
 <link rel="stylesheet" href="admin.css">
 </head><body>
-<div id="login" class="admin-login">
-  <form id="loginForm" class="admin-card">
-    <h1>لوحة تحكم RYLIST</h1>
-    <input id="email" type="email" placeholder="البريد" required>
-    <input id="password" type="password" placeholder="كلمة المرور" required>
-    <button type="submit">دخول</button>
-    <p id="loginErr" class="admin-err"></p>
-  </form>
-</div>
-<div id="app" class="admin-app" hidden>
-  <aside id="nav" class="admin-nav"></aside>
-  <main id="view" class="admin-view"></main>
+<div class="rl" dir="rtl" lang="ar">
+
+  <div id="login" class="admin-login">
+    <form id="loginForm" class="admin-card">
+      <div class="brand"><div class="mark">R</div><div><div class="wm">RYLIST</div><div class="sub">لوحة التحكم</div></div></div>
+      <input id="email" type="email" placeholder="البريد" required autocomplete="username">
+      <input id="password" type="password" placeholder="كلمة المرور" required autocomplete="current-password">
+      <button class="btn btn-primary" type="submit">دخول</button>
+      <p id="loginErr" class="admin-err"></p>
+    </form>
+  </div>
+
+  <div id="app" class="shell admin-app" hidden>
+    <aside id="side" class="side"></aside>
+    <div class="main">
+      <div id="topbar" class="topbar"></div>
+      <div id="view" class="content"></div>
+    </div>
+  </div>
+
 </div>
 <script type="module" src="app.js"></script>
 </body></html>
