@@ -39,7 +39,7 @@ export function renderProjectPages(out, c, siteUrl){
         canonical:path(loc), hreflang, assets: loc==="ar"?"..":"../..", home: loc==="ar"?"/":`/${loc}/`,
         image:p.image_url||"", district:p.i18n?.district?.[loc]||"", typeLabel:tax("property_type",p.type_key,loc),
         cityLabel:tax("city",p.city_key,loc),
-        price: p.price_min? `${p.price_min.toLocaleString()} – ${(p.price_max||p.price_min).toLocaleString()} ${loc==="en"?"SAR":"ريال"}` : ({ar:"السعر عند الطلب",en:"Price on request",zh:"价格待询"}[loc]||"السعر عند الطلب"),
+        price: p.price_min? `${p.price_min.toLocaleString("en-US")} – ${(p.price_max||p.price_min).toLocaleString("en-US")} ${loc==="en"?"SAR":"ريال"}` : ({ar:"السعر عند الطلب",en:"Price on request",zh:"价格待询"}[loc]||"السعر عند الطلب"),
         description:p.i18n?.description?.[loc]||"", whatsapp:wa, cta:CTA[loc]||CTA.ar, brochure, details, gallery,
         statusLabel: ({available:{ar:"متاح",en:"Available",zh:"可售"},reserved:{ar:"محجوز",en:"Reserved",zh:"已预订"},sold:{ar:"مباع",en:"Sold",zh:"已售"},soon:{ar:"قريبًا",en:"Soon",zh:"即将推出"}}[p.status]||{})[loc] || "",
         statusClass: p.status==="sold"?"status-pill--sold":(p.status==="reserved"?"status-pill--reserved":(p.status==="soon"?"status-pill--soon":"")),
