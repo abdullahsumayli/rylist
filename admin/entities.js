@@ -3,7 +3,7 @@ export const ENTITIES = [
     {n:"code",t:"text",l:"الكود",req:true},
     {n:"city_key",t:"select",l:"المدينة",options:"taxonomy:city"},
     {n:"type_key",t:"select",l:"النوع",options:"taxonomy:property_type"},
-    {n:"status",t:"select",l:"الحالة",options:["available","sold"]},
+    {n:"status",t:"select",l:"الحالة",options:["available","reserved","sold"]},
     {n:"sold",t:"number",l:"نسبة البيع"},
     {n:"price_min",t:"number",l:"سعر من"},{n:"price_max",t:"number",l:"سعر إلى"},
     {n:"area",t:"text",l:"المساحة"},{n:"beds_min",t:"number",l:"غرف من"},{n:"beds_max",t:"number",l:"غرف إلى"},

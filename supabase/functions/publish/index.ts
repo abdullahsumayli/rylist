@@ -1,6 +1,10 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 Deno.serve(async (req) => {
-  const cors = { "Access-Control-Allow-Origin":"*", "Access-Control-Allow-Headers":"authorization, content-type" };
+  const cors = {
+    "Access-Control-Allow-Origin":"*",
+    "Access-Control-Allow-Methods":"POST, OPTIONS",
+    "Access-Control-Allow-Headers": req.headers.get("access-control-request-headers") ?? "authorization, x-client-info, apikey, content-type",
+  };
   if(req.method==="OPTIONS") return new Response("ok",{ headers:cors });
   const auth = req.headers.get("Authorization") || "";
   const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_ANON_KEY")!, { global:{ headers:{ Authorization:auth } } });

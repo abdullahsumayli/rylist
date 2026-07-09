@@ -1,4 +1,4 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from "./vendor/supabase.js";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js";
 export const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 export async function signIn(email, password){ return sb.auth.signInWithPassword({ email, password }); }

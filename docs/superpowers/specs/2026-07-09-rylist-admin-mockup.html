@@ -1,4 +1,5 @@
-/* ===== RYLIST admin — design tokens (silent luxury: ink · ivory · champagne) ===== */
+<style>
+  /* ===== RYLIST admin — design tokens (silent luxury: ink · ivory · champagne) ===== */
   :root{
     --bg:#F6F3EB; --surface:#FBF9F4; --surface-2:#EFEBE0;
     --text:#17140F; --text-2:#6B6152; --text-3:#8b8170;
@@ -213,19 +214,217 @@
   .savebar{grid-column:1/-1;display:flex;gap:10px;justify-content:flex-start;padding-top:6px;border-top:1px solid var(--line);margin-top:4px}
 
   @media (prefers-reduced-motion:reduce){.rl *{transition:none!important;animation:none!important}}
+</style>
 
-/* ===== login gate ===== */
-.admin-login{min-height:100vh;display:grid;place-items:center;padding:24px}
-.admin-login[hidden]{display:none}
-.admin-app[hidden]{display:none}
-.admin-card{display:flex;flex-direction:column;gap:12px;width:min(360px,92vw);
-  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);
-  padding:30px 26px;box-shadow:var(--shadow-lg)}
-.admin-card .brand{border-bottom:1px solid var(--line);margin-bottom:6px}
-.admin-card .brand .wm{color:var(--text)}
-.admin-card .brand .sub{color:var(--text-2)}
-.admin-card input{background:var(--bg);border:1px solid var(--line-2);border-radius:8px;
-  padding:11px 13px;font:inherit;font-size:14px;color:var(--text);outline:none}
-.admin-card input:focus{border-color:var(--accent)}
-.admin-card .btn-primary{justify-content:center;padding:11px;font-size:14.5px}
-.admin-err{color:var(--sold);font-size:13px;min-height:1em;text-align:center}
+<div class="rl" dir="rtl" lang="ar">
+<div class="shell">
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside class="side">
+    <div class="brand">
+      <div class="mark">R</div>
+      <div>
+        <div class="wm">RYLIST</div>
+        <div class="sub">لوحة التحكم</div>
+      </div>
+    </div>
+
+    <div class="navlbl">القسم</div>
+    <nav class="nav">
+      <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>لوحة رئيسية</a>
+      <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 4h16v4H4z"/><path d="M4 12h16v8H4z"/></svg>الطلبات <span class="badge">0</span></a>
+      <a href="#" class="active"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M10 21v-6h4v6"/></svg>العقارات</a>
+      <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h5"/></svg>الأخبار / المدونة</a>
+      <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="9" cy="8" r="3"/><path d="M4 20c0-3 2.5-5 5-5s5 2 5 5"/><circle cx="17" cy="9" r="2"/></svg>الشركاء</a>
+      <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg>الأرقام</a>
+      <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 4h16v16H4z"/><path d="M4 9h16"/></svg>الصفحات</a>
+
+    <div class="navlbl">الإعدادات</div>
+      <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>التواصل</a>
+      <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>السوشيال ميديا</a>
+    </nav>
+
+    <div class="foot">
+      <button class="publish"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>نشر الموقع</button>
+      <div class="whoami"><span class="av">ع</span><span>عبدالله السميلي · أدمن</span></div>
+    </div>
+  </aside>
+
+  <!-- ===================== MAIN ===================== -->
+  <div class="main">
+    <div class="topbar">
+      <div class="crumb">RYLIST · <b>العقارات</b></div>
+      <div class="search-lite">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+        بحث سريع…
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="mocknote">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+        نموذج تصميم (Mockup) — للعرض والاعتماد فقط · بيانات حقيقية من قاعدتك (٩ عقارات)
+      </div>
+
+      <div class="pagehead">
+        <div class="ttl">
+          <h1>العقارات</h1>
+          <p>قائمة عقارات مكتبك. تُعرض في الموقع العام، ويُبنى منها كل عقار صفحته الخاصة عند النشر.</p>
+        </div>
+        <div class="actions">
+          <button class="btn"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 15V3M8 7l4-4 4 4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>رفع من ملف</button>
+          <button class="btn"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6"/></svg>رفع بروشور</button>
+          <button class="btn btn-primary"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>إضافة عقار</button>
+        </div>
+      </div>
+
+      <div class="countline">إجمالي <b class="num">٩</b> عقارات · تظهر جميعها للعملاء في الموقع</div>
+
+      <!-- stat cards -->
+      <div class="stats">
+        <div class="stat total"><div class="lab">كل العقارات</div><div class="val num">٩</div></div>
+        <div class="stat avail"><div class="lab"><span class="dot"></span>متاح</div><div class="val num">٨</div></div>
+        <div class="stat res"><div class="lab"><span class="dot"></span>محجوز <span style="font-size:10px;color:var(--accent-deep);border:1px solid var(--accent);border-radius:5px;padding:0 5px;margin-inline-start:4px">جديد</span></div><div class="val num">٠</div></div>
+        <div class="stat sold"><div class="lab"><span class="dot"></span>مباع</div><div class="val num">١</div></div>
+      </div>
+
+      <!-- toolbar -->
+      <div class="toolbar">
+        <div class="searchbox">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+          <input id="q" placeholder="ابحث في العنوان أو الحي أو الكود…">
+        </div>
+        <div class="filters" id="filters">
+          <button class="chip on" data-f="all">الكل <span class="n num">٩</span></button>
+          <button class="chip" data-f="available">متاح <span class="n num">٨</span></button>
+          <button class="chip" data-f="reserved">محجوز <span class="n num">٠</span></button>
+          <button class="chip" data-f="sold">مباع <span class="n num">١</span></button>
+        </div>
+      </div>
+
+      <!-- property grid -->
+      <div class="grid" id="grid"></div>
+
+      <!-- ===== add/edit form — AI demo ===== -->
+      <div class="formwrap">
+        <div class="fh">
+          <h2>إضافة عقار</h2>
+          <span class="pill">✨ مدعوم بالذكاء — Claude Opus ٤٫٨</span>
+        </div>
+        <div class="fbody">
+          <div class="field"><label>الكود</label><input value="RY-1067"></div>
+          <div class="field"><label>المدينة</label><select><option>الرياض</option><option>جدة</option><option>الشرقية</option><option>مكة</option><option>المدينة</option></select></div>
+          <div class="field"><label>النوع</label><select><option>فيلا</option><option>شقة</option><option>تاون هاوس</option><option>أرض</option><option>على الخارطة</option></select></div>
+          <div class="field"><label>الحالة</label><select><option>متاح</option><option>محجوز — جديد</option><option>مباع</option></select></div>
+
+          <div class="field full">
+            <label>العنوان</label>
+            <div class="langtabs"><button class="on">ع</button><button>EN</button><button>中文</button></div>
+            <input placeholder="مثال: قمم الملقا">
+          </div>
+
+          <div class="field full">
+            <label>الوصف</label>
+            <div class="langtabs"><button class="on">ع</button><button>EN</button><button>中文</button></div>
+            <div class="aibar">
+              <button class="aibtn" data-ai="gen"><span>✨</span> توليد الوصف</button>
+              <button class="aibtn" data-ai="improve">تحسين</button>
+              <button class="aibtn" data-ai="translate">ترجمة ع→EN→中</button>
+              <button class="aibtn" data-ai="seo">عنوان + SEO</button>
+              <button class="aibtn" data-ai="ideas">أفكار</button>
+            </div>
+            <textarea id="desc" placeholder="اكتب وصف العقار، أو دع ✨ يكتبه لك من بيانات العقار أعلاه…"></textarea>
+            <div class="aihint" id="aihint">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+              يكتب الذكاء بلغة تسويقية مختصرة من الكود والمدينة والنوع والسعر — ويترجمها لكل اللغات المفعّلة.
+            </div>
+          </div>
+
+          <div class="savebar">
+            <button class="btn btn-primary"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5L20 7"/></svg>حفظ ورفع الصور</button>
+            <button class="btn">رجوع</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+(function(){
+  var AR="٠١٢٣٤٥٦٧٨٩";
+  function ar(n){return String(n).replace(/[0-9]/g,function(d){return AR[+d]});}
+  var CITY={riyadh:"الرياض",jeddah:"جدة",eastern:"الشرقية",madinah:"المدينة",makkah:"مكة"};
+  var TYPE={villa:"فيلا",apartment:"شقة",townhouse:"تاون هاوس",offplan:"على الخارطة",land:"أرض"};
+  var ST={available:{t:"متاح",c:"available"},reserved:{t:"محجوز",c:"reserved"},sold:{t:"مباع",c:"sold"}};
+  var P=[
+    {code:"RY-1042",city:"riyadh",type:"villa",status:"available",sold:62,pmin:2400000,pmax:3900000,area:"320–520",b1:4,b2:6,feat:true,title:"قمم الملقا",dist:"الملقا"},
+    {code:"RY-1043",city:"riyadh",type:"apartment",status:"available",sold:47,pmin:900000,pmax:1600000,area:"120–210",b1:2,b2:4,feat:true,title:"واجهة النرجس",dist:"النرجس"},
+    {code:"RY-1044",city:"riyadh",type:"townhouse",status:"available",sold:78,pmin:1800000,pmax:2600000,area:"240–300",b1:3,b2:5,feat:true,title:"أروقة حطين",dist:"حطين"},
+    {code:"RY-1051",city:"jeddah",type:"apartment",status:"available",sold:35,pmin:1100000,pmax:2400000,area:"140–260",b1:2,b2:4,feat:true,title:"رصيف أبحر",dist:"أبحر الشمالية"},
+    {code:"RY-1055",city:"eastern",type:"offplan",status:"available",sold:29,pmin:1300000,pmax:2800000,area:"160–300",b1:3,b2:5,feat:true,title:"شاطئ الشراع",dist:"الخبر — العقربية"},
+    {code:"RY-1066",city:"makkah",type:"offplan",status:"available",sold:66,pmin:1500000,pmax:3000000,area:"150–280",b1:3,b2:5,feat:true,title:"أفق مكة",dist:"العزيزية"},
+    {code:"RY-1060",city:"riyadh",type:"land",status:"available",sold:54,pmin:600000,pmax:1900000,area:"375–900",b1:0,b2:0,feat:false,title:"أراضي القيروان",dist:"القيروان"},
+    {code:"RY-1063",city:"madinah",type:"apartment",status:"available",sold:41,pmin:800000,pmax:1500000,area:"110–190",b1:2,b2:3,feat:false,title:"نُزُل المدينة",dist:"الرانوناء"},
+    {code:"RY-1039",city:"riyadh",type:"villa",status:"sold",sold:100,pmin:2100000,pmax:3200000,area:"300–460",b1:4,b2:6,feat:false,title:"مروج العارض",dist:"العارض"}
+  ];
+  function money(n){var m=n/1e6; var s=(Math.round(m*10)/10).toFixed(1).replace(/\.0$/,""); return ar(s);}
+  function card(p){
+    var s=ST[p.status];
+    var beds=p.b1?('<span class="tag">'+ar(p.b1)+'–'+ar(p.b2)+' غرف</span>'):'';
+    return '<article class="card" data-status="'+p.status+'" data-txt="'+(p.title+" "+p.dist+" "+p.code).toLowerCase()+'">'
+      +'<div class="ph"><div class="pat"></div><span class="code">'+p.code+'</span>'
+        +(p.feat?'<span class="star" title="مميّز">★</span>':'')
+        +'<span class="badge '+s.c+'"><span class="d"></span>'+s.t+'</span></div>'
+      +'<div class="bd">'
+        +'<h3>'+p.title+'</h3>'
+        +'<div class="loc"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>'+p.dist+' · '+CITY[p.city]+'</div>'
+        +'<div class="metar"><span class="tag">'+TYPE[p.type]+'</span>'+beds+'<span class="tag">'+ar(p.area)+' م²</span></div>'
+        +'<div class="price">'+money(p.pmin)+' – '+money(p.pmax)+' <span class="u">مليون ر.س</span></div>'
+        +'<div class="prog"><div class="rowb"><span>نسبة البيع</span><span class="num">'+ar(p.sold)+'٪</span></div>'
+          +'<div class="bar"><div class="fill" style="width:'+p.sold+'%"></div></div></div>'
+        +'<div class="cta"><button class="mini">تعديل</button><button class="mini ai" title="مساعد ذكي">✨</button><button class="mini">حذف</button></div>'
+      +'</div></article>';
+  }
+  var grid=document.getElementById("grid");
+  grid.innerHTML=P.map(card).join("");
+
+  // filters + search
+  var flt="all",q="";
+  function apply(){
+    var cards=grid.children;
+    for(var i=0;i<cards.length;i++){var c=cards[i];
+      var okF=flt==="all"||c.getAttribute("data-status")===flt;
+      var okQ=!q||c.getAttribute("data-txt").indexOf(q)>-1;
+      c.style.display=(okF&&okQ)?"":"none";
+    }
+  }
+  document.getElementById("filters").addEventListener("click",function(e){
+    var b=e.target.closest(".chip"); if(!b)return;
+    [].forEach.call(this.children,function(x){x.classList.remove("on")});
+    b.classList.add("on"); flt=b.getAttribute("data-f"); apply();
+  });
+  document.getElementById("q").addEventListener("input",function(e){q=e.target.value.trim().toLowerCase();apply();});
+
+  // language tabs
+  [].forEach.call(document.querySelectorAll(".langtabs"),function(g){
+    g.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;
+      [].forEach.call(g.children,function(x){x.classList.remove("on")}); b.classList.add("on");});
+  });
+
+  // AI demo (fills textarea to show the concept)
+  var SAMPLE="مشروع سكني راقٍ في حي الملقا شمال الرياض، يقدّم فللاً عصرية بمساحات ٣٢٠–٥٢٠م² و٤–٦ غرف. تصاميم مفتوحة، تشطيبات فاخرة، وقربٌ من المدارس والخدمات. أسعار من ٢٫٤ حتى ٣٫٩ مليون ريال. فرصة استثمار وسكن في أحد أرقى أحياء العاصمة.";
+  document.querySelector(".aibar").addEventListener("click",function(e){
+    var b=e.target.closest(".aibtn"); if(!b)return;
+    var ta=document.getElementById("desc"), hint=document.getElementById("aihint");
+    b.classList.add("busy"); hint.textContent="✨ يكتب الذكاء…";
+    var full=SAMPLE, i=0; ta.value="";
+    var timer=setInterval(function(){ ta.value=full.slice(0,i+=3);
+      if(i>=full.length){clearInterval(timer);b.classList.remove("busy");
+        hint.textContent="✨ اقتراح جاهز — عدّله كما تشاء، أو اطلب «ترجمة» لباقي اللغات.";}
+    },14);
+  });
+})();
+</script>

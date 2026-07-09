@@ -304,6 +304,11 @@ html[lang="ar"] .hero .display { line-height: 1.35; }
 }
 html[lang="ar"] .badge { font-family: var(--font-ar-body); letter-spacing: 0; text-transform: none; font-size: 0.72rem; }
 .badge--sold { background: var(--gold-deep); }
+.badge--reserved { background: var(--warning); }
+/* status pill for project detail pages (static, not absolutely positioned) */
+.status-pill { display: inline-block; background: var(--ink); color: var(--bone); font-size: 0.75rem; letter-spacing: 0.02em; padding: 0.3em 0.85em; border-radius: var(--radius); }
+.status-pill--sold { background: var(--gold-deep); }
+.status-pill--reserved { background: var(--warning); }
 .project-card__body { padding: clamp(1.1rem, 2vw, 1.5rem); display: flex; flex-direction: column; gap: var(--sp-3); flex: 1; }
 .project-card__loc { font-size: 0.8rem; color: var(--text-mid); display: flex; align-items: center; gap: 0.4rem; }
 .project-card__title { font-size: 1.35rem; }
