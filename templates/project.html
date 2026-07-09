@@ -5,13 +5,16 @@
 <link rel="canonical" href="{{canonical}}">{{hreflang}}
 <link rel="stylesheet" href="{{assets}}/assets/css/styles.css">
 </head><body>
-<main class="container">
-  <a href="{{home}}">RYLIST</a>
-  <h1>{{title}}</h1>
-  <p><span class="status-pill {{statusClass}}">{{statusLabel}}</span></p>
-  <img src="{{image}}" alt="{{title}}" style="max-width:100%">
-  <p>{{district}} · {{typeLabel}} · {{cityLabel}}</p>
-  <p>{{price}}</p>
-  <div>{{description}}</div>
-  <a href="{{whatsapp}}" target="_blank" rel="noopener">{{cta}}</a>
+<main class="container pdetail">
+  <a class="pdetail__back" href="{{home}}">← RYLIST</a>
+  <figure class="pdetail__hero"><img src="{{image}}" alt="{{title}}"></figure>
+  <header class="pdetail__head">
+    <h1>{{title}}</h1>
+    <p><span class="status-pill {{statusClass}}">{{statusLabel}}</span></p>
+    <p class="pdetail__loc">{{district}} · {{typeLabel}} · {{cityLabel}}</p>
+    <p class="pdetail__price">{{price}}</p>
+  </header>
+  <div class="pdetail__desc">{{description}}</div>
+  {{gallery}}
+  <div class="btn-row"><a class="btn btn--primary" href="{{whatsapp}}" target="_blank" rel="noopener">{{cta}}</a></div>
 </main></body></html>

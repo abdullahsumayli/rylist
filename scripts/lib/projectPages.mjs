@@ -12,13 +12,21 @@ export function renderProjectPages(out, c, siteUrl){
       const path = (l)=> `${base}${l==="ar"?"":"/"+l}/projects/${p.code}.html`;
       const hreflang = ["ar","en","zh"].map(l=>`\n<link rel="alternate" hreflang="${l}" href="${path(l)}">`).join("");
       const wa = c.contact?.whatsapp ? `https://wa.me/${c.contact.whatsapp}?text=${encodeURIComponent(`${t} (${p.code})`)}` : "#";
+      const galTitle = {ar:"معرض المشروع",en:"Project gallery",zh:"项目图库"}[loc]||"معرض المشروع";
+      const gimgs = Array.isArray(p.gallery)?p.gallery:[];
+      const gallery = gimgs.length ? (
+        `<section class="pgallery"><h2>${galTitle}</h2><div class="pgallery__grid">`+
+        gimgs.map((u,i)=>`<a class="pgallery__cell" href="#g-${p.code}-${i}"><img loading="lazy" src="${u}" alt="${t} ${i+1}"></a>`).join("")+
+        `</div>`+
+        gimgs.map((u,i)=>`<div class="pgallery__lb" id="g-${p.code}-${i}"><a class="pgallery__bg" href="#"></a><img src="${u}" alt=""><a class="pgallery__x" href="#" aria-label="إغلاق">×</a></div>`).join("")+
+        `</section>`) : "";
       const html = fill(tmpl, {
         lang:loc, dir:L.dir, title:t, desc:(p.i18n?.description?.[loc]||"").slice(0,150),
-        canonical:path(loc), hreflang, assets: loc==="ar"?".":"..", home: loc==="ar"?"/":`/${loc}/`,
+        canonical:path(loc), hreflang, assets: loc==="ar"?"..":"../..", home: loc==="ar"?"/":`/${loc}/`,
         image:p.image_url||"", district:p.i18n?.district?.[loc]||"", typeLabel:tax("property_type",p.type_key,loc),
         cityLabel:tax("city",p.city_key,loc),
-        price: p.price_min? `${p.price_min.toLocaleString()} – ${(p.price_max||p.price_min).toLocaleString()} ${loc==="en"?"SAR":"ريال"}`:"",
-        description:p.i18n?.description?.[loc]||"", whatsapp:wa, cta:CTA[loc]||CTA.ar,
+        price: p.price_min? `${p.price_min.toLocaleString()} – ${(p.price_max||p.price_min).toLocaleString()} ${loc==="en"?"SAR":"ريال"}` : ({ar:"السعر عند الطلب",en:"Price on request",zh:"价格待询"}[loc]||"السعر عند الطلب"),
+        description:p.i18n?.description?.[loc]||"", whatsapp:wa, cta:CTA[loc]||CTA.ar, gallery,
         statusLabel: ({available:{ar:"متاح",en:"Available",zh:"可售"},reserved:{ar:"محجوز",en:"Reserved",zh:"已预订"},sold:{ar:"مباع",en:"Sold",zh:"已售"},soon:{ar:"قريبًا",en:"Soon",zh:"即将推出"}}[p.status]||{})[loc] || "",
         statusClass: p.status==="sold"?"status-pill--sold":(p.status==="reserved"?"status-pill--reserved":(p.status==="soon"?"status-pill--soon":"")),
       });
