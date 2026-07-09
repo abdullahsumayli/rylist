@@ -13,17 +13,18 @@
 <script>(function(){try{var l=localStorage.getItem('rylist-lang');if(l==='en'){document.documentElement.lang='en';document.documentElement.dir='ltr';}}catch(e){}})();</script>
 </head>
 <body>
-<a class="skip-link" href="#main" data-en="Skip to content">تخطَّ إلى المحتوى</a>
+<a class="skip-link" href="#main" data-en="Skip to content" data-zh="">تخطَّ إلى المحتوى</a>
 
 <div class="topbar">
   <div class="container topbar__inner">
     <div class="topbar__group">
-      <a data-wa target="_blank" rel="noopener" data-en="WhatsApp">واتساب</a>
+      <a data-wa target="_blank" rel="noopener" data-en="WhatsApp" data-zh="">واتساب</a>
       <a data-email data-email-text href="#">hello@rylist.sa</a>
     </div>
     <div class="topbar__group">
-      <span class="topbar__group--muted" data-en="Riyadh · Saudi Arabia">الرياض · السعودية</span>
-      <button class="lang-toggle" data-lang-toggle aria-label="Switch to English">EN</button>
+      <span class="topbar__group--muted" data-en="Riyadh · Saudi Arabia" data-zh="">الرياض · السعودية</span>
+      <a class="lang-toggle" data-lang-link="en" aria-label="Switch to English">EN</a>
+      <a class="lang-toggle" data-lang-link="ar" aria-label="التبديل إلى العربية">ع</a>
     </div>
   </div>
 </div>
@@ -32,17 +33,17 @@
   <div class="container site-header__inner">
     <a class="logo" href="index.html" aria-label="RYLIST">
       <svg class="mark" viewBox="0 0 200 200" aria-hidden="true"><path d="M40 150 H160" stroke="currentColor" stroke-width="5"/><path d="M55 150 L100 55 L145 150" stroke="currentColor" stroke-width="9" fill="none" stroke-linecap="square"/><circle cx="100" cy="55" r="13" fill="#A38A58"/></svg>
-      <span class="logo__text"><span class="logo__name">RYLIST</span><span class="logo__sub" data-en="REAL ESTATE">العقارية</span></span>
+      <span class="logo__text"><span class="logo__name">RYLIST</span><span class="logo__sub" data-en="REAL ESTATE" data-zh="">العقارية</span></span>
     </a>
     <button class="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav"><span></span></button>
     <nav class="nav" id="nav" aria-label="Primary">
-      <a href="index.html" data-en="Home">الرئيسية</a>
-      <a href="projects.html" data-en="Projects">المشاريع</a>
-      <a href="services.html" data-en="Services">الخدمات</a>
-      <a href="about.html" data-en="About">من نحن</a>
-      <a href="news.html" data-en="News">الأخبار</a>
-      <a href="contact.html" data-en="Contact">تواصل</a>
-      <a class="btn btn--primary nav__cta" href="contact.html" data-en="Register interest">سجّل اهتمامك</a>
+      <a href="index.html" data-en="Home" data-zh="">الرئيسية</a>
+      <a href="projects.html" data-en="Projects" data-zh="">المشاريع</a>
+      <a href="services.html" data-en="Services" data-zh="">الخدمات</a>
+      <a href="about.html" data-en="About" data-zh="">من نحن</a>
+      <a href="news.html" data-en="News" data-zh="">الأخبار</a>
+      <a href="contact.html" data-en="Contact" data-zh="">تواصل</a>
+      <a class="btn btn--primary nav__cta" href="contact.html" data-en="Register interest" data-zh="">سجّل اهتمامك</a>
     </nav>
   </div>
 </header>
@@ -52,21 +53,21 @@
 
   <section class="page-banner has-summit">
     <div class="container page-banner__inner">
-      <span class="eyebrow" data-en="About us">من نحن</span>
-      <h1 class="display" data-en="A house of measured marketing.">بيتٌ للتسويق المقاس.</h1>
-      <p class="lead" data-en="RYLIST is a real estate marketing company. We start from the market as it is, and answer to sales.">RYLIST شركة تسويق عقاري. نبدأ من السوق كما هو، ونُحاسَب على المبيعات.</p>
+      <span class="eyebrow" data-en="About us" data-zh="">من نحن</span>
+      <h1 class="display" data-en="A house of measured marketing." data-zh="">بيتٌ للتسويق المقاس.</h1>
+      <p class="lead" data-en="RYLIST is a real estate marketing company. We start from the market as it is, and answer to sales." data-zh="">RYLIST شركة تسويق عقاري. نبدأ من السوق كما هو، ونُحاسَب على المبيعات.</p>
     </div>
   </section>
 
   <section class="section">
     <div class="container two-col">
       <div>
-        <span class="eyebrow" data-en="Our story">قصّتنا</span>
-        <h2 data-en="Marketing that sells, not marketing that moves.">تسويق يبيع، لا تسويق يتحرّك.</h2>
+        <span class="eyebrow" data-en="Our story" data-zh="">قصّتنا</span>
+        <h2 data-en="Marketing that sells, not marketing that moves." data-zh="">تسويق يبيع، لا تسويق يتحرّك.</h2>
       </div>
       <div class="stack">
-        <p data-en="Where much of the category sells activity — campaigns, impressions, motion — RYLIST sells outcomes. We promote developers’ projects with a wide, qualified client base and a plan built before the spend.">حيث تبيع كثير من الجهات النشاط — حملات، انطباعات، حركة — تبيع RYLIST النتائج. نُروّج مشاريع المطوّرين عبر قاعدة عملاء واسعة ومؤهّلة، وبخطة تُبنى قبل الإنفاق.</p>
-        <p data-en="The work is direct: diagnose the market, position and price the project, launch, then measure every week against sales. What doesn’t work is cut.">العمل مباشر: نشخّص السوق، نموضع المشروع ونسعّره، نُطلق، ثم نقيس كل أسبوع على المبيعات. وما لا ينفع يُوقف.</p>
+        <p data-en="Where much of the category sells activity — campaigns, impressions, motion — RYLIST sells outcomes. We promote developers’ projects with a wide, qualified client base and a plan built before the spend." data-zh="">حيث تبيع كثير من الجهات النشاط — حملات، انطباعات، حركة — تبيع RYLIST النتائج. نُروّج مشاريع المطوّرين عبر قاعدة عملاء واسعة ومؤهّلة، وبخطة تُبنى قبل الإنفاق.</p>
+        <p data-en="The work is direct: diagnose the market, position and price the project, launch, then measure every week against sales. What doesn’t work is cut." data-zh="">العمل مباشر: نشخّص السوق، نموضع المشروع ونسعّره، نُطلق، ثم نقيس كل أسبوع على المبيعات. وما لا ينفع يُوقف.</p>
       </div>
     </div>
   </section>
@@ -74,12 +75,12 @@
   <section class="section section--bg">
     <div class="container two-col">
       <div>
-        <div class="eyebrow" data-en="Mission">المهمّة</div>
-        <p class="lead" data-en="Turn marketing activity with no impact into measured growth — results before everything else.">تحويل النشاط التسويقي بلا أثر إلى نموٍّ مقاس — النتائج قبل كل شيء.</p>
+        <div class="eyebrow" data-en="Mission" data-zh="">المهمّة</div>
+        <p class="lead" data-en="Turn marketing activity with no impact into measured growth — results before everything else." data-zh="">تحويل النشاط التسويقي بلا أثر إلى نموٍّ مقاس — النتائج قبل كل شيء.</p>
       </div>
       <div>
-        <div class="eyebrow" data-en="Vision">الرؤية</div>
-        <p class="lead" data-en="To become the reference for real estate marketing in Saudi Arabia — the one serious projects turn to before they launch.">أن نكون المرجع في التسويق العقاري بالسعودية — من تلجأ إليه المشاريع الجادّة قبل أن تُطلق.</p>
+        <div class="eyebrow" data-en="Vision" data-zh="">الرؤية</div>
+        <p class="lead" data-en="To become the reference for real estate marketing in Saudi Arabia — the one serious projects turn to before they launch." data-zh="">أن نكون المرجع في التسويق العقاري بالسعودية — من تلجأ إليه المشاريع الجادّة قبل أن تُطلق.</p>
       </div>
     </div>
   </section>
@@ -87,34 +88,34 @@
   <section class="section">
     <div class="container">
       <div class="section-head">
-        <span class="eyebrow" data-en="How we work">منهجية العمل</span>
-        <h2 data-en="Four steps, in order.">أربع خطوات، بالترتيب.</h2>
+        <span class="eyebrow" data-en="How we work" data-zh="">منهجية العمل</span>
+        <h2 data-en="Four steps, in order." data-zh="">أربع خطوات، بالترتيب.</h2>
       </div>
       <div class="steps">
-        <div class="step"><span class="step__n">01</span><div><h3 data-en="Diagnose the market">تشخيص السوق</h3><p data-en="Demand, pricing, and absorption — read before any recommendation.">الطلب والتسعير والامتصاص — تُقرأ قبل أي توصية.</p></div></div>
-        <div class="step"><span class="step__n">02</span><div><h3 data-en="Position and price">التموضع والتسعير</h3><p data-en="Place the project where demand is, at a price the market rewards.">نضع المشروع حيث الطلب، بسعرٍ يكافئه السوق.</p></div></div>
-        <div class="step"><span class="step__n">03</span><div><h3 data-en="Launch and promote">الإطلاق والترويج</h3><p data-en="The right channels and a message that sells.">القنوات الصحيحة ورسالة تبيع.</p></div></div>
-        <div class="step"><span class="step__n">04</span><div><h3 data-en="Measure and adjust">القياس والتعديل</h3><p data-en="Measured weekly against sales.">تُقاس أسبوعيًا على المبيعات.</p></div></div>
+        <div class="step"><span class="step__n">01</span><div><h3 data-en="Diagnose the market" data-zh="">تشخيص السوق</h3><p data-en="Demand, pricing, and absorption — read before any recommendation." data-zh="">الطلب والتسعير والامتصاص — تُقرأ قبل أي توصية.</p></div></div>
+        <div class="step"><span class="step__n">02</span><div><h3 data-en="Position and price" data-zh="">التموضع والتسعير</h3><p data-en="Place the project where demand is, at a price the market rewards." data-zh="">نضع المشروع حيث الطلب، بسعرٍ يكافئه السوق.</p></div></div>
+        <div class="step"><span class="step__n">03</span><div><h3 data-en="Launch and promote" data-zh="">الإطلاق والترويج</h3><p data-en="The right channels and a message that sells." data-zh="">القنوات الصحيحة ورسالة تبيع.</p></div></div>
+        <div class="step"><span class="step__n">04</span><div><h3 data-en="Measure and adjust" data-zh="">القياس والتعديل</h3><p data-en="Measured weekly against sales." data-zh="">تُقاس أسبوعيًا على المبيعات.</p></div></div>
       </div>
     </div>
   </section>
 
   <section class="section section--bg">
     <div class="container">
-      <div class="section-head"><span class="eyebrow" data-en="Core values">قيمنا</span><h2 data-en="What we hold to.">ما نلتزم به.</h2></div>
+      <div class="section-head"><span class="eyebrow" data-en="Core values" data-zh="">قيمنا</span><h2 data-en="What we hold to." data-zh="">ما نلتزم به.</h2></div>
       <div class="values">
-        <div class="value"><span class="num">01</span><div><h3 data-en="Results over activity">النتائج قبل النشاط</h3><p data-en="Sales are the scoreboard.">المبيعات هي المقياس.</p></div></div>
-        <div class="value"><span class="num">02</span><div><h3 data-en="Honesty, without flattery">صدقٌ بلا مجاملة</h3><p data-en="We tell you before you spend.">نصارحك قبل أن تنفق.</p></div></div>
-        <div class="value"><span class="num">03</span><div><h3 data-en="Depth before speed">العمق قبل السرعة</h3><p data-en="A plan, not a rush.">خطة، لا استعجال.</p></div></div>
-        <div class="value"><span class="num">04</span><div><h3 data-en="Long-term partnership">شراكة طويلة الأمد</h3><p data-en="We stay past the launch.">نبقى بعد الإطلاق.</p></div></div>
-        <div class="value"><span class="num">05</span><div><h3 data-en="Institutional professionalism">مِهنيّة مؤسسية</h3><p data-en="Composed, consistent, accountable.">رصانة واتساق ومساءلة.</p></div></div>
+        <div class="value"><span class="num">01</span><div><h3 data-en="Results over activity" data-zh="">النتائج قبل النشاط</h3><p data-en="Sales are the scoreboard." data-zh="">المبيعات هي المقياس.</p></div></div>
+        <div class="value"><span class="num">02</span><div><h3 data-en="Honesty, without flattery" data-zh="">صدقٌ بلا مجاملة</h3><p data-en="We tell you before you spend." data-zh="">نصارحك قبل أن تنفق.</p></div></div>
+        <div class="value"><span class="num">03</span><div><h3 data-en="Depth before speed" data-zh="">العمق قبل السرعة</h3><p data-en="A plan, not a rush." data-zh="">خطة، لا استعجال.</p></div></div>
+        <div class="value"><span class="num">04</span><div><h3 data-en="Long-term partnership" data-zh="">شراكة طويلة الأمد</h3><p data-en="We stay past the launch." data-zh="">نبقى بعد الإطلاق.</p></div></div>
+        <div class="value"><span class="num">05</span><div><h3 data-en="Institutional professionalism" data-zh="">مِهنيّة مؤسسية</h3><p data-en="Composed, consistent, accountable." data-zh="">رصانة واتساق ومساءلة.</p></div></div>
       </div>
     </div>
   </section>
 
   <section class="section section--ink has-summit">
     <div class="container">
-      <div class="section-head center"><span class="eyebrow" data-en="By the numbers">بالأرقام</span><h2 data-en="Results, measured.">النتائج، بالقياس.</h2></div>
+      <div class="section-head center"><span class="eyebrow" data-en="By the numbers" data-zh="">بالأرقام</span><h2 data-en="Results, measured." data-zh="">النتائج، بالقياس.</h2></div>
       <div id="statsGrid" class="stats"></div>
     </div>
   </section>
@@ -123,7 +124,7 @@
     <div class="container">
       <div class="statement">
         <div class="gold-rule"></div>
-        <p class="q" data-en="“Marketing without measurement is an expense, not an investment.”">«التسويق دون قياسٍ إنفاقٌ لا استثمار.»</p>
+        <p class="q" data-en="“Marketing without measurement is an expense, not an investment.”" data-zh="">«التسويق دون قياسٍ إنفاقٌ لا استثمار.»</p>
       </div>
     </div>
   </section>
@@ -131,8 +132,8 @@
   <section class="section section--ink has-summit cta-band">
     <div class="container">
       <div class="gold-rule gold-rule--center"></div>
-      <h2 class="h1" data-en="Let’s read your project’s market.">لنقرأ سوق مشروعك.</h2>
-      <div class="btn-row" style="justify-content:center"><a class="btn btn--primary" href="contact.html" data-en="Register interest">سجّل اهتمامك</a></div>
+      <h2 class="h1" data-en="Let’s read your project’s market." data-zh="">لنقرأ سوق مشروعك.</h2>
+      <div class="btn-row" style="justify-content:center"><a class="btn btn--primary" href="contact.html" data-en="Register interest" data-zh="">سجّل اهتمامك</a></div>
     </div>
   </section>
 
@@ -144,32 +145,32 @@
       <div>
         <a class="logo" href="index.html" aria-label="RYLIST">
           <svg class="mark" viewBox="0 0 200 200" aria-hidden="true"><path d="M40 150 H160" stroke="currentColor" stroke-width="5"/><path d="M55 150 L100 55 L145 150" stroke="currentColor" stroke-width="9" fill="none" stroke-linecap="square"/><circle cx="100" cy="55" r="13" fill="#A38A58"/></svg>
-          <span class="logo__text"><span class="logo__name">RYLIST</span><span class="logo__sub" data-en="REAL ESTATE">العقارية</span></span>
+          <span class="logo__text"><span class="logo__name">RYLIST</span><span class="logo__sub" data-en="REAL ESTATE" data-zh="">العقارية</span></span>
         </a>
-        <p class="site-footer__tag" data-en="Modern real estate marketing — we promote developers’ projects with a wide client base and a plan measured before the spend.">التسويق العقاري الحديث — نُروّج مشاريع المطوّرين عبر قاعدة عملاء واسعة وخطة تُقاس قبل الإنفاق.</p>
+        <p class="site-footer__tag" data-en="Modern real estate marketing — we promote developers’ projects with a wide client base and a plan measured before the spend." data-zh="">التسويق العقاري الحديث — نُروّج مشاريع المطوّرين عبر قاعدة عملاء واسعة وخطة تُقاس قبل الإنفاق.</p>
       </div>
       <div class="footer-col">
-        <h4 data-en="Explore">تصفّح</h4>
+        <h4 data-en="Explore" data-zh="">تصفّح</h4>
         <ul>
-          <li><a href="projects.html" data-en="Projects">المشاريع</a></li>
-          <li><a href="services.html" data-en="Services">الخدمات</a></li>
-          <li><a href="about.html" data-en="About">من نحن</a></li>
-          <li><a href="news.html" data-en="News">الأخبار</a></li>
+          <li><a href="projects.html" data-en="Projects" data-zh="">المشاريع</a></li>
+          <li><a href="services.html" data-en="Services" data-zh="">الخدمات</a></li>
+          <li><a href="about.html" data-en="About" data-zh="">من نحن</a></li>
+          <li><a href="news.html" data-en="News" data-zh="">الأخبار</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <h4 data-en="Contact">تواصل</h4>
+        <h4 data-en="Contact" data-zh="">تواصل</h4>
         <ul>
-          <li><a data-wa target="_blank" rel="noopener" data-en="WhatsApp">واتساب</a></li>
+          <li><a data-wa target="_blank" rel="noopener" data-en="WhatsApp" data-zh="">واتساب</a></li>
           <li><a data-email data-email-text href="#">hello@rylist.sa</a></li>
           <li><a data-phone data-phone-text href="#">+966 11 000 0000</a></li>
-          <li><span data-en="Riyadh, Saudi Arabia">الرياض، السعودية</span></li>
+          <li><span data-en="Riyadh, Saudi Arabia" data-zh="">الرياض، السعودية</span></li>
         </ul>
       </div>
     </div>
     <div class="site-footer__bottom">
-      <span>© <span data-year>2026</span> RYLIST — <span data-en="All rights reserved">جميع الحقوق محفوظة</span></span>
-      <span data-en="Privacy · Terms">الخصوصية · الشروط</span>
+      <span>© <span data-year>2026</span> RYLIST — <span data-en="All rights reserved" data-zh="">جميع الحقوق محفوظة</span></span>
+      <span data-en="Privacy · Terms" data-zh="">الخصوصية · الشروط</span>
     </div>
   </div>
 </footer>
