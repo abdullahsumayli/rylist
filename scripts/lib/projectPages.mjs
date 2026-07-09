@@ -19,8 +19,8 @@ export function renderProjectPages(out, c, siteUrl){
         cityLabel:tax("city",p.city_key,loc),
         price: p.price_min? `${p.price_min.toLocaleString()} – ${(p.price_max||p.price_min).toLocaleString()} ${loc==="en"?"SAR":"ريال"}`:"",
         description:p.i18n?.description?.[loc]||"", whatsapp:wa, cta:CTA[loc]||CTA.ar,
-        statusLabel: ({available:{ar:"متاح",en:"Available",zh:"可售"},reserved:{ar:"محجوز",en:"Reserved",zh:"已预订"},sold:{ar:"مباع",en:"Sold",zh:"已售"}}[p.status]||{})[loc] || "",
-        statusClass: p.status==="sold"?"status-pill--sold":(p.status==="reserved"?"status-pill--reserved":""),
+        statusLabel: ({available:{ar:"متاح",en:"Available",zh:"可售"},reserved:{ar:"محجوز",en:"Reserved",zh:"已预订"},sold:{ar:"مباع",en:"Sold",zh:"已售"},soon:{ar:"قريبًا",en:"Soon",zh:"即将推出"}}[p.status]||{})[loc] || "",
+        statusClass: p.status==="sold"?"status-pill--sold":(p.status==="reserved"?"status-pill--reserved":(p.status==="soon"?"status-pill--soon":"")),
       });
       fs.writeFileSync(`${outDir}/${p.code}.html`, "<!doctype html>\n"+html);
     }

@@ -13,6 +13,8 @@
     available: { ar: "متاح", en: "Available" },
     reserved: { ar: "محجوز", en: "Reserved" },
     sold: { ar: "مباع", en: "Sold" },
+    soon: { ar: "قريبًا", en: "Soon" },
+    priceOnRequest: { ar: "السعر عند الطلب", en: "Price on request" },
     soldPct: { ar: "مباع", en: "Sold" },
     view: { ar: "شاهد التفاصيل", en: "View details" },
     beds: { ar: "غرف", en: "beds" },
@@ -31,6 +33,7 @@
   }
 
   function fmtPrice(min, max) {
+    if (!min && !max) return t("priceOnRequest");
     function n(x) { var m = x / 1e6; return m % 1 === 0 ? m.toFixed(0) : m.toFixed(1); }
     return isAr()
       ? n(min) + " – " + n(max) + " مليون ريال"
@@ -38,13 +41,10 @@
   }
 
   function fmtMeta(p) {
-    var a = isAr() ? p.area + " " + T.area.ar : p.area + " " + T.area.en;
-    if (p.bedsMax > 0) {
-      a += isAr()
-        ? " · " + p.bedsMin + "–" + p.bedsMax + " " + T.beds.ar
-        : " · " + p.bedsMin + "–" + p.bedsMax + " " + T.beds.en;
-    }
-    return a;
+    var parts = [];
+    if (p.area) parts.push(p.area + " " + (isAr() ? T.area.ar : T.area.en));
+    if (p.bedsMax > 0) parts.push(p.bedsMin + "–" + p.bedsMax + " " + (isAr() ? T.beds.ar : T.beds.en));
+    return parts.join(" · ");
   }
 
   function localeDate(iso) {
@@ -59,9 +59,15 @@
     var city = isAr() ? p.cityAr : p.cityEn;
     var district = isAr() ? p.districtAr : p.districtEn;
     var type = isAr() ? p.typeAr : p.typeEn;
-    var stKey = (p.status === "sold" || p.status === "reserved") ? p.status : "available";
+    var stKey = (p.status === "sold" || p.status === "reserved" || p.status === "soon") ? p.status : "available";
     var statusTxt = t(stKey);
-    var statusCls = { sold: "badge--sold", reserved: "badge--reserved" }[p.status] || "";
+    var statusCls = { sold: "badge--sold", reserved: "badge--reserved", soon: "badge--soon" }[p.status] || "";
+    var soldHtml = p.sold ? (
+      '<div class="sold">' +
+        '<div class="sold__label"><span>' + t("soldPct") + '</span><b>' + p.sold + '%</b></div>' +
+        '<div class="sold__bar"><span class="sold__fill" style="width:' + p.sold + '%"></span></div>' +
+      '</div>'
+    ) : '';
     var inquiry = isAr()
       ? "مرحبًا، أرغب بتفاصيل مشروع «" + p.titleAr + "» (كود " + p.code + ")."
       : "Hello, I’d like details about “" + p.titleEn + "” (code " + p.code + ").";
@@ -79,10 +85,7 @@
           '</div>' +
           '<h3 class="project-card__title">' + esc(title) + '</h3>' +
           '<div class="project-card__type">' + esc(type) + '</div>' +
-          '<div class="sold">' +
-            '<div class="sold__label"><span>' + t("soldPct") + '</span><b>' + p.sold + '%</b></div>' +
-            '<div class="sold__bar"><span class="sold__fill" style="width:' + p.sold + '%"></span></div>' +
-          '</div>' +
+          soldHtml +
           '<div class="project-card__meta">' + fmtMeta(p) + '</div>' +
           '<div class="project-card__foot">' +
             '<div class="project-card__price"><b>' + fmtPrice(p.priceMin, p.priceMax) + '</b>' +

@@ -11,7 +11,7 @@ async function taxonomy(kind) {
 
 // Arabic labels for enum selects that store English values in the DB
 const ENUM_AR = {
-  available: "متاح", reserved: "محجوز", sold: "مباع",
+  available: "متاح", reserved: "محجوز", sold: "مباع", soon: "قريبًا",
   draft: "مسودة", published: "منشور",
 };
 const tabLabel = (code) => (code === "ar" ? "ع" : code === "en" ? "EN" : "中文");
