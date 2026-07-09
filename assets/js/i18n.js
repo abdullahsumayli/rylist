@@ -52,10 +52,9 @@
 
   function init() {
     captureOriginals();
-    var stored;
-    try { stored = localStorage.getItem(KEY); } catch (e) {}
-    var lang = stored === "en" || stored === "ar" ? stored : "ar";
-    apply(lang);
+    // Language is decided by the URL: the build renders / (Arabic) and /en/ as
+    // separate pages, so trust the lang the page was served with — never override it.
+    apply(getLang());
 
     document.querySelectorAll("[data-lang-toggle]").forEach(function (btn) {
       btn.addEventListener("click", toggle);
