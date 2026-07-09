@@ -96,13 +96,13 @@ export async function renderForm(root, ent, row, onDone) {
       input.value = val; draft[f.n] = val;
       input.onchange = () => draft[f.n] = input.value;
       field.appendChild(input);
-    } else if (f.t === "image") {
+    } else if (f.t === "image" || f.t === "file") {
       field.appendChild(label);
       const box = document.createElement("div"); box.style.display = "flex"; box.style.flexDirection = "column"; box.style.gap = "8px";
-      const cur = document.createElement("input"); cur.value = draft[f.n] || ""; cur.placeholder = "رابط الصورة"; cur.oninput = () => draft[f.n] = cur.value;
-      const img = document.createElement("input"); img.type = "file"; img.accept = "image/*";
-      img.onchange = async () => { const url = await uploadImage(ent.table, img.files[0]); if (url) { cur.value = url; draft[f.n] = url; } };
-      box.append(cur, img); field.appendChild(box);
+      const cur = document.createElement("input"); cur.value = draft[f.n] || ""; cur.placeholder = f.t === "file" ? "رابط الملف (PDF)" : "رابط الصورة"; cur.oninput = () => draft[f.n] = cur.value;
+      const up = document.createElement("input"); up.type = "file"; up.accept = f.t === "file" ? "application/pdf" : "image/*";
+      up.onchange = async () => { const url = await uploadImage(ent.table, up.files[0]); if (url) { cur.value = url; draft[f.n] = url; } };
+      box.append(cur, up); field.appendChild(box);
     } else {
       field.appendChild(label);
       const input = document.createElement("input"); input.type = f.t === "number" ? "number" : "text"; input.value = draft[f.n] ?? "";

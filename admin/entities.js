@@ -9,6 +9,7 @@ export const ENTITIES = [
     {n:"area",t:"text",l:"المساحة"},{n:"beds_min",t:"number",l:"غرف من"},{n:"beds_max",t:"number",l:"غرف إلى"},
     {n:"featured",t:"bool",l:"مميّز"},{n:"sort_order",t:"number",l:"الترتيب"},
     {n:"image_url",t:"image",l:"الصورة"},
+    {n:"brochure_url",t:"file",l:"البروشور (PDF)"},
     {n:"i18n.title",t:"i18n-text",l:"العنوان"},{n:"i18n.district",t:"i18n-text",l:"الحي"},
     {n:"i18n.description",t:"i18n-rich",l:"الوصف"} ]},
   { key:"news", label:"الأخبار/المدونة", table:"news", order:"published_at", title:"i18n.title", fields:[
