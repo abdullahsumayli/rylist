@@ -124,7 +124,7 @@ const PROJECTS = [
 
 /* ----- الإحصائيات (أرقام تجريبية — استبدلها) ---------------------------- */
 const STATS = [
-  { value: 48,   decimals: 0, sym: "+", labelAr: "مشروعًا تحت التسويق", labelEn: "Projects marketed" },
+  { value: 48,   decimals: 0, sym: "+", labelAr: "مشروعًا معروضًا", labelEn: "Projects listed" },
   { value: 3.2,  decimals: 1, sym: "B", labelAr: "قيمة المبيعات — بالريال", labelEn: "Sales value — SAR" },
   { value: 6400, decimals: 0, sym: "+", labelAr: "وحدة مباعة", labelEn: "Units sold" },
   { value: 96,   decimals: 0, sym: "%", labelAr: "رضا العملاء", labelEn: "Client satisfaction" }
