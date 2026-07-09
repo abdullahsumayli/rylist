@@ -1,0 +1,21 @@
+<!doctype html><html lang="ar" dir="rtl"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RYLIST — لوحة التحكم</title>
+<link rel="stylesheet" href="../assets/css/styles.css">
+<link rel="stylesheet" href="admin.css">
+</head><body>
+<div id="login" class="admin-login">
+  <form id="loginForm" class="admin-card">
+    <h1>لوحة تحكم RYLIST</h1>
+    <input id="email" type="email" placeholder="البريد" required>
+    <input id="password" type="password" placeholder="كلمة المرور" required>
+    <button type="submit">دخول</button>
+    <p id="loginErr" class="admin-err"></p>
+  </form>
+</div>
+<div id="app" class="admin-app" hidden>
+  <aside id="nav" class="admin-nav"></aside>
+  <main id="view" class="admin-view"></main>
+</div>
+<script type="module" src="app.js"></script>
+</body></html>
