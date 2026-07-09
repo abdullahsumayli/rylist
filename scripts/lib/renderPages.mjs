@@ -12,6 +12,14 @@ function localizeHtml(html, locale, dir, siteUrl, pageName){
       else { el.set_content(el.getAttribute(`data-${locale}`)); }
     });
     root.querySelectorAll(`[data-${locale}-ph]`).forEach(el=>{ el.setAttribute("placeholder", el.getAttribute(`data-${locale}-ph`)); });
+    // localized pages live under /<locale>/, so root-relative assets must be made absolute
+    // (page-to-page links like "projects.html" stay relative and resolve within /<locale>/)
+    root.querySelectorAll("[href],[src]").forEach(el=>{
+      ["href","src"].forEach(attr=>{
+        const v = el.getAttribute(attr);
+        if(v && /^(assets\/|favicon\.svg)/.test(v)) el.setAttribute(attr, "/"+v);
+      });
+    });
   }
   // hreflang + canonical
   const head = root.querySelector("head");
