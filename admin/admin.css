@@ -197,6 +197,13 @@
   .field{display:flex;flex-direction:column;gap:6px}
   .field.full{grid-column:1/-1}
   .field label{font-size:12.5px;font-weight:600;color:var(--text-2)}
+  .fieldhint{font-size:11.5px;color:var(--text-2);line-height:1.6;margin:2px 0 0;opacity:.85}
+  .uploadstatus{font-size:12px;line-height:1.7;margin:2px 0 0;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .uploadstatus.is-busy{color:var(--text-2)}
+  .uploadstatus.is-ok{color:#1a7f4b}
+  .uploadstatus.is-err{color:#c0392b}
+  .uploadstatus.is-warn{color:#8a5a00;background:#fff6e0;border:1px solid #f0d48a;border-radius:8px;padding:8px 10px}
+  .uploadstatus .warngo{font:inherit;font-size:11.5px;font-weight:600;cursor:pointer;color:#fff;background:#8a5a00;border:0;border-radius:6px;padding:4px 10px}
   .field input,.field select,.field textarea{background:var(--bg);border:1px solid var(--line-2);border-radius:8px;
     padding:10px 12px;font:inherit;font-size:14px;color:var(--text);outline:none;transition:border-color .15s}
   .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--accent)}

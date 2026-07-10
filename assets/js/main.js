@@ -157,7 +157,12 @@
     var el = document.getElementById("partnersGrid");
     if (!el) return;
     el.innerHTML = PARTNERS.map(function (p) {
-      return '<div class="partner">' + esc(isAr() ? p.ar : p.en) + '</div>';
+      var label = esc(isAr() ? p.ar : p.en);
+      if (p.logo) {
+        return '<div class="partner partner--logo">' +
+          '<img class="partner__logo" src="' + esc(p.logo) + '" alt="' + label + '" loading="lazy"></div>';
+      }
+      return '<div class="partner">' + label + '</div>';
     }).join("");
   }
 

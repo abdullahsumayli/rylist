@@ -54,6 +54,17 @@ export async function uploadImage(prefix, file) {
   return sb.storage.from("media").getPublicUrl(path).data.publicUrl;
 }
 
+// حجم مقروء (KB/MB) + قياس أبعاد الصورة — للتحقّق من مواصفات الشعار قبل الرفع
+function fmtBytes(n) { return n >= 1048576 ? (n / 1048576).toFixed(1) + " MB" : Math.round(n / 1024) + " KB"; }
+function imageDims(file) {
+  return new Promise((res) => {
+    const url = URL.createObjectURL(file); const img = new Image();
+    img.onload = () => { res({ w: img.naturalWidth, h: img.naturalHeight }); URL.revokeObjectURL(url); };
+    img.onerror = () => { res({ w: 0, h: 0 }); URL.revokeObjectURL(url); };
+    img.src = url;
+  });
+}
+
 // renderForm(root, ent, row, onDone) — onDone() is called after save or "back"
 export async function renderForm(root, ent, row, onDone) {
   const pk = ent.pk || "id";
@@ -101,14 +112,42 @@ export async function renderForm(root, ent, row, onDone) {
       const box = document.createElement("div"); box.style.display = "flex"; box.style.flexDirection = "column"; box.style.gap = "8px";
       const cur = document.createElement("input"); cur.value = draft[f.n] || ""; cur.placeholder = f.t === "file" ? "رابط الملف (PDF)" : "رابط الصورة"; cur.oninput = () => draft[f.n] = cur.value;
       const up = document.createElement("input"); up.type = "file"; up.accept = f.t === "file" ? "application/pdf" : "image/*";
-      up.onchange = async () => { const url = await uploadImage(ent.table, up.files[0]); if (url) { cur.value = url; draft[f.n] = url; } };
-      box.append(cur, up); field.appendChild(box);
+      const status = document.createElement("p"); status.className = "uploadstatus"; status.hidden = true;
+      const doUpload = async (file) => {
+        up.disabled = true; status.hidden = false; status.className = "uploadstatus is-busy";
+        status.textContent = "⏳ جارٍ رفع " + (f.l || "الملف") + "…";
+        const url = await uploadImage(ent.table, file);
+        up.disabled = false;
+        if (url) { cur.value = url; draft[f.n] = url; status.className = "uploadstatus is-ok"; status.textContent = "✓ تم رفع " + (f.l || "الملف"); }
+        else { status.className = "uploadstatus is-err"; status.textContent = "✗ تعذّر الرفع، حاول مرة أخرى"; }
+      };
+      up.onchange = async () => {
+        const file = up.files[0]; if (!file) return;
+        // تحقّق من مواصفات الحقل (شعار الشركاء مثلًا) قبل الرفع، ونبّه المستخدم إن تجاوزها
+        if (f.spec) {
+          const dims = f.t === "image" ? await imageDims(file) : { w: 0, h: 0 };
+          const overSize = f.spec.maxKB && file.size > f.spec.maxKB * 1024;
+          const overDim = f.spec.maxW && dims.w && (dims.w > f.spec.maxW || dims.h > f.spec.maxH);
+          if (overSize || overDim) {
+            const has = ["حجمه " + fmtBytes(file.size)]; if (dims.w) has.push("أبعاده " + dims.w + "×" + dims.h + "px");
+            const need = []; if (f.spec.maxKB) need.push("≤ " + f.spec.maxKB + "KB"); if (f.spec.recW) need.push("~" + f.spec.recW + "×" + f.spec.recH + "px");
+            status.hidden = false; status.className = "uploadstatus is-warn";
+            status.textContent = "⚠ هذا الشعار " + has.join(" و") + ". المطلوب " + need.join(" و") + " — صغّره أو صدّره SVG قبل الرفع. ";
+            const go = document.createElement("button"); go.type = "button"; go.className = "warngo"; go.textContent = "ارفعه على أي حال";
+            go.onclick = () => doUpload(file); status.appendChild(go);
+            return;
+          }
+        }
+        doUpload(file);
+      };
+      box.append(cur, up, status); field.appendChild(box);
     } else {
       field.appendChild(label);
       const input = document.createElement("input"); input.type = f.t === "number" ? "number" : "text"; input.value = draft[f.n] ?? "";
       input.oninput = () => draft[f.n] = f.t === "number" ? (input.value === "" ? null : Number(input.value)) : input.value;
       field.appendChild(input);
     }
+    if (f.hint) { const h = document.createElement("p"); h.className = "fieldhint"; h.textContent = f.hint; field.appendChild(h); }
     fbody.appendChild(field);
   }
 

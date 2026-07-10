@@ -49,7 +49,10 @@ function flatNews(news) {
 }
 
 function flatPartners(partners) {
-  return (partners || []).map((p) => ({ ar: name(p.i18n?.name, "ar"), en: name(p.i18n?.name, "en") }));
+  return (partners || []).map((p) => ({
+    ar: name(p.i18n?.name, "ar"), en: name(p.i18n?.name, "en"),
+    logo: p.logo_url || "",
+  }));
 }
 
 function flatStats(stats) {

@@ -20,7 +20,7 @@ export const ENTITIES = [
     {n:"i18n.title",t:"i18n-text",l:"العنوان"},{n:"i18n.excerpt",t:"i18n-text",l:"المقتطف"},
     {n:"i18n.body",t:"i18n-rich",l:"النص"} ]},
   { key:"partners", label:"الشركاء", table:"partners", order:"sort_order", title:"i18n.name", fields:[
-    {n:"logo_url",t:"image",l:"الشعار"},{n:"sort_order",t:"number",l:"الترتيب"},
+    {n:"logo_url",t:"image",l:"الشعار",hint:"SVG (مفضّل) أو PNG بخلفية شفافة · شعار عرضي ~240×120px · أقصى حجم 200KB",spec:{maxKB:200,maxW:600,maxH:400,recW:240,recH:120}},{n:"sort_order",t:"number",l:"الترتيب"},
     {n:"i18n.name",t:"i18n-text",l:"الاسم"} ]},
   { key:"stats", label:"الأرقام", table:"stats", order:"sort_order", title:"i18n.label", fields:[
     {n:"value",t:"number",l:"القيمة",req:true},{n:"suffix",t:"text",l:"اللاحقة"},
