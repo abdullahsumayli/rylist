@@ -130,15 +130,9 @@ const STATS = [
   { value: 96,   decimals: 0, sym: "%", labelAr: "رضا العملاء", labelEn: "Client satisfaction" }
 ];
 
-/* ----- شركاء النجاح (أسماء تجريبية) ------------------------------------- */
+/* ----- بالشراكة مع (شركاء حقيقيون بشعارات فقط) -------------------------- */
 const PARTNERS = [
-  { ar: "ريبورتاج", en: "Reportage", logo: "https://rylist.sa/assets/img/partners/reportage.png" },
-  { ar: "بنيان", en: "Bunyan" },
-  { ar: "رواسي", en: "Rawasi" }, { ar: "تُراث", en: "Turath" },
-  { ar: "أصالة", en: "Asala" }, { ar: "مدى", en: "Mada" },
-  { ar: "ركائز", en: "Rakaiz" }, { ar: "منارة", en: "Manarah" },
-  { ar: "واحة", en: "Waha" }, { ar: "صروح", en: "Sroh" },
-  { ar: "تكوين", en: "Takwin" }, { ar: "أوج", en: "Awj" }
+  { ar: "ريبورتاج", en: "Reportage", logo: "https://rylist.sa/assets/img/partners/reportage.png" }
 ];
 
 /* ----- الأخبار / الرؤى --------------------------------------------------- */

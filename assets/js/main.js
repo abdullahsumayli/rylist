@@ -156,13 +156,13 @@
   function renderPartners() {
     var el = document.getElementById("partnersGrid");
     if (!el) return;
-    el.innerHTML = PARTNERS.map(function (p) {
+    var withLogo = PARTNERS.filter(function (p) { return p.logo; });
+    var sec = el.closest ? el.closest("section") : null;
+    if (!withLogo.length) { if (sec) sec.hidden = true; return; }
+    if (sec) sec.hidden = false;
+    el.innerHTML = withLogo.map(function (p) {
       var label = esc(isAr() ? p.ar : p.en);
-      if (p.logo) {
-        return '<div class="partner partner--logo">' +
-          '<img class="partner__logo" src="' + esc(p.logo) + '" alt="' + label + '" loading="lazy"></div>';
-      }
-      return '<div class="partner">' + label + '</div>';
+      return '<span class="partner-logo"><img src="' + esc(p.logo) + '" alt="' + label + '" title="' + label + '" loading="lazy"></span>';
     }).join("");
   }
 
