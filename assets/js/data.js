@@ -132,7 +132,7 @@ const STATS = [
 
 /* ----- شركاء النجاح (أسماء تجريبية) ------------------------------------- */
 const PARTNERS = [
-  { ar: "ريبورتاج", en: "Reportage", logo: "https://ghtcwsbtyvczlznviojj.supabase.co/storage/v1/object/public/media/partners/1783640924576-logo2.png" },
+  { ar: "ريبورتاج", en: "Reportage", logo: "https://rylist.sa/assets/img/partners/reportage.png" },
   { ar: "بنيان", en: "Bunyan" },
   { ar: "رواسي", en: "Rawasi" }, { ar: "تُراث", en: "Turath" },
   { ar: "أصالة", en: "Asala" }, { ar: "مدى", en: "Mada" },
