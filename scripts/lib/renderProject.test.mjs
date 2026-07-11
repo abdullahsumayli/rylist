@@ -144,3 +144,29 @@ test("renderProjectHtml fills header fields and title", () => {
   assert.match(html, /الرمال · تاون هاوس · الرياض/);
   assert.match(html, /q=24\.77,46\.73/);
 });
+
+import { renderProjectPages } from "./projectPages.mjs";
+import os from "node:os";
+import path from "node:path";
+
+test("renderProjectPages writes one file per project per locale", () => {
+  const out = fs.mkdtempSync(path.join(os.tmpdir(), "rylist-build-"));
+  const c = {
+    locales: [{ code: "ar", dir: "rtl" }, { code: "en", dir: "ltr" }],
+    taxonomies: [
+      { kind: "city", key: "riyadh", i18n: { label: { ar: "الرياض", en: "Riyadh" } } },
+      { kind: "property_type", key: "townhouse", i18n: { label: { ar: "تاون هاوس", en: "Townhouse" } } },
+    ],
+    contact: { whatsapp: "966500000000" },
+    projects: [sampleProject],
+  };
+  renderProjectPages(out, c, "https://rylist.sa");
+  const arFile = path.join(out, "projects", "najd-2.html");
+  const enFile = path.join(out, "en", "projects", "najd-2.html");
+  assert.ok(fs.existsSync(arFile), "ar file written");
+  assert.ok(fs.existsSync(enFile), "en file written");
+  const html = fs.readFileSync(arFile, "utf8");
+  assert.match(html, /^<!doctype html>/);
+  assert.match(html, /class="punit-rich"/);   // rich units rendered
+  fs.rmSync(out, { recursive: true, force: true });
+});
