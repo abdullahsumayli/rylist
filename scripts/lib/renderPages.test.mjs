@@ -50,3 +50,20 @@ test("renderPages keeps defaults when CMS empty", () => {
     assert.match(html, /Cormorant\+Garamond/);
   });
 });
+
+test("renderPages overlays DB text over the data-en default for en", () => {
+  withTempIndex(SRC, (dir) => {
+    const out = path.join(dir, "dist");
+    renderPages(out, {
+      locales: [{ code: "en", dir: "ltr" }],
+      home: { i18n: { hero_title: { en: "DB English" } } },
+      chrome: {}, theme: {},
+    }, "https://rylist.sa");
+    const html = fs.readFileSync(path.join(out, "en", "index.html"), "utf8");
+    assert.match(html, /DB English/);
+    // the data-en default was overridden in the RENDERED element text.
+    // (the authoring `data-en="Old EN"` attribute itself is intentionally left in
+    //  the output, same as every locale — so scope the check to element content.)
+    assert.doesNotMatch(html, />Old EN</);
+  });
+});

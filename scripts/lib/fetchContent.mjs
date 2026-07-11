@@ -8,10 +8,9 @@ export async function fetchContent(){
     (await sb.from("news").select("*").eq("status","published").order("published_at",{ascending:false})).data||[],
     grab("partners","sort_order"), grab("stats","sort_order"), grab("social_links","sort_order"),
   ]);
-  const contact = (await sb.from("contact").select("*").eq("id",1).single()).data || {};
   const single = async (t) => (await sb.from(t).select("*").eq("id", 1).maybeSingle()).data || {};
-  const [home, chrome, theme] = await Promise.all([
-    single("home_content"), single("site_chrome"), single("site_theme"),
+  const [contact, home, chrome, theme] = await Promise.all([
+    single("contact"), single("home_content"), single("site_chrome"), single("site_theme"),
   ]);
   const pages = Object.fromEntries(((await sb.from("pages").select("*")).data||[]).map(p=>[p.key,p.i18n]));
   return { locales: locales.filter(l=>l.enabled), taxonomies, projects, news, partners, stats,
