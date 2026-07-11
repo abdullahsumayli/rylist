@@ -8,10 +8,10 @@ export const FONT_PRESETS = {
     label: "الترف الكلاسيكي",
     href: G("family=Cormorant+Garamond:wght@400;500&family=Hanken+Grotesk:wght@300;400;500;600&family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600"),
     vars: {
-      "--font-en-display": '"Cormorant Garamond", Georgia, serif',
-      "--font-en-body": '"Hanken Grotesk", system-ui, sans-serif',
+      "--font-en-display": '"Cormorant Garamond", Georgia, "Times New Roman", serif',
+      "--font-en-body": '"Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif',
       "--font-ar-display": '"Amiri", "Times New Roman", serif',
-      "--font-ar-body": '"IBM Plex Sans Arabic", system-ui, Tahoma, sans-serif',
+      "--font-ar-body": '"IBM Plex Sans Arabic", system-ui, "Segoe UI", Tahoma, sans-serif',
     },
   },
   modern: {
@@ -56,8 +56,8 @@ export const ACCENT_PRESETS = {
 
 // resolveTheme(row) -> { href, vars } — href = Google Fonts URL, vars = CSS declarations for :root
 export function resolveTheme(row = {}) {
-  const font = FONT_PRESETS[row?.font_preset] || FONT_PRESETS.classic;
-  const accent = ACCENT_PRESETS[row?.accent_preset] || ACCENT_PRESETS.gold;
+  const font = Object.hasOwn(FONT_PRESETS, row?.font_preset) ? FONT_PRESETS[row.font_preset] : FONT_PRESETS.classic;
+  const accent = Object.hasOwn(ACCENT_PRESETS, row?.accent_preset) ? ACCENT_PRESETS[row.accent_preset] : ACCENT_PRESETS.gold;
   const all = { ...font.vars, ...accent.vars };
   const vars = Object.entries(all).map(([k, v]) => `${k}: ${v};`).join(" ");
   return { href: font.href, vars };

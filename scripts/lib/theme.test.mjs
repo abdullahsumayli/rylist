@@ -26,3 +26,27 @@ test("every preset id is present in the exported maps", () => {
   assert.deepEqual(Object.keys(FONT_PRESETS), ["classic", "modern", "elegant", "simple"]);
   assert.deepEqual(Object.keys(ACCENT_PRESETS), ["gold", "green", "navy", "charcoal", "burgundy"]);
 });
+
+test("classic default --font-en-body mirrors the live CSS fallback chain exactly", () => {
+  const t = resolveTheme({});
+  assert.ok(
+    t.vars.includes('--font-en-body: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;'),
+  );
+});
+
+test("resolveTheme(null) and resolveTheme(undefined) return classic/gold", () => {
+  assert.match(resolveTheme(null).href, /Cormorant\+Garamond/);
+  assert.match(resolveTheme(undefined).href, /Cormorant\+Garamond/);
+});
+
+test("mixed row (font only) keeps the gold accent default", () => {
+  const t = resolveTheme({ font_preset: "modern" });
+  assert.match(t.vars, /--champagne:\s*#A38A58/);
+  assert.match(t.href, /Hanken\+Grotesk/);
+});
+
+test("resolveTheme falls back to defaults for a __proto__ id", () => {
+  const t = resolveTheme({ font_preset: "__proto__", accent_preset: "__proto__" });
+  assert.match(t.href, /Cormorant\+Garamond/);
+  assert.match(t.vars, /--champagne:\s*#A38A58/);
+});
