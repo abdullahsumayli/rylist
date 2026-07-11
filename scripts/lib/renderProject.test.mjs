@@ -34,6 +34,7 @@ test("mapHtml appends nearby-landmarks list when location present", () => {
 
 const richUnit = {
   title: { ar: "تاون هاوس ٣ غرف", en: "3-bed townhouse" },
+  price: { ar: "٢٬٢٠٠٬٠٠٠ ريال", en: "SAR 2,200,000" },
   description: { ar: "وحدة فاخرة", en: "Luxury unit" },
   specs: [{ label: { ar: "المساحة" }, value: { ar: "٢٠٠ م²" } }],
   gallery: ["https://x/u1.jpg", "https://x/u2.jpg"],
@@ -46,6 +47,8 @@ test("unitsHtml renders rich units as a card grid (all visible, no accordion)", 
   assert.match(html, /<article class="punit-card">/);
   assert.doesNotMatch(html, /<details/);                            // no accordion — all visible
   assert.match(html, /class="punit-card__media"/);                  // first unit shows its photo
+  assert.match(html, /class="punit-card__price"/);                  // price shown per unit
+  assert.match(html, /٢٬٢٠٠٬٠٠٠ ريال/);
   assert.match(html, /تاون هاوس ٣ غرف/);
   assert.match(html, /وحدة فاخرة/);
   assert.match(html, /٢٠٠ م²/);

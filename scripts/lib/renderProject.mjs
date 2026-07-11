@@ -43,6 +43,7 @@ export function unitsHtml(D, code, loc) {
       `<div class="pgallery__lb" id="${id}"><a class="pgallery__bg" href="#"></a><img src="${url}" alt=""><a class="pgallery__x" href="#" aria-label="إغلاق">×</a></div>`;
     const cards = units.map((u, ui) => {
       const title = tr(u.title, loc);
+      const price = tr(u.price, loc);
       const desc = tr(u.description, loc);
       const specs = Array.isArray(u.specs) ? u.specs : [];
       const g = Array.isArray(u.gallery) ? u.gallery : [];
@@ -60,6 +61,7 @@ export function unitsHtml(D, code, loc) {
         : "";
       return `<article class="punit-card">${media}<div class="punit-card__body">`
         + `<h3 class="punit-card__title">${title}</h3>`
+        + (price ? `<div class="punit-card__price">${price}</div>` : "")
         + (desc ? `<p class="punit-card__desc">${desc}</p>` : "")
         + specsHtml + planLink
         + `</div></article>`;

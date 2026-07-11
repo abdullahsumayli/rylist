@@ -547,6 +547,8 @@ html[lang="ar"] .statement .q { font-family: var(--font-ar-display); }
 .punit-card:hover .punit-card__media img { transform: scale(1.05); }
 .punit-card__body { padding: clamp(1.1rem, 2vw, 1.5rem); display: flex; flex-direction: column; gap: var(--sp-3); flex: 1; }
 .punit-card__title { font-size: 1.2rem; color: var(--gold-deep); }
+.punit-card__price { font-size: 1.1rem; font-weight: 600; color: var(--ink); }
+html[lang="ar"] .punit-card__price { font-family: var(--font-ar-display); }
 .punit-card__desc { margin: 0; font-size: 0.9rem; line-height: 1.8; color: var(--text-mid); }
 .punit-card__meta { display: flex; flex-wrap: wrap; gap: var(--sp-3); font-size: 0.78rem; color: var(--text-mid); }
 .punit-card__plan { display: inline-flex; align-items: center; gap: 0.5rem; margin-top: auto; font-size: 0.8rem; color: var(--gold-deep); text-decoration: none; }
