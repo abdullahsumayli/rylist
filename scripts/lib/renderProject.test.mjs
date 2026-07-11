@@ -72,3 +72,28 @@ test("unitsHtml returns empty string when no unit data at all", () => {
   assert.equal(unitsHtml({}, "p", "ar"), "");
   assert.equal(unitsHtml({ units: [] }, "p", "ar"), "");
 });
+
+import { galleryHtml, factsHtml, featuresHtml } from "./renderProject.mjs";
+
+test("galleryHtml renders grid + lightbox, empty when no images", () => {
+  const html = galleryHtml(["https://x/1.jpg"], "najd-2", "نجد ٢", "ar");
+  assert.match(html, /class="pgallery"/);
+  assert.match(html, /id="g-najd-2-0"/);
+  assert.equal(galleryHtml([], "najd-2", "نجد ٢", "ar"), "");
+  assert.equal(galleryHtml(undefined, "najd-2", "نجد ٢", "ar"), "");
+});
+
+test("factsHtml renders facts grid, empty when none", () => {
+  const html = factsHtml({ facts: [{ label: { ar: "النوع" }, value: { ar: "تاون هاوس" } }] }, "ar");
+  assert.match(html, /pfacts/);
+  assert.match(html, /النوع/);
+  assert.match(html, /تاون هاوس/);
+  assert.equal(factsHtml({}, "ar"), "");
+});
+
+test("featuresHtml renders list, empty when none", () => {
+  const html = featuresHtml({ features: [{ ar: "مسبح" }] }, "ar");
+  assert.match(html, /pfeatures/);
+  assert.match(html, /مسبح/);
+  assert.equal(featuresHtml({}, "ar"), "");
+});

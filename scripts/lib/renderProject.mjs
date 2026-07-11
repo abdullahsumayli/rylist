@@ -77,3 +77,29 @@ export function unitsHtml(D, code, loc) {
   }
   return "";
 }
+
+export function galleryHtml(images, code, title, loc) {
+  const imgs = Array.isArray(images) ? images : [];
+  if (!imgs.length) return "";
+  const H = { ar: "معرض الصور", en: "Photo gallery", zh: "图库" }[loc] || "معرض الصور";
+  const { cells, overlays } = lightboxCells(imgs, `g-${code}`, title, "pgallery__cell");
+  return `<section class="pgallery"><h2>${H}</h2><div class="pgallery__grid">${cells}</div>${overlays}</section>`;
+}
+
+export function factsHtml(D, loc) {
+  const facts = Array.isArray(D?.facts) ? D.facts : [];
+  if (!facts.length) return "";
+  const H = { ar: "تفاصيل المشروع", en: "Project details" }[loc] || "تفاصيل المشروع";
+  return `<section class="psec"><h2>${H}</h2><div class="pfacts">`
+    + facts.map((f) => `<div class="pfact"><span class="pfact__k">${tr(f.label, loc)}</span><span class="pfact__v">${tr(f.value, loc)}</span></div>`).join("")
+    + `</div></section>`;
+}
+
+export function featuresHtml(D, loc) {
+  const feats = Array.isArray(D?.features) ? D.features : [];
+  if (!feats.length) return "";
+  const H = { ar: "المزايا والمرافق", en: "Features & amenities" }[loc] || "المزايا والمرافق";
+  return `<section class="psec"><h2>${H}</h2><ul class="pfeatures">`
+    + feats.map((x) => `<li>${tr(x, loc)}</li>`).join("")
+    + `</ul></section>`;
+}
