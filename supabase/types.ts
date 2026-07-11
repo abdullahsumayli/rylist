@@ -203,6 +203,8 @@ export type Database = {
           i18n: Json
           id: string
           image_url: string | null
+          map_lat: number | null
+          map_lng: number | null
           price_max: number | null
           price_min: number | null
           sold: number
@@ -222,6 +224,8 @@ export type Database = {
           i18n?: Json
           id?: string
           image_url?: string | null
+          map_lat?: number | null
+          map_lng?: number | null
           price_max?: number | null
           price_min?: number | null
           sold?: number
@@ -241,6 +245,8 @@ export type Database = {
           i18n?: Json
           id?: string
           image_url?: string | null
+          map_lat?: number | null
+          map_lng?: number | null
           price_max?: number | null
           price_min?: number | null
           sold?: number
