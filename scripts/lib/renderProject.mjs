@@ -103,3 +103,46 @@ export function featuresHtml(D, loc) {
     + feats.map((x) => `<li>${tr(x, loc)}</li>`).join("")
     + `</ul></section>`;
 }
+
+const CTA = { ar: "استفسر عبر واتساب", en: "Enquire on WhatsApp", zh: "通过 WhatsApp 咨询" };
+const DL = { ar: "تحميل البروشور", en: "Download brochure", zh: "下载手册" };
+const STATUS = {
+  available: { ar: "متاح", en: "Available", zh: "可售" },
+  reserved: { ar: "محجوز", en: "Reserved", zh: "已预订" },
+  sold: { ar: "مباع", en: "Sold", zh: "已售" },
+  soon: { ar: "قريبًا", en: "Soon", zh: "即将推出" },
+};
+const STATUS_CLASS = { sold: "status-pill--sold", reserved: "status-pill--reserved", soon: "status-pill--soon" };
+
+// Assemble one full project page. `ctx` = { loc, dir, base, tax(kind,key,loc), contact }.
+export function renderProjectHtml(tmpl, p, ctx) {
+  const { loc, dir, base, tax } = ctx;
+  const t = p.i18n?.title?.[loc] || p.i18n?.title?.ar || p.code;
+  const url = (l) => `${base}${l === "ar" ? "" : "/" + l}/projects/${p.code}.html`;
+  const hreflang = ["ar", "en", "zh"].map((l) => `\n<link rel="alternate" hreflang="${l}" href="${url(l)}">`).join("");
+  const wa = ctx.contact?.whatsapp
+    ? `https://wa.me/${ctx.contact.whatsapp}?text=${encodeURIComponent(`${t} (${p.code})`)}`
+    : "#";
+  const price = p.price_min
+    ? `${p.price_min.toLocaleString("en-US")} – ${(p.price_max || p.price_min).toLocaleString("en-US")} ${loc === "en" ? "SAR" : "ريال"}`
+    : ({ ar: "السعر عند الطلب", en: "Price on request", zh: "价格待询" }[loc] || "السعر عند الطلب");
+  const D = p.details || {};
+  const brochure = p.brochure_url
+    ? `<a class="btn btn--ghost" href="${p.brochure_url}" target="_blank" rel="noopener">${DL[loc] || DL.ar}</a>`
+    : "";
+  return fill(tmpl, {
+    lang: loc, dir, title: t, desc: (p.i18n?.description?.[loc] || "").slice(0, 150),
+    canonical: url(loc), hreflang,
+    assets: loc === "ar" ? ".." : "../..", home: loc === "ar" ? "/" : `/${loc}/`,
+    image: p.image_url || "", district: p.i18n?.district?.[loc] || "",
+    typeLabel: tax("property_type", p.type_key, loc), cityLabel: tax("city", p.city_key, loc),
+    price, description: p.i18n?.description?.[loc] || "", whatsapp: wa, cta: CTA[loc] || CTA.ar, brochure,
+    gallery: galleryHtml(p.gallery, p.code, t, loc),
+    facts: factsHtml(D, loc),
+    units: unitsHtml(D, p.code, loc),
+    features: featuresHtml(D, loc),
+    map: mapHtml({ lat: p.map_lat, lng: p.map_lng, district: p.i18n?.district?.[loc] || "", cityLabel: tax("city", p.city_key, loc), location: D.location, loc }),
+    statusLabel: (STATUS[p.status] || {})[loc] || "",
+    statusClass: STATUS_CLASS[p.status] || "",
+  });
+}

@@ -97,3 +97,50 @@ test("featuresHtml renders list, empty when none", () => {
   assert.match(html, /مسبح/);
   assert.equal(featuresHtml({}, "ar"), "");
 });
+
+import { renderProjectHtml } from "./renderProject.mjs";
+import fs from "node:fs";
+
+const TMPL = fs.readFileSync("templates/project.html", "utf8");
+const stubTax = (kind, key, loc) => ({ city: { riyadh: "الرياض" }, property_type: { townhouse: "تاون هاوس" } }[kind]?.[key] || key);
+
+const sampleProject = {
+  code: "najd-2", city_key: "riyadh", type_key: "townhouse", status: "available",
+  price_min: 2200000, price_max: 2250000, image_url: "https://x/hero.jpg", brochure_url: "https://x/b.pdf",
+  map_lat: 24.77, map_lng: 46.73,
+  gallery: ["https://x/g1.jpg"],
+  i18n: { title: { ar: "نجد ٢" }, district: { ar: "الرمال" }, description: { ar: "وصف المشروع" } },
+  details: {
+    facts: [{ label: { ar: "النوع" }, value: { ar: "تاون هاوس" } }],
+    units: [{ title: { ar: "تاون هاوس ٣ غرف" }, description: { ar: "وحدة" }, gallery: ["https://x/u.jpg"], floorplan: "https://x/p.jpg" }],
+    features: [{ ar: "مسبح" }],
+    location: [{ ar: "قريب من المطار" }],
+  },
+};
+
+test("renderProjectHtml assembles sections in the correct order", () => {
+  const html = renderProjectHtml(TMPL, sampleProject, { loc: "ar", dir: "rtl", base: "https://rylist.sa", tax: stubTax, contact: {} });
+  const iGallery = html.indexOf('class="pgallery"');
+  // Anchor on the wrapping class, not the raw description text: the same text is
+  // also mirrored into the <head> <meta name="description"> tag (correct, existing
+  // SEO behavior — see projectPages.mjs), so a raw-text search matches the <head>
+  // occurrence first and misreports order.
+  const iDesc = html.indexOf('class="pdetail__desc"');
+  const iFacts = html.indexOf("تفاصيل المشروع");
+  const iUnits = html.indexOf("الوحدات");
+  const iFeatures = html.indexOf("المزايا والمرافق");
+  const iMap = html.indexOf('class="psec pmap"');
+  assert.ok(iGallery > -1 && iDesc > iGallery, "gallery before description");
+  assert.ok(iFacts > iDesc, "facts after description");
+  assert.ok(iUnits > iFacts, "units after facts");
+  assert.ok(iFeatures > iUnits, "features after units");
+  assert.ok(iMap > iFeatures, "map after features");
+});
+
+test("renderProjectHtml fills header fields and title", () => {
+  const html = renderProjectHtml(TMPL, sampleProject, { loc: "ar", dir: "rtl", base: "https://rylist.sa", tax: stubTax, contact: {} });
+  assert.match(html, /<title>نجد ٢ — RYLIST<\/title>/);
+  assert.match(html, /2,200,000 – 2,250,000 ريال/);
+  assert.match(html, /الرمال · تاون هاوس · الرياض/);
+  assert.match(html, /q=24\.77,46\.73/);
+});
