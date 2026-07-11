@@ -211,12 +211,6 @@
   .langtabs{display:flex;gap:4px;margin-bottom:2px}
   .langtabs button{padding:5px 13px;border-radius:7px;font-size:12.5px;font-weight:600;color:var(--text-2);border:1px solid transparent}
   .langtabs button.on{background:var(--text);color:var(--surface)}
-  .aibar{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:8px}
-  .aibtn{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:8px;font-size:12.5px;font-weight:600;
-    border:1px solid var(--accent);color:var(--accent-deep);background:var(--accent-soft);transition:.15s}
-  .aibtn:hover{background:var(--accent);color:var(--on-accent)}
-  .aibtn.busy{opacity:.6;pointer-events:none}
-  .aihint{font-size:11.5px;color:var(--text-3);margin-top:7px;display:flex;align-items:center;gap:6px}
   .savebar{grid-column:1/-1;display:flex;gap:10px;justify-content:flex-start;padding-top:6px;border-top:1px solid var(--line);margin-top:4px}
 
   @media (prefers-reduced-motion:reduce){.rl *{transition:none!important;animation:none!important}}

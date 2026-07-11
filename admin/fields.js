@@ -1,6 +1,5 @@
 import { sb } from "./db.js";
 import { LOCALES } from "./config.js";
-import { renderAIBar } from "./ai.js";
 
 // taxonomy cache (cities / property types) for select fields
 let TAX = null;
@@ -17,7 +16,7 @@ const ENUM_AR = {
 const tabLabel = (code) => (code === "ar" ? "ع" : code === "en" ? "EN" : "中文");
 
 // per-locale editor with language tabs (ع / EN / 中文)
-// returns { el, current(), setText(loc,text) } so ✨ (ai.js) can read/write values
+// returns { el, current(), setText(loc,text) }
 function localeTabs(field, value, onLocale) {
   const wrap = document.createElement("div");
   const tabs = document.createElement("div"); tabs.className = "langtabs";
@@ -70,8 +69,7 @@ export async function renderForm(root, ent, row, onDone) {
   const pk = ent.pk || "id";
   const editing = !!(row && row[pk]);
   root.innerHTML = `<div class="formwrap">
-      <div class="fh"><h2>${ent.label} — ${editing ? "تعديل" : "جديد"}</h2>
-        <span class="pill" id="aiPill" hidden>✨ مدعوم بالذكاء</span></div>
+      <div class="fh"><h2>${ent.label} — ${editing ? "تعديل" : "جديد"}</h2></div>
       <div class="fbody" id="fbody"></div>
     </div>`;
   const fbody = root.querySelector("#fbody");
@@ -87,12 +85,8 @@ export async function renderForm(root, ent, row, onDone) {
       const key = f.n.split(".")[1];
       draft.i18n[key] = draft.i18n[key] || {}; // linked object (so tab-switch keeps typed text on new rows)
       const value = draft.i18n[key];
-      // AI mount point — filled by ai.js (Part B)
-      const aibar = document.createElement("div"); aibar.className = "aibar"; aibar.id = "ai-" + key; aibar.dataset.field = f.n;
-      field.appendChild(aibar);
       const tabs = localeTabs(f, value, (loc, val) => { value[loc] = val; });
       field.appendChild(tabs.el);
-      renderAIBar(aibar, { field: f, ent, draft, tabs });
     } else if (f.t === "bool") {
       label.style.flexDirection = "row"; label.style.alignItems = "center"; label.style.gap = "8px";
       const input = document.createElement("input"); input.type = "checkbox"; input.checked = !!draft[f.n];
