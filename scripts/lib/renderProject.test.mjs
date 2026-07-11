@@ -1,7 +1,10 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { mapHtml } from "./renderProject.mjs";
-import { unitsHtml } from "./renderProject.mjs";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { mapHtml, unitsHtml, galleryHtml, factsHtml, featuresHtml, renderProjectHtml } from "./renderProject.mjs";
+import { renderProjectPages } from "./projectPages.mjs";
 
 test("mapHtml embeds exact coordinates when lat/lng present", () => {
   const html = mapHtml({ lat: 24.77, lng: 46.73, district: "الرمال", cityLabel: "الرياض", location: [], loc: "ar" });
@@ -73,11 +76,10 @@ test("unitsHtml returns empty string when no unit data at all", () => {
   assert.equal(unitsHtml({ units: [] }, "p", "ar"), "");
 });
 
-import { galleryHtml, factsHtml, featuresHtml } from "./renderProject.mjs";
-
 test("galleryHtml renders grid + lightbox, empty when no images", () => {
   const html = galleryHtml(["https://x/1.jpg"], "najd-2", "نجد ٢", "ar");
   assert.match(html, /class="pgallery"/);
+  assert.match(html, /معرض الصور/);
   assert.match(html, /id="g-najd-2-0"/);
   assert.equal(galleryHtml([], "najd-2", "نجد ٢", "ar"), "");
   assert.equal(galleryHtml(undefined, "najd-2", "نجد ٢", "ar"), "");
@@ -97,9 +99,6 @@ test("featuresHtml renders list, empty when none", () => {
   assert.match(html, /مسبح/);
   assert.equal(featuresHtml({}, "ar"), "");
 });
-
-import { renderProjectHtml } from "./renderProject.mjs";
-import fs from "node:fs";
 
 const TMPL = fs.readFileSync("templates/project.html", "utf8");
 const stubTax = (kind, key, loc) => ({ city: { riyadh: "الرياض" }, property_type: { townhouse: "تاون هاوس" } }[kind]?.[key] || key);
@@ -140,14 +139,11 @@ test("renderProjectHtml assembles sections in the correct order", () => {
 test("renderProjectHtml fills header fields and title", () => {
   const html = renderProjectHtml(TMPL, sampleProject, { loc: "ar", dir: "rtl", base: "https://rylist.sa", tax: stubTax, contact: {} });
   assert.match(html, /<title>نجد ٢ — RYLIST<\/title>/);
+  assert.match(html, /dir="rtl"/);
   assert.match(html, /2,200,000 – 2,250,000 ريال/);
   assert.match(html, /الرمال · تاون هاوس · الرياض/);
   assert.match(html, /q=24\.77,46\.73/);
 });
-
-import { renderProjectPages } from "./projectPages.mjs";
-import os from "node:os";
-import path from "node:path";
 
 test("renderProjectPages writes one file per project per locale", () => {
   const out = fs.mkdtempSync(path.join(os.tmpdir(), "rylist-build-"));

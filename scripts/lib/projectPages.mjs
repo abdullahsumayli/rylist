@@ -9,8 +9,8 @@ export function renderProjectPages(out, c, siteUrl) {
     c.taxonomies.find((t) => t.kind === kind && t.key === key)?.i18n?.label?.[loc] || key;
   for (const L of c.locales) {
     const loc = L.code;
-    const dir = loc === "ar" ? "" : `/${loc}`;
-    const outDir = `${out}${dir}/projects`;
+    const urlDir = loc === "ar" ? "" : `/${loc}`;
+    const outDir = `${out}${urlDir}/projects`;
     fs.mkdirSync(outDir, { recursive: true });
     for (const p of c.projects) {
       const html = renderProjectHtml(tmpl, p, { loc, dir: L.dir, base, tax, contact: c.contact });
