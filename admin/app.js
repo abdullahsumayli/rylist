@@ -22,7 +22,7 @@ async function buildSections() {
     newLeads = count || 0;
   } catch { /* leads badge is best-effort */ }
 
-  const iconFor = { projects: "projects", news: "news", partners: "partners", stats: "stats", pages: "pages", contact: "contact", social_links: "social" };
+  const iconFor = { projects: "projects", news: "news", partners: "partners", stats: "stats", pages: "pages", contact: "contact", social_links: "social", home_content: "home", site_chrome: "pages", site_theme: "pages" };
   const entitySections = ENTITIES.map((e) => ({
     key: e.key, label: e.label, icon: iconFor[e.key] || "pages",
     render: (v) => (e.key === "projects" ? renderProjects(v) : renderList(v, e)),
