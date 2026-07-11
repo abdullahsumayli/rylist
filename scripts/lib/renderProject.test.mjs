@@ -40,10 +40,12 @@ const richUnit = {
   floorplan: "https://x/plan1.jpg",
 };
 
-test("unitsHtml renders rich units as <details> blocks with first open", () => {
+test("unitsHtml renders rich units as a card grid (all visible, no accordion)", () => {
   const html = unitsHtml({ units: [richUnit, { title: { ar: "٤ غرف" } }] }, "najd-2", "ar");
-  assert.match(html, /<details class="punit-rich" open>/);          // first open
-  assert.match(html, /<details class="punit-rich">/);               // second closed
+  assert.match(html, /<div class="grid grid-3 punits-grid">/);
+  assert.match(html, /<article class="punit-card">/);
+  assert.doesNotMatch(html, /<details/);                            // no accordion — all visible
+  assert.match(html, /class="punit-card__media"/);                  // first unit shows its photo
   assert.match(html, /تاون هاوس ٣ غرف/);
   assert.match(html, /وحدة فاخرة/);
   assert.match(html, /٢٠٠ م²/);
@@ -163,6 +165,6 @@ test("renderProjectPages writes one file per project per locale", () => {
   assert.ok(fs.existsSync(enFile), "en file written");
   const html = fs.readFileSync(arFile, "utf8");
   assert.match(html, /^<!doctype html>/);
-  assert.match(html, /class="punit-rich"/);   // rich units rendered
+  assert.match(html, /class="punit-card"/);   // rich unit cards rendered
   fs.rmSync(out, { recursive: true, force: true });
 });

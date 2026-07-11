@@ -37,35 +37,34 @@ export function unitsHtml(D, code, loc) {
   if (units.length) {
     const H = { ar: "الوحدات", en: "Units", zh: "单元" }[loc] || "الوحدات";
     const fpLabel = { ar: "المخطط", en: "Floor plan", zh: "户型图" }[loc] || "المخطط";
-    const blocks = units.map((u, ui) => {
+    // Units render as a card grid (like the homepage project grid) — all visible at once.
+    let overlays = "";
+    const lb = (id, url) =>
+      `<div class="pgallery__lb" id="${id}"><a class="pgallery__bg" href="#"></a><img src="${url}" alt=""><a class="pgallery__x" href="#" aria-label="إغلاق">×</a></div>`;
+    const cards = units.map((u, ui) => {
       const title = tr(u.title, loc);
       const desc = tr(u.description, loc);
       const specs = Array.isArray(u.specs) ? u.specs : [];
-      const specsHtml = specs.length
-        ? `<div class="pfacts punit-rich__specs">`
-          + specs.map((s) => `<div class="pfact"><span class="pfact__k">${tr(s.label, loc)}</span><span class="pfact__v">${tr(s.value, loc)}</span></div>`).join("")
-          + `</div>`
-        : "";
       const g = Array.isArray(u.gallery) ? u.gallery : [];
-      let gHtml = "";
-      if (g.length) {
-        const { cells, overlays } = lightboxCells(g, `u-${code}-${ui}`, title, "pgallery__cell");
-        gHtml = `<div class="pgallery__grid punit-rich__gallery">${cells}</div>${overlays}`;
-      }
       const plans = Array.isArray(u.floorplans) ? u.floorplans : (u.floorplan ? [u.floorplan] : []);
-      let fpHtml = "";
-      if (plans.length) {
-        const { cells, overlays } = lightboxCells(plans, `fp-${code}-${ui}`, `${title} ${fpLabel}`, "pfloorplan__cell");
-        fpHtml = `<div class="pfloorplan"><h4>${fpLabel}</h4><div class="pfloorplan__grid">${cells}</div>${overlays}</div>`;
-      }
-      const open = ui === 0 ? " open" : "";
-      return `<details class="punit-rich"${open}><summary class="punit-rich__sum">${title}</summary>`
-        + `<div class="punit-rich__body">`
-        + (desc ? `<p class="punit-rich__desc">${desc}</p>` : "")
-        + specsHtml + gHtml + fpHtml
-        + `</div></details>`;
+      g.forEach((url, ii) => { overlays += lb(`u-${code}-${ui}-${ii}`, url); });
+      plans.forEach((url, pi) => { overlays += lb(`fp-${code}-${ui}-${pi}`, url); });
+      const media = g.length
+        ? `<a class="punit-card__media" href="#u-${code}-${ui}-0"><img loading="lazy" src="${g[0]}" alt="${title}"></a>`
+        : "";
+      const specsHtml = specs.length
+        ? `<div class="punit-card__meta">` + specs.map((s) => `<span>${tr(s.label, loc)}: ${tr(s.value, loc)}</span>`).join("") + `</div>`
+        : "";
+      const planLink = plans.length
+        ? `<a class="punit-card__plan" href="#fp-${code}-${ui}-0"><img loading="lazy" src="${plans[0]}" alt="${title} ${fpLabel}"><span>${fpLabel}</span></a>`
+        : "";
+      return `<article class="punit-card">${media}<div class="punit-card__body">`
+        + `<h3 class="punit-card__title">${title}</h3>`
+        + (desc ? `<p class="punit-card__desc">${desc}</p>` : "")
+        + specsHtml + planLink
+        + `</div></article>`;
     }).join("");
-    return `<section class="psec"><h2>${H}</h2><div class="punits-rich">${blocks}</div></section>`;
+    return `<section class="psec"><h2>${H}</h2><div class="grid grid-3 punits-grid">${cards}</div>${overlays}</section>`;
   }
   // Legacy fallback: simple unitTypes cards (existing behavior preserved verbatim).
   const legacy = Array.isArray(D?.unitTypes) ? D.unitTypes : [];
