@@ -47,3 +47,19 @@ test("leaves hero image untouched when none provided", () => {
   applyContent(root, { text: {}, heroImage: "" }, "ar");
   assert.match(root.toString(), /old\.jpg/);
 });
+
+test("sanitizes special characters in the hero image url", () => {
+  const root = parse(`<div data-cms-img="hero" style="x"></div>`);
+  applyContent(root, { text: {}, heroImage: "https://cdn/a'b.jpg" }, "ar");
+  const html = root.toString();
+  assert.match(html, /%27/);
+  assert.doesNotMatch(html, /'\); /);
+  assert.match(html, /background-image:url\(/);
+});
+
+test("does not throw and keeps default when maps is missing", () => {
+  const root = parse(`<h1 data-cms="x">افتراضي</h1>`);
+  assert.doesNotThrow(() => applyContent(root, undefined, "ar"));
+  assert.doesNotThrow(() => applyContent(root, null, "ar"));
+  assert.match(root.toString(), /افتراضي/);
+});
