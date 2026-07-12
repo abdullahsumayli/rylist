@@ -231,7 +231,8 @@ html[lang="ar"] .logo__sub { font-family: var(--font-ar-body); letter-spacing: 0
   content: ""; position: absolute; inset-inline: 0; bottom: -2px; height: 2px; background: var(--champagne);
 }
 .nav__cta { margin-inline-start: var(--sp-2); }
-.nav__cta svg { color: var(--gold-bright); flex: none; }
+/* شرارة فاهم الذهبية (رمز AI) على كل أزرار "استشير فاهم" */
+.nav__cta svg, .fahem-spark { color: var(--gold-bright); flex: none; }
 
 /* زر قائمة الجوال */
 .nav-toggle { display: none; width: 44px; height: 44px; align-items: center; justify-content: center; }
@@ -262,7 +263,7 @@ html[lang="ar"] .logo__sub { font-family: var(--font-ar-body); letter-spacing: 0
 .hero .display { color: var(--bone); }
 html[lang="ar"] .hero .display { line-height: 1.35; }
 .hero .lead { color: rgba(246,243,235,0.8); margin-top: var(--sp-6); }
-.hero .btn--ghost { border-color: rgba(246,243,235,0.4); color: var(--bone); }
+.hero .btn--ghost { border-color: rgba(246,243,235,0.6); color: var(--bone); }
 .hero .btn--ghost:hover { background: var(--bone); color: var(--ink); border-color: var(--bone); }
 .hero__meta {
   display: flex; gap: clamp(1.5rem, 4vw, 3rem); margin-top: var(--sp-12);
