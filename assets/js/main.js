@@ -301,6 +301,25 @@
     relabelStats();
   }
 
+  /* ----- ظهور تدريجي عند التمرير ----- */
+  function initReveal() {
+    var targets = document.querySelectorAll(".section-head, .grid-3, .grid-2");
+    if (!targets.length) return;
+    document.documentElement.classList.add("reveal-on");
+    targets.forEach(function (t) { t.setAttribute("data-reveal", ""); });
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce || !("IntersectionObserver" in window)) {
+      targets.forEach(function (t) { t.classList.add("is-in"); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
+    targets.forEach(function (t) { io.observe(t); });
+  }
+
   function boot() {
     renderFeatured();
     renderProjectsPage();
@@ -312,6 +331,7 @@
     initHomeSearch();
     wireContactLinks();
     setYear();
+    initReveal();
 
     // فلاتر المشاريع
     ["filterCity", "filterType", "filterStatus"].forEach(function (id) {

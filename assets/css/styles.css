@@ -695,3 +695,38 @@ html[lang="en"] .fahem-card__type { font-family: var(--font-en-body); }
   .fahem-fab__label { display: none; }
   .fahem-fab { padding: 0.85rem; }
 }
+
+/* ==========================================================================
+   ظهور تدريجي عند التمرير (Scroll reveal)
+   تحسين تدريجي: لا يُفعَّل إلا بعد أن يضيف الـ JS الكلاس reveal-on على <html>،
+   فلو تعطّل الـ JS يبقى كل المحتوى ظاهرًا. يحترم تقليل الحركة.
+   ========================================================================== */
+html.reveal-on [data-reveal]:not(.grid) {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .7s cubic-bezier(.22,.61,.36,1), transform .7s cubic-bezier(.22,.61,.36,1);
+  will-change: opacity, transform;
+}
+html.reveal-on [data-reveal]:not(.grid).is-in { opacity: 1; transform: none; }
+
+/* داخل الشبكات: ظهور متدرّج للبطاقات (الحاوية تبقى ثابتة حتى لو أُعيد رسم البطاقات) */
+html.reveal-on .grid[data-reveal] > * {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .7s cubic-bezier(.22,.61,.36,1), transform .7s cubic-bezier(.22,.61,.36,1);
+}
+html.reveal-on .grid[data-reveal].is-in > * { opacity: 1; transform: none; }
+html.reveal-on .grid[data-reveal].is-in > *:nth-child(2) { transition-delay: .07s; }
+html.reveal-on .grid[data-reveal].is-in > *:nth-child(3) { transition-delay: .14s; }
+html.reveal-on .grid[data-reveal].is-in > *:nth-child(4) { transition-delay: .21s; }
+html.reveal-on .grid[data-reveal].is-in > *:nth-child(5) { transition-delay: .28s; }
+html.reveal-on .grid[data-reveal].is-in > *:nth-child(6) { transition-delay: .35s; }
+
+@media (prefers-reduced-motion: reduce) {
+  html.reveal-on [data-reveal]:not(.grid),
+  html.reveal-on .grid[data-reveal] > * {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
