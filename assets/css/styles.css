@@ -231,8 +231,15 @@ html[lang="ar"] .logo__sub { font-family: var(--font-ar-body); letter-spacing: 0
   content: ""; position: absolute; inset-inline: 0; bottom: -2px; height: 2px; background: var(--champagne);
 }
 .nav__cta { margin-inline-start: var(--sp-2); }
-/* شرارة فاهم الذهبية (رمز AI) على كل أزرار "استشير فاهم" */
-.nav__cta svg, .fahem-spark { color: var(--gold-bright); flex: none; }
+/* زر "استشير فاهم" في الشريط العلوي: كان نصه داكنًا على خلفية داكنة فلا يظهر — نجعله فاتحًا */
+.nav a.nav__cta { color: var(--bone); }
+.nav a.nav__cta:hover { color: var(--bone); }
+/* شرارة فاهم = رمز الذكاء الصناعي: ذهبية، أوضح، بتوهّج خفيف يوحي بأنه مساعد ذكي */
+.nav__cta svg, .fahem-spark, .fahem-fab svg {
+  color: var(--gold-bright); flex: none;
+  width: 19px; height: 19px;
+  filter: drop-shadow(0 0 5px rgba(187,164,118,0.55));
+}
 
 /* زر قائمة الجوال */
 .nav-toggle { display: none; width: 44px; height: 44px; align-items: center; justify-content: center; }
@@ -267,7 +274,7 @@ html[lang="ar"] .hero .display {
   white-space: nowrap;
   width: max-content;
   max-width: none;
-  font-size: min(8.5vw, 4.75rem);
+  font-size: min(8.5vw, 3.9rem);
 }
 .hero .lead { color: rgba(246,243,235,0.8); margin-top: var(--sp-6); }
 .hero .btn--ghost { border-color: rgba(246,243,235,0.6); color: var(--bone); }
