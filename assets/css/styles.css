@@ -90,7 +90,7 @@ html[lang="en"] h1, html[lang="en"] h2, html[lang="en"] h3, html[lang="en"] .dis
 }
 html[lang="ar"] h1, html[lang="ar"] h2, html[lang="ar"] h3, html[lang="ar"] .display {
   font-family: var(--font-ar-display);
-  line-height: 1.4;
+  line-height: 1.3;
   font-weight: 400;
 }
 
@@ -261,7 +261,7 @@ html[lang="ar"] .logo__sub { font-family: var(--font-ar-body); letter-spacing: 0
 }
 .hero__inner { padding-block: clamp(5rem, 14vw, 9.5rem); max-width: 46ch; }
 .hero .display { color: var(--bone); }
-html[lang="ar"] .hero .display { line-height: 1.35; }
+html[lang="ar"] .hero .display { line-height: 1.2; }
 .hero .lead { color: rgba(246,243,235,0.8); margin-top: var(--sp-6); }
 .hero .btn--ghost { border-color: rgba(246,243,235,0.6); color: var(--bone); }
 .hero .btn--ghost:hover { background: var(--bone); color: var(--ink); border-color: var(--bone); }
