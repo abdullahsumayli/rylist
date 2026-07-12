@@ -56,6 +56,9 @@
   }
 
   *{box-sizing:border-box}
+  /* الأدمن يحمّل ستايل الموقع الرئيسي الذي يضبط body بخلفية كريميّة؛ نتجاوزها هنا
+     حتى لا تظهر شريحة فاتحة أسفل الحاوية الداكنة في الوضع الليلي */
+  html,body{background:var(--bg)}
   .rl{font-family:var(--font);color:var(--text);background:var(--bg);min-height:100vh;
       line-height:1.7;-webkit-font-smoothing:antialiased}
   .rl button{font:inherit;color:inherit;cursor:pointer;background:none;border:none}
