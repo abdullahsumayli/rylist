@@ -5,6 +5,7 @@ import os from "node:os";
 import path from "node:path";
 import { mapHtml, unitsHtml, galleryHtml, factsHtml, featuresHtml, renderProjectHtml } from "./renderProject.mjs";
 import { renderProjectPages } from "./projectPages.mjs";
+import { resolveTheme } from "./theme.mjs";
 
 test("mapHtml embeds exact coordinates when lat/lng present", () => {
   const html = mapHtml({ lat: 24.77, lng: 46.73, district: "الرمال", cityLabel: "الرياض", location: [], loc: "ar" });
@@ -148,6 +149,19 @@ test("renderProjectHtml fills header fields and title", () => {
   assert.match(html, /2,200,000 – 2,250,000 ريال/);
   assert.match(html, /الرمال · تاون هاوس · الرياض/);
   assert.match(html, /q=24\.77,46\.73/);
+});
+
+test("renderProjectHtml injects theme head when a theme is provided", () => {
+  const theme = resolveTheme({ font_preset: "elegant", accent_preset: "green" });
+  const html = renderProjectHtml(TMPL, sampleProject, { loc: "ar", dir: "rtl", base: "https://rylist.sa", tax: stubTax, contact: {}, theme });
+  assert.match(html, /<style id="theme-vars">:root\{/);
+  assert.match(html, /--champagne:\s*#4E6A4E/);
+  assert.match(html, /family=Playfair\+Display/);
+});
+
+test("renderProjectHtml leaves no themeHead placeholder when theme absent", () => {
+  const html = renderProjectHtml(TMPL, sampleProject, { loc: "ar", dir: "rtl", base: "https://rylist.sa", tax: stubTax, contact: {} });
+  assert.doesNotMatch(html, /\{\{themeHead\}\}/);   // placeholder cleanly removed
 });
 
 test("renderProjectPages writes one file per project per locale", () => {

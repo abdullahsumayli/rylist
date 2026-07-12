@@ -117,7 +117,7 @@ const STATUS_CLASS = { sold: "status-pill--sold", reserved: "status-pill--reserv
 
 // Assemble one full project page. `ctx` = { loc, dir, base, tax(kind,key,loc), contact }.
 export function renderProjectHtml(tmpl, p, ctx) {
-  const { loc, dir, base, tax } = ctx;
+  const { loc, dir, base, tax, theme } = ctx;
   const t = p.i18n?.title?.[loc] || p.i18n?.title?.ar || p.code;
   const url = (l) => `${base}${l === "ar" ? "" : "/" + l}/projects/${p.code}.html`;
   const hreflang = ["ar", "en", "zh"].map((l) => `\n<link rel="alternate" hreflang="${l}" href="${url(l)}">`).join("");
@@ -134,6 +134,7 @@ export function renderProjectHtml(tmpl, p, ctx) {
   return fill(tmpl, {
     lang: loc, dir, title: t, desc: (p.i18n?.description?.[loc] || "").slice(0, 150),
     canonical: url(loc), hreflang,
+    themeHead: theme ? `<link rel="stylesheet" href="${theme.href}"><style id="theme-vars">:root{${theme.vars}}</style>` : "",
     assets: loc === "ar" ? ".." : "../..", home: loc === "ar" ? "/" : `/${loc}/`,
     image: p.image_url || "", district: p.i18n?.district?.[loc] || "",
     typeLabel: tax("property_type", p.type_key, loc), cityLabel: tax("city", p.city_key, loc),
