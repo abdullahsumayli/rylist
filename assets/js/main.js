@@ -224,7 +224,7 @@
           io.unobserve(e.target);
         }
       });
-    }, { threshold: 0.4 });
+    }, { threshold: 0.2, rootMargin: "0px 0px 180px 0px" });
     statEls.forEach(function (n) { io.observe(n); });
   }
 
