@@ -598,7 +598,8 @@ html[lang="en"] .fahem-fab__label { font-family: var(--font-en-body); letter-spa
   transform: translateX(100%); transition: transform .32s ease;
 }
 html[dir="rtl"] .fahem-panel { transform: translateX(-100%); }
-.fahem-panel.is-open { transform: translateX(0); }
+.fahem-panel.is-open,
+html[dir="rtl"] .fahem-panel.is-open { transform: translateX(0); }
 
 /* رأس اللوحة */
 .fahem-head {
