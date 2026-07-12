@@ -261,7 +261,14 @@ html[lang="ar"] .logo__sub { font-family: var(--font-ar-body); letter-spacing: 0
 }
 .hero__inner { padding-block: clamp(5rem, 14vw, 9.5rem); max-width: 46ch; }
 .hero .display { color: var(--bone); }
-html[lang="ar"] .hero .display { line-height: 1.2; }
+/* الهيرو: العنوان العربي على سطر واحد يمتد بالعرض (يتقلّص مع الشاشة ليبقى سطرًا) */
+html[lang="ar"] .hero .display {
+  line-height: 1.2;
+  white-space: nowrap;
+  width: max-content;
+  max-width: none;
+  font-size: min(8.5vw, 4.75rem);
+}
 .hero .lead { color: rgba(246,243,235,0.8); margin-top: var(--sp-6); }
 .hero .btn--ghost { border-color: rgba(246,243,235,0.6); color: var(--bone); }
 .hero .btn--ghost:hover { background: var(--bone); color: var(--ink); border-color: var(--bone); }
