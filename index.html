@@ -22,7 +22,7 @@
       <a data-email data-email-text href="#">info@rylist.sa</a>
     </div>
     <div class="topbar__group">
-      <span class="topbar__group--muted" data-en="Riyadh · Saudi Arabia" data-zh="">الرياض · السعودية</span>
+      <span class="topbar__group--muted" data-cms="topbar_city" data-en="Riyadh · Saudi Arabia" data-zh="">الرياض · السعودية</span>
       <a class="lang-toggle" data-lang-link="en" aria-label="Switch to English">EN</a>
       <a class="lang-toggle" data-lang-link="ar" aria-label="التبديل إلى العربية">ع</a>
     </div>
@@ -38,13 +38,13 @@
     </a>
     <button class="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav"><span></span></button>
     <nav class="nav" id="nav" aria-label="Primary">
-      <a href="index.html" data-en="Home" data-zh="">الرئيسية</a>
-      <a href="projects.html" data-en="Projects" data-zh="">المشاريع</a>
-      <a href="services.html" data-en="Services" data-zh="">الخدمات</a>
-      <a href="about.html" data-en="About" data-zh="">من نحن</a>
-      <a href="news.html" data-en="News" data-zh="">الأخبار</a>
-      <a href="contact.html" data-en="Contact" data-zh="">تواصل</a>
-      <a class="btn btn--primary nav__cta" href="contact.html" data-en="Request a consultation" data-zh="">اطلب استشارة عقارية</a>
+      <a href="index.html" data-cms="nav_home" data-en="Home" data-zh="">الرئيسية</a>
+      <a href="projects.html" data-cms="nav_projects" data-en="Projects" data-zh="">المشاريع</a>
+      <a href="services.html" data-cms="nav_services" data-en="Services" data-zh="">الخدمات</a>
+      <a href="about.html" data-cms="nav_about" data-en="About" data-zh="">من نحن</a>
+      <a href="news.html" data-cms="nav_news" data-en="News" data-zh="">الأخبار</a>
+      <a href="contact.html" data-cms="nav_contact" data-en="Contact" data-zh="">تواصل</a>
+      <a class="btn btn--primary nav__cta" href="contact.html" data-cms="nav_cta" data-en="Request a consultation" data-zh="">اطلب استشارة عقارية</a>
     </nav>
   </div>
 </header>
@@ -54,13 +54,13 @@
 
   <!-- الهيرو -->
   <section class="hero">
-    <div class="hero__bg" style="background-image:url('https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=1920&q=70')"></div>
+    <div class="hero__bg" data-cms-img="hero" style="background-image:url('https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=1920&q=70')"></div>
     <div class="container hero__inner">
-      <h1 class="display" data-en="Find the property that suits you." data-zh="">دور على العقار الي يناسبك</h1>
-      <p class="lead" data-en="We bring you curated residential projects from trusted developers, with all the information you need to buy with confidence." data-zh="">نجيب لك مشاريع سكنية مختارة من مطورين موثوقين، مع كل المعلومات التي تحتاجها لاتخاذ قرار الشراء بثقة</p>
+      <h1 class="display" data-cms="hero_title" data-en="Find the property that suits you." data-zh="">دور على العقار الي يناسبك</h1>
+      <p class="lead" data-cms="hero_lead" data-en="We bring you curated residential projects from trusted developers, with all the information you need to buy with confidence." data-zh="">نجيب لك مشاريع سكنية مختارة من مطورين موثوقين، مع كل المعلومات التي تحتاجها لاتخاذ قرار الشراء بثقة</p>
       <div class="btn-row">
-        <a class="btn btn--primary" href="projects.html" data-en="Our projects" data-zh="">مشاريعنا</a>
-        <a class="btn btn--ghost" href="contact.html" data-en="Request a consultation" data-zh="">اطلب استشارة عقارية</a>
+        <a class="btn btn--primary" href="projects.html" data-cms="hero_cta1" data-en="Our projects" data-zh="">مشاريعنا</a>
+        <a class="btn btn--ghost" href="contact.html" data-cms="hero_cta2" data-en="Request a consultation" data-zh="">اطلب استشارة عقارية</a>
       </div>
     </div>
   </section>
@@ -68,7 +68,7 @@
   <!-- بحث عن مشروع -->
   <section class="section section--tight section--soft">
     <div class="container">
-      <span class="eyebrow" data-en="Find a project" data-zh="">ابحث عن مشروع</span>
+      <span class="eyebrow" data-cms="search_eyebrow" data-en="Find a project" data-zh="">ابحث عن مشروع</span>
       <form id="homeSearch" class="search-bar">
         <select aria-label="City" data-en-label="City">
           <option value="all" data-en="All cities" data-zh="">كل المدن</option>
@@ -91,27 +91,27 @@
   <section class="section">
     <div class="container">
       <div class="section-head">
-        <span class="eyebrow" data-en="What we do" data-zh="">خدماتنا</span>
-        <h2 data-en="Everything you need to choose your property." data-zh="">كل الي تحتاجه عشان تختار عقارك</h2>
+        <span class="eyebrow" data-cms="svc_eyebrow" data-en="What we do" data-zh="">خدماتنا</span>
+        <h2 data-cms="svc_head" data-en="Everything you need to choose your property." data-zh="">كل الي تحتاجه عشان تختار عقارك</h2>
       </div>
       <div class="grid grid-3">
         <div class="service-card">
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 21h18M6 21V8l6-4 6 4v13M10 21v-5h4v5"/></svg>
           <span class="num">01</span>
-          <h3 data-en="Curated residential projects" data-zh="">مشاريع سكنية مختارة</h3>
-          <p data-en="Browse trusted projects with clear details that help you compare and choose the best fit." data-zh="">استعرض مشاريع موثوقة مع تفاصيل واضحة تساعدك تقارن وتختار الأنسب لك</p>
+          <h3 data-cms="svc1_title" data-en="Curated residential projects" data-zh="">مشاريع سكنية مختارة</h3>
+          <p data-cms="svc1_desc" data-en="Browse trusted projects with clear details that help you compare and choose the best fit." data-zh="">استعرض مشاريع موثوقة مع تفاصيل واضحة تساعدك تقارن وتختار الأنسب لك</p>
         </div>
         <div class="service-card">
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M9 20l-5.5 2V6L9 4l6 2 5.5-2v16L15 22z"/><path d="M9 4v16M15 6v16"/></svg>
           <span class="num">02</span>
-          <h3 data-en="Off-plan projects" data-zh="">مشاريع البيع على الخارطة</h3>
-          <p data-en="Explore licensed off-plan projects, with clear information on construction stages and ownership options." data-zh="">استكشف مشاريع البيع على الخارطة المرخصة، مع معلومات واضحة عن مراحل التنفيذ وخيارات التملك</p>
+          <h3 data-cms="svc2_title" data-en="Off-plan projects" data-zh="">مشاريع البيع على الخارطة</h3>
+          <p data-cms="svc2_desc" data-en="Explore licensed off-plan projects, with clear information on construction stages and ownership options." data-zh="">استكشف مشاريع البيع على الخارطة المرخصة، مع معلومات واضحة عن مراحل التنفيذ وخيارات التملك</p>
         </div>
         <div class="service-card">
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 12l9 4 9-4M3 17l9 4 9-4"/></svg>
           <span class="num">03</span>
-          <h3 data-en="Residential & investment land" data-zh="">أراضٍ سكنية واستثمارية</h3>
-          <p data-en="A range of land options in prime locations, suited to living or investment." data-zh="">خيارات متنوعة من الأراضي في مواقع مميزة تناسب السكن أو الاستثمار</p>
+          <h3 data-cms="svc3_title" data-en="Residential & investment land" data-zh="">أراضٍ سكنية واستثمارية</h3>
+          <p data-cms="svc3_desc" data-en="A range of land options in prime locations, suited to living or investment." data-zh="">خيارات متنوعة من الأراضي في مواقع مميزة تناسب السكن أو الاستثمار</p>
         </div>
       </div>
     </div>
@@ -122,10 +122,10 @@
     <div class="container">
       <div class="section-head" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;max-width:none">
         <div>
-          <span class="eyebrow" data-en="Featured projects" data-zh="">مشاريع مميزة</span>
-          <h2 data-en="A selection available now." data-zh="">مشاريع مختارة معروضة الآن.</h2>
+          <span class="eyebrow" data-cms="feat_eyebrow" data-en="Featured projects" data-zh="">مشاريع مميزة</span>
+          <h2 data-cms="feat_head" data-en="A selection available now." data-zh="">مشاريع مختارة معروضة الآن.</h2>
         </div>
-        <a class="link-arrow" href="projects.html" data-en="All projects" data-zh="">كل المشاريع</a>
+        <a class="link-arrow" href="projects.html" data-cms="feat_link" data-en="All projects" data-zh="">كل المشاريع</a>
       </div>
       <div id="featuredProjects" class="grid grid-3"></div>
     </div>
@@ -134,7 +134,7 @@
   <!-- بالشراكة مع -->
   <section class="section section--tight">
     <div class="container center">
-      <span class="eyebrow" data-en="In partnership with" data-zh="">بالشراكة مع</span>
+      <span class="eyebrow" data-cms="partners_eyebrow" data-en="In partnership with" data-zh="">بالشراكة مع</span>
       <div id="partnersGrid" class="partners-logos"></div>
     </div>
   </section>
@@ -143,15 +143,15 @@
   <section class="section">
     <div class="container two-col">
       <div>
-        <span class="eyebrow" data-en="Why RYLIST" data-zh="">لماذا rylist</span>
-        <h2 data-en="We help you choose with peace of mind." data-zh="">نساعدك تختار وانت مرتاح</h2>
-        <p class="lead" style="margin-top:1.5rem" data-en="We choose projects carefully and give you clear information, so you can make a considered decision." data-zh="">نختار المشاريع بعناية ونقدم لك معلومات واضحة تساعدك تاخذ قرار شراء مدروس</p>
-        <div class="btn-row"><a class="btn btn--ghost" href="about.html" data-en="Our approach" data-zh="">منهجية عملنا</a></div>
+        <span class="eyebrow" data-cms="why_eyebrow" data-en="Why RYLIST" data-zh="">لماذا rylist</span>
+        <h2 data-cms="why_head" data-en="We help you choose with peace of mind." data-zh="">نساعدك تختار وانت مرتاح</h2>
+        <p class="lead" style="margin-top:1.5rem" data-cms="why_lead" data-en="We choose projects carefully and give you clear information, so you can make a considered decision." data-zh="">نختار المشاريع بعناية ونقدم لك معلومات واضحة تساعدك تاخذ قرار شراء مدروس</p>
+        <div class="btn-row"><a class="btn btn--ghost" href="about.html" data-cms="why_cta" data-en="Our approach" data-zh="">منهجية عملنا</a></div>
       </div>
       <div class="values" style="grid-template-columns:1fr">
-        <div class="value"><span class="num">01</span><div><h3 data-en="Projects from trusted developers" data-zh="">مشاريع من مطورين موثوقين</h3><p data-en="We show you selected projects for living and investment." data-zh="">نعرض لك مشاريع مختارة تلبي احتياجات السكن والاستثمار</p></div></div>
-        <div class="value"><span class="num">02</span><div><h3 data-en="Real-estate market expertise" data-zh="">خبرة بالسوق العقاري</h3><p data-en="We help you compare options and understand prices before you buy." data-zh="">نساعدك على مقارنة الخيارات وفهم الأسعار قبل ما تشتري</p></div></div>
-        <div class="value"><span class="num">03</span><div><h3 data-en="Information before you own" data-zh="">معلومات تساعدك قبل التملك</h3><p data-en="We provide clear information on every project we trust." data-zh="">نوفر لك معلومات واضحة عن كل مشروع نثق فيه</p></div></div>
+        <div class="value"><span class="num">01</span><div><h3 data-cms="why1_title" data-en="Projects from trusted developers" data-zh="">مشاريع من مطورين موثوقين</h3><p data-cms="why1_desc" data-en="We show you selected projects for living and investment." data-zh="">نعرض لك مشاريع مختارة تلبي احتياجات السكن والاستثمار</p></div></div>
+        <div class="value"><span class="num">02</span><div><h3 data-cms="why2_title" data-en="Real-estate market expertise" data-zh="">خبرة بالسوق العقاري</h3><p data-cms="why2_desc" data-en="We help you compare options and understand prices before you buy." data-zh="">نساعدك على مقارنة الخيارات وفهم الأسعار قبل ما تشتري</p></div></div>
+        <div class="value"><span class="num">03</span><div><h3 data-cms="why3_title" data-en="Information before you own" data-zh="">معلومات تساعدك قبل التملك</h3><p data-cms="why3_desc" data-en="We provide clear information on every project we trust." data-zh="">نوفر لك معلومات واضحة عن كل مشروع نثق فيه</p></div></div>
       </div>
     </div>
   </section>
@@ -160,9 +160,9 @@
   <section class="section section--ink has-summit cta-band">
     <div class="container">
       <div class="gold-rule gold-rule--center"></div>
-      <h2 class="h1" data-en="Looking for your property?" data-zh="">تدور عن عقارك ؟</h2>
-      <p class="lead" data-en="Get in touch and we’ll help you find the project that fits your needs and budget." data-zh="">تواصل معنا وبنساعدك تحصل على المشروع الي يناسب احتياجك وميزانيتك</p>
-      <div class="btn-row" style="justify-content:center"><a class="btn btn--primary" href="contact.html" data-en="Request a consultation" data-zh="">اطلب استشارة عقارية</a><a class="btn btn--ghost" data-wa target="_blank" rel="noopener" data-en="WhatsApp" data-zh="">واتساب</a></div>
+      <h2 class="h1" data-cms="cta_head" data-en="Looking for your property?" data-zh="">تدور عن عقارك ؟</h2>
+      <p class="lead" data-cms="cta_lead" data-en="Get in touch and we’ll help you find the project that fits your needs and budget." data-zh="">تواصل معنا وبنساعدك تحصل على المشروع الي يناسب احتياجك وميزانيتك</p>
+      <div class="btn-row" style="justify-content:center"><a class="btn btn--primary" href="contact.html" data-cms="cta_primary" data-en="Request a consultation" data-zh="">اطلب استشارة عقارية</a><a class="btn btn--ghost" data-wa data-cms="cta_wa" target="_blank" rel="noopener" data-en="WhatsApp" data-zh="">واتساب</a></div>
     </div>
   </section>
 
@@ -177,10 +177,10 @@
           <svg class="mark" viewBox="0 0 200 200" aria-hidden="true"><path d="M40 150 H160" stroke="currentColor" stroke-width="5"/><path d="M55 150 L100 55 L145 150" stroke="currentColor" stroke-width="9" fill="none" stroke-linecap="square"/><circle cx="100" cy="55" r="13" fill="#A38A58"/></svg>
           <span class="logo__text"><span class="logo__name">RYLIST</span><span class="logo__sub" data-en="REAL ESTATE" data-zh="">العقارية</span></span>
         </a>
-        <p class="site-footer__tag" data-en="Curated residential projects from trusted developers. Clear information to help you choose your home with confidence." data-zh="">مشاريع سكنية مختارة من مطوّرين موثوقين، مع معلومات واضحة تساعدك تختار عقارك بثقة.</p>
+        <p class="site-footer__tag" data-cms="footer_tag" data-en="Curated residential projects from trusted developers. Clear information to help you choose your home with confidence." data-zh="">مشاريع سكنية مختارة من مطوّرين موثوقين، مع معلومات واضحة تساعدك تختار عقارك بثقة.</p>
       </div>
       <div class="footer-col">
-        <h4 data-en="Explore" data-zh="">تصفّح</h4>
+        <h4 data-cms="footer_explore_head" data-en="Explore" data-zh="">تصفّح</h4>
         <ul>
           <li><a href="projects.html" data-en="Projects" data-zh="">المشاريع</a></li>
           <li><a href="services.html" data-en="Services" data-zh="">الخدمات</a></li>
@@ -189,7 +189,7 @@
         </ul>
       </div>
       <div class="footer-col">
-        <h4 data-en="Contact" data-zh="">تواصل</h4>
+        <h4 data-cms="footer_contact_head" data-en="Contact" data-zh="">تواصل</h4>
         <ul>
           <li><a data-wa target="_blank" rel="noopener" data-en="WhatsApp" data-zh="">واتساب</a></li>
           <li><a data-email data-email-text href="#">info@rylist.sa</a></li>
@@ -200,8 +200,8 @@
       </div>
     </div>
     <div class="site-footer__bottom">
-      <span>© <span data-year>2026</span> RYLIST — <span data-en="All rights reserved" data-zh="">جميع الحقوق محفوظة</span></span>
-      <span data-en="Privacy · Terms" data-zh="">الخصوصية · الشروط</span>
+      <span>© <span data-year>2026</span> RYLIST — <span data-cms="footer_rights" data-en="All rights reserved" data-zh="">جميع الحقوق محفوظة</span></span>
+      <span data-cms="footer_bottom" data-en="Privacy · Terms" data-zh="">الخصوصية · الشروط</span>
     </div>
   </div>
 </footer>
