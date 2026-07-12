@@ -56,12 +56,15 @@ function flatPartners(partners) {
 }
 
 function flatStats(stats) {
-  return (stats || []).map((s) => ({
-    value: s.value ?? 0,
-    decimals: Number.isInteger(s.value) ? 0 : 1,
-    sym: s.suffix || "",
-    labelAr: name(s.i18n?.label, "ar"), labelEn: name(s.i18n?.label, "en"),
-  }));
+  return (stats || []).map((s) => {
+    const num = Number(s.value) || 0;
+    return {
+      value: num,
+      decimals: Number.isInteger(num) ? 0 : 1,
+      sym: s.suffix || "",
+      labelAr: name(s.i18n?.label, "ar"), labelEn: name(s.i18n?.label, "en"),
+    };
+  });
 }
 
 function flatContact(contact) {
