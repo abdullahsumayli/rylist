@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-label="RYLIST العقارية — صورة قريبًا">
+  <rect width="1600" height="1000" fill="#17140F"/>
+  <!-- hairline frame -->
+  <rect x="40" y="40" width="1520" height="920" fill="none" stroke="#A38A58" stroke-opacity="0.28" stroke-width="2"/>
+  <!-- RYLIST mark: baseline + peak + gold apex -->
+  <g transform="translate(800 340)">
+    <path d="M-150 130 H150" stroke="#F6F3EB" stroke-width="9" stroke-linecap="round"/>
+    <path d="M-118 130 L0 -66 L118 130" stroke="#F6F3EB" stroke-width="16" fill="none" stroke-linecap="square" stroke-linejoin="miter"/>
+    <circle cx="0" cy="-70" r="26" fill="#A38A58"/>
+  </g>
+  <!-- wordmark -->
+  <text x="800" y="640" text-anchor="middle" fill="#F6F3EB"
+        font-family="Georgia, 'Times New Roman', serif" font-size="150" letter-spacing="14">RYLIST</text>
+  <text x="800" y="720" text-anchor="middle" fill="#BBA476"
+        font-family="'Segoe UI', Tahoma, Arial, sans-serif" font-size="52" letter-spacing="6">العقارية</text>
+  <!-- placeholder caption -->
+  <text x="800" y="855" text-anchor="middle" fill="#F6F3EB" fill-opacity="0.55"
+        font-family="'Segoe UI', Tahoma, Arial, sans-serif" font-size="40" letter-spacing="2">الصورة قريبًا · Image coming soon</text>
+</svg>
