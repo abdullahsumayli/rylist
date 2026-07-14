@@ -588,6 +588,8 @@ html[lang="ar"] .punit-card__price { font-family: var(--font-ar-display); }
    ========================================================================== */
 
 /* الزر العائم "استشير فاهم" — فوق زر الواتساب */
+/* الزر العائم لفاهم مُخفى — فاهم يُفتح من زر الشريط العلوي فقط */
+.fahem-fab { display: none !important; }
 .fahem-fab {
   position: fixed; inset-block-end: calc(88px + env(safe-area-inset-bottom, 0px));
   inset-inline-end: 20px; z-index: 60;
