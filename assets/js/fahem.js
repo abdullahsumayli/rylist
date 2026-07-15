@@ -49,53 +49,8 @@ const T = {
     ar: "عجبك مشروع؟ اترك اسمك وجوالك ويتواصل معك فريق rylist ويرتّب لك كل شيء — مجانًا.",
     en: "Like a project? Leave your name and phone and the rylist team will reach out and arrange everything — free.",
   },
-  restart: { ar: "ابحث من جديد", en: "Start over" },
 };
 const tr = (k) => T[k][isAr() ? "ar" : "en"];
-
-// خطوات التدفّق الموجّه (أزرار ثابتة) — [نص الزر, القيمة].
-const GUIDE = () =>
-  isAr()
-    ? {
-        purpose: {
-          q: "هلا والله! أنا فاهم، مستشارك العقاري في rylist. وش ناوي عليه؟",
-          opts: [["سكن", "living"], ["استثمار", "investment"]],
-        },
-        type: {
-          q: "تمام. وش نوع العقار اللي يناسبك؟",
-          opts: [["شقة", "apartment"], ["فيلا", "villa"], ["تاون هاوس", "townhouse"], ["أرض", "land"], ["أي نوع", ""]],
-        },
-        budget: {
-          q: "وش ميزانيتك التقريبية؟",
-          opts: [
-            ["أقل من مليون", "|1000000"],
-            ["مليون – ١.٥", "1000000|1500000"],
-            ["١.٥ – ٢ مليون", "1500000|2000000"],
-            ["أكثر من ٢ مليون", "2000000|"],
-            ["أي ميزانية", "|"],
-          ],
-        },
-      }
-    : {
-        purpose: {
-          q: "Hi! I'm Fahem, your rylist real-estate advisor. What are you looking for?",
-          opts: [["To live", "living"], ["To invest", "investment"]],
-        },
-        type: {
-          q: "Great. What type of property suits you?",
-          opts: [["Apartment", "apartment"], ["Villa", "villa"], ["Townhouse", "townhouse"], ["Land", "land"], ["Any type", ""]],
-        },
-        budget: {
-          q: "What's your approximate budget?",
-          opts: [
-            ["Under 1M", "|1000000"],
-            ["1M – 1.5M", "1000000|1500000"],
-            ["1.5M – 2M", "1500000|2000000"],
-            ["Over 2M", "2000000|"],
-            ["Any budget", "|"],
-          ],
-        },
-      };
 
 function esc(s) {
   return String(s == null ? "" : s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -124,8 +79,7 @@ function metaLine(p) {
 let started = false;
 let loading = false;
 let interestCode = null; // مشروع أبدى العميل اهتمامًا به (لربط الـ lead).
-let criteria = { purpose: null, type: null, budget_min: null, budget_max: null }; // من التدفّق الموجّه.
-const msgs = []; // [{ role, content, quickReplies?, guidedPhase?, guidedOpts?, properties?, showContactForm? }]
+const msgs = []; // [{ role, content, quickReplies?, properties?, showContactForm? }]
 
 let els = {};
 
@@ -209,7 +163,7 @@ function open() {
   document.body.style.overflow = "hidden";
   if (!started) {
     started = true;
-    startGuided();
+    void startChat();
   }
   setTimeout(() => els.input.focus(), 260);
 }
@@ -220,81 +174,22 @@ function close() {
   document.body.style.overflow = "";
 }
 
-/* ----- التدفّق الموجّه (أزرار ثابتة، بلا نداء موديل) ----- */
-function askGuided(phase) {
-  const step = GUIDE()[phase];
-  msgs.push({
-    role: "assistant",
-    content: step.q,
-    quickReplies: step.opts.map((o) => o[0]),
-    guidedOpts: step.opts,
-    guidedPhase: phase,
-  });
-  render();
-}
-
-function startGuided() {
-  criteria = { purpose: null, type: null, budget_min: null, budget_max: null };
+/* ----- الافتتاحية (من edge — يذكر المدن المخدومة ثم سؤال مفتوح) ----- */
+async function startChat() {
   interestCode = null;
-  askGuided("purpose");
-}
-
-function onGuided(phase, value, label) {
-  // سجّل جواب العميل كفقاعة.
-  msgs.push({ role: "user", content: label });
-  if (phase === "purpose") {
-    criteria.purpose = value;
-    render();
-    askGuided("type");
-  } else if (phase === "type") {
-    criteria.type = value || null;
-    render();
-    askGuided("budget");
-  } else if (phase === "budget") {
-    const parts = String(value).split("|");
-    criteria.budget_min = parts[0] ? Number(parts[0]) : null;
-    criteria.budget_max = parts[1] ? Number(parts[1]) : null;
-    render();
-    void doSearch();
-  } else if (phase === "postsearch") {
-    startGuided(); // "ابحث من جديد"
-  }
-}
-
-/* ----- نداء البحث الحتمي (edge — بلا موديل) ----- */
-async function doSearch() {
-  const payload = {
-    language: lang(),
-    search: {
-      type: criteria.type || undefined,
-      budget_min: criteria.budget_min || undefined,
-      budget_max: criteria.budget_max || undefined,
-    },
-  };
   setLoading(true);
   try {
-    const { data, error } = await sb.functions.invoke("fahem-chat", { body: payload });
+    const { data, error } = await sb.functions.invoke("fahem-chat", { body: { language: lang(), start: true } });
     if (error) throw error;
-    msgs.push({ role: "assistant", content: (data && data.message) || "", properties: (data && data.properties) || null });
-    // خطوة التواصل بعد النتائج.
-    msgs.push({
-      role: "assistant",
-      content: tr("afterSearch"),
-      showContactForm: true,
-      quickReplies: [tr("restart")],
-      guidedOpts: [[tr("restart"), ""]],
-      guidedPhase: "postsearch",
-    });
-    render();
+    pushAssistant(data);
   } catch {
-    msgs.push({ role: "assistant", content: tr("error") });
-    render();
+    pushAssistant({ message: tr("error") });
   } finally {
     setLoading(false);
   }
 }
 
-/* ----- النص الحر (احتياطي) → مسار الذكاء الكامل في edge ----- */
+/* ----- النص الحر (المسار الأساسي) → البحث/المحادثة في edge ----- */
 function history() {
   return msgs.filter((m) => m.role === "user" || m.role === "assistant").map((m) => ({ role: m.role, content: m.content }));
 }
@@ -319,6 +214,7 @@ async function send(text) {
 
 function pushAssistant(data) {
   if (data && data.projectCode) interestCode = data.projectCode;
+  const hasProps = !!(data && data.properties && data.properties.length);
   msgs.push({
     role: "assistant",
     content: (data && data.message) || "",
@@ -326,6 +222,10 @@ function pushAssistant(data) {
     properties: (data && data.properties) || null,
     showContactForm: !!(data && data.showContactForm),
   });
+  // بعد عرض نتائج بحث، ادعُ العميل للتواصل (ما لم يطلبها المسار أصلاً).
+  if (hasProps && !(data && data.showContactForm)) {
+    msgs.push({ role: "assistant", content: tr("afterSearch"), showContactForm: true });
+  }
   render();
 }
 
@@ -337,12 +237,9 @@ function setLoading(v) {
 
 /* ----- التقاط العميل مباشرة في leads ----- */
 async function submitContact(name, phone, msgEl, formEl) {
-  const summary = [
-    criteria.purpose ? "الغرض: " + criteria.purpose : "",
-    criteria.type ? "النوع: " + criteria.type : "",
-    criteria.budget_max || criteria.budget_min ? "الميزانية: " + (criteria.budget_min || 0) + "-" + (criteria.budget_max || "") : "",
-  ]
-    .concat(msgs.filter((m) => m.role === "user").map((m) => m.content))
+  const summary = msgs
+    .filter((m) => m.role === "user")
+    .map((m) => m.content)
     .filter(Boolean)
     .join(" | ")
     .slice(0, 1000);
@@ -415,18 +312,9 @@ function render() {
   }
   els.thread.innerHTML = html;
 
-  // ربط الأزرار (موجّهة أو نص حر).
-  const last = msgs[lastIdx];
+  // ربط الأزرار السريعة: كل زر يرسل نصّه كرسالة حرة.
   els.thread.querySelectorAll(".fahem-chip").forEach((b) => {
-    b.addEventListener("click", () => {
-      const k = Number(b.getAttribute("data-k"));
-      if (last && last.guidedPhase && last.guidedOpts) {
-        const opt = last.guidedOpts[k];
-        onGuided(last.guidedPhase, opt[1], opt[0]);
-      } else {
-        send(b.textContent);
-      }
-    });
+    b.addEventListener("click", () => send(b.textContent));
   });
 
   const cf = els.thread.querySelector(".fahem-lead");
