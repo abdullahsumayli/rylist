@@ -17,7 +17,7 @@ const tabLabel = (code) => (code === "ar" ? "ع" : code === "en" ? "EN" : "中�
 
 // per-locale editor with language tabs (ع / EN / 中文)
 // returns { el, current(), setText(loc,text) }
-function localeTabs(field, value, onLocale) {
+export function localeTabs(field, value, onLocale) {
   const wrap = document.createElement("div");
   const tabs = document.createElement("div"); tabs.className = "langtabs";
   const pane = document.createElement("div");
