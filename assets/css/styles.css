@@ -522,7 +522,9 @@ html[lang="ar"] .statement .q { font-family: var(--font-ar-display); }
 @media (max-width: 860px) {
   /* backdrop-filter يجعل الهيدر «كتلة احتواء» فتُحبس القائمة المنسدلة داخل ارتفاعه (128px).
      نلغيه على الجوال (والخلفية تبقى معتمة 100%) لتملأ القائمة كامل الشاشة. */
-  .site-header { background: var(--bone); backdrop-filter: none; }
+  /* يجب أن يعلو الهيدر خلفية القائمة (55): sticky+z-index ينشئ سياق تكديس يحبس
+     القائمة (60) داخل طبقة الهيدر، فكانت الخلفية عند مستوى body تعلوها وتبتلع الضغط. */
+  .site-header { background: var(--bone); backdrop-filter: none; z-index: 61; }
   .nav {
     position: fixed; inset-block: 0; inset-inline-end: 0; width: min(320px, 84vw);
     background: var(--bone); border-inline-start: 1px solid var(--line);
