@@ -73,7 +73,13 @@ export async function renderForm(root, ent, row, onDone) {
       <div class="fbody" id="fbody"></div>
     </div>`;
   const fbody = root.querySelector("#fbody");
-  const draft = JSON.parse(JSON.stringify(row || {})); draft.i18n = draft.i18n || {};
+  // only tables that actually have i18n fields get an i18n payload — otherwise
+  // Postgres rejects the write ("Could not find the 'i18n' column …") for tables
+  // like social_links / site_theme that have no i18n column.
+  const hasI18n = ent.fields.some((f) => f.t.startsWith("i18n-"));
+  const draft = JSON.parse(JSON.stringify(row || {}));
+  if (hasI18n) draft.i18n = draft.i18n || {};
+  else delete draft.i18n;
 
   for (const f of ent.fields) {
     const isI18n = f.t.startsWith("i18n-");
