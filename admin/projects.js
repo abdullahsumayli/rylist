@@ -1,6 +1,7 @@
 import { sb } from "./db.js";
 import { ENTITIES } from "./entities.js";
 import { renderForm } from "./fields.js";
+import { renderProjectContent } from "./content.js";
 
 const AR = "٠١٢٣٤٥٦٧٨٩";
 const ar = (n) => String(n ?? 0).replace(/[0-9]/g, (d) => AR[+d]);
@@ -66,7 +67,7 @@ export async function renderProjects(root) {
         <div class="prog"><div class="rowb"><span>نسبة البيع</span><span class="num">${ar(p.sold || 0)}٪</span></div>
           <div class="bar"><div class="fill" style="width:${Number(p.sold) || 0}%"></div></div></div>
         <div class="cta"><button class="mini" data-edit="${esc(p.id)}">تعديل</button>
-          <button class="mini ai" title="مساعد ذكي (قريبًا)" disabled>✨</button>
+          <button class="mini" data-content="${esc(p.id)}">المحتوى</button>
           <button class="mini" data-del="${esc(p.id)}">حذف</button></div>
       </div></article>`;
   };
@@ -93,8 +94,9 @@ export async function renderProjects(root) {
   root.querySelector("#addBtn").onclick = () => renderForm(root, ENT(), {}, () => renderProjects(root));
   root.querySelector("#importBtn").onclick = () => alert("رفع العقارات من ملف Excel/CSV — قريبًا (الجزء ج).");
   grid.addEventListener("click", async (e) => {
-    const ed = e.target.closest("[data-edit]"), dl = e.target.closest("[data-del]");
+    const ed = e.target.closest("[data-edit]"), dl = e.target.closest("[data-del]"), ct = e.target.closest("[data-content]");
     if (ed) { const row = rows.find((r) => String(r.id) === ed.dataset.edit); renderForm(root, ENT(), row, () => renderProjects(root)); }
+    if (ct) { const row = rows.find((r) => String(r.id) === ct.dataset.content); renderProjectContent(root, row, () => renderProjects(root)); }
     if (dl) { if (!confirm("حذف العقار؟")) return; const { error: e2 } = await sb.from("projects").delete().eq("id", dl.dataset.del); if (e2) { alert(e2.message); return; } renderProjects(root); }
   });
 }
