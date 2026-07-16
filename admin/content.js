@@ -78,3 +78,70 @@ function galleryEditor(arr, prefix) {
   wrap.append(listEl, actions); render();
   return wrap;
 }
+
+// pairsEditor(arr, aKey, bKey, aLabel, bLabel, mkBlank) -> element.
+// arr is an array of { [aKey]:i18n, [bKey]:i18n } mutated in place.
+function pairsEditor(arr, aKey, bKey, aLabel, bLabel, mkBlank) {
+  const wrap = el("div", "ci-list");
+  const listEl = el("div");
+  const render = () => {
+    listEl.innerHTML = "";
+    arr.forEach((pair, i) => {
+      pair[aKey] = pair[aKey] || blankI18n();
+      pair[bKey] = pair[bKey] || blankI18n();
+      const row = el("div", "ci-pair-row");
+      const a = el("div", "ci-col"); a.append(el("label", "ci-lbl", aLabel), i18nField(pair[aKey]));
+      const b = el("div", "ci-col"); b.append(el("label", "ci-lbl", bLabel), i18nField(pair[bKey]));
+      row.append(a, b, rowTools(arr, i, render, "حذف الصف؟"));
+      listEl.appendChild(row);
+    });
+  };
+  const add = el("button", "btn", "+ صف"); add.type = "button";
+  add.onclick = () => { arr.push(mkBlank()); render(); };
+  wrap.append(listEl, add); render();
+  return wrap;
+}
+
+// stringsEditor(arr) -> element. arr is an array of i18n objects mutated in place.
+function stringsEditor(arr) {
+  const wrap = el("div", "ci-list");
+  const listEl = el("div");
+  const render = () => {
+    listEl.innerHTML = "";
+    arr.forEach((val, i) => {
+      if (!val || typeof val !== "object") arr[i] = blankI18n();
+      const row = el("div", "ci-string-row");
+      const c = el("div", "ci-col"); c.append(i18nField(arr[i]));
+      row.append(c, rowTools(arr, i, render, "حذف السطر؟"));
+      listEl.appendChild(row);
+    });
+  };
+  const add = el("button", "btn", "+ سطر"); add.type = "button";
+  add.onclick = () => { arr.push(blankI18n()); render(); };
+  wrap.append(listEl, add); render();
+  return wrap;
+}
+
+// collapsible(icon, title, countFn, bodyFn) -> element with a lazily-built body.
+// The returned element carries `_refreshCount()` to update its counter.
+function collapsible(icon, title, countFn, bodyFn) {
+  const sec = el("div", "ci-sec");
+  const head = el("button", "ci-sec-head"); head.type = "button";
+  const caret = el("span", "ci-caret", "▸");
+  const label = el("span", "ci-sec-title", `${icon} ${title}`);
+  const count = el("span", "ci-sec-count");
+  const setCount = () => { count.textContent = `(${countFn()})`; };
+  head.append(caret, label, count);
+  const body = el("div", "ci-sec-body"); body.hidden = true;
+  let built = false;
+  head.onclick = () => {
+    body.hidden = !body.hidden;
+    caret.textContent = body.hidden ? "▸" : "▾";
+    if (!built && !body.hidden) { body.appendChild(bodyFn()); built = true; }
+    setCount();
+  };
+  setCount();
+  sec.append(head, body);
+  sec._refreshCount = setCount;
+  return sec;
+}
