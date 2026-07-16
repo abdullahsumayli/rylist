@@ -268,3 +268,29 @@
 .admin-card input:focus{border-color:var(--accent)}
 .admin-card .btn-primary{justify-content:center;padding:11px;font-size:14.5px}
 .admin-err{color:var(--sold);font-size:13px;min-height:1em;text-align:center}
+
+/* ---- project content editor ---- */
+.ci-body { display: flex; flex-direction: column; gap: 10px; }
+.ci-sec { border: 1px solid var(--line, #e5e2dc); border-radius: 10px; overflow: hidden; }
+.ci-sec-head { width: 100%; display: flex; align-items: center; gap: 8px; padding: 12px 14px;
+  background: var(--surface-2, #faf9f6); border: 0; cursor: pointer; font: inherit; text-align: start; }
+.ci-caret { width: 14px; color: var(--text-3, #999); }
+.ci-sec-title { font-weight: 600; }
+.ci-sec-count { color: var(--text-3, #999); font-variant-numeric: tabular-nums; }
+.ci-sec-body { padding: 14px; border-top: 1px solid var(--line, #e5e2dc); }
+.ci-list { display: flex; flex-direction: column; gap: 12px; }
+.ci-pair-row, .ci-string-row, .ci-gallery-row, .ci-unit-row {
+  display: flex; gap: 10px; align-items: flex-start; }
+.ci-col { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+.ci-lbl { font-size: 12px; color: var(--text-2, #666); }
+.ci-tools { display: flex; gap: 4px; flex-shrink: 0; }
+.ci-mini { padding: 4px 8px; font-size: 13px; }
+.ci-thumb { width: 56px; height: 56px; object-fit: cover; border-radius: 8px; flex-shrink: 0;
+  background: var(--surface-2, #faf9f6); }
+.ci-gallery-row input, .ci-imageinput input { flex: 1; }
+.ci-actions { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
+.ci-unit-row { align-items: center; padding: 8px 0; border-bottom: 1px solid var(--line, #e5e2dc); }
+.ci-unit-name { flex: 1; font-weight: 500; }
+.ci-unit-h { margin: 0 0 10px; }
+.ci-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.ci-imageinput { display: flex; flex-direction: column; gap: 6px; }
