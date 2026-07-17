@@ -32,28 +32,52 @@ function lightboxCells(urls, idPrefix, altBase, cellClass) {
   return { cells, overlays };
 }
 
+// A model card is content-bearing if any field is filled. Blank template slots
+// (the editor seeds 4 so it always offers spare models) never render publicly.
+function unitHasContent(u) {
+  if (!u || typeof u !== "object") return false;
+  const anyText = (v) => v && typeof v === "object"
+    ? Object.values(v).some((x) => typeof x === "string" && x.trim() !== "")
+    : (typeof v === "string" && v.trim() !== "");
+  const plans = Array.isArray(u.floorplans) ? u.floorplans : (u.floorplan ? [u.floorplan] : []);
+  return anyText(u.title) || anyText(u.price) || anyText(u.description)
+    || (Array.isArray(u.specs) && u.specs.length > 0)
+    || plans.some((s) => typeof s === "string" && s.trim() !== "");
+}
+
 export function unitsHtml(D, code, loc) {
   const units = Array.isArray(D?.units) ? D.units : [];
-  if (units.length) {
-    const H = { ar: "الوحدات", en: "Units", zh: "单元" }[loc] || "الوحدات";
-    // Units render as a card grid (like the homepage project grid) — all visible at once.
-    // Data only: unit photos and floor-plan images are intentionally omitted.
-    const cards = units.map((u) => {
+  const shown = units.filter(unitHasContent);
+  if (shown.length) {
+    const H = { ar: "النماذج", en: "Models", zh: "户型" }[loc] || "النماذج";
+    const fpLabel = { ar: "المخطط", en: "Floor plan", zh: "户型图" }[loc] || "المخطط";
+    // Models render as a card grid — all visible at once. Data + floor-plan image
+    // per card; unit gallery photos are intentionally omitted.
+    let overlays = "";
+    const lb = (id, url) =>
+      `<div class="pgallery__lb" id="${id}"><a class="pgallery__bg" href="#"></a><img src="${url}" alt=""><a class="pgallery__x" href="#" aria-label="إغلاق">×</a></div>`;
+    const cards = shown.map((u, ui) => {
       const title = tr(u.title, loc);
       const price = tr(u.price, loc);
       const desc = tr(u.description, loc);
       const specs = Array.isArray(u.specs) ? u.specs : [];
+      const plans = (Array.isArray(u.floorplans) ? u.floorplans : (u.floorplan ? [u.floorplan] : []))
+        .filter((s) => typeof s === "string" && s.trim() !== "");
+      plans.forEach((url, pi) => { overlays += lb(`fp-${code}-${ui}-${pi}`, url); });
       const specsHtml = specs.length
         ? `<div class="punit-card__meta">` + specs.map((s) => `<span>${tr(s.label, loc)}: ${tr(s.value, loc)}</span>`).join("") + `</div>`
+        : "";
+      const planLink = plans.length
+        ? `<a class="punit-card__plan" href="#fp-${code}-${ui}-0"><img loading="lazy" src="${plans[0]}" alt="${title} ${fpLabel}"><span>${fpLabel}</span></a>`
         : "";
       return `<article class="punit-card"><div class="punit-card__body">`
         + `<h3 class="punit-card__title">${title}</h3>`
         + (price ? `<div class="punit-card__price">${price}</div>` : "")
         + (desc ? `<p class="punit-card__desc">${desc}</p>` : "")
-        + specsHtml
+        + specsHtml + planLink
         + `</div></article>`;
     }).join("");
-    return `<section class="psec"><h2>${H}</h2><div class="grid grid-3 punits-grid">${cards}</div></section>`;
+    return `<section class="psec"><h2>${H}</h2><div class="grid grid-3 punits-grid">${cards}</div>${overlays}</section>`;
   }
   // Legacy fallback: simple unitTypes cards (existing behavior preserved verbatim).
   const legacy = Array.isArray(D?.unitTypes) ? D.unitTypes : [];

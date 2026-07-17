@@ -1,6 +1,6 @@
 import { sb } from "./db.js";
 import { uploadImage, localeTabs } from "./fields.js";
-import { blankI18n, blankPair, blankUnit, blankUnitType, buildPayload } from "./content-data.js";
+import { blankI18n, blankPair, blankUnit, blankUnitType, buildPayload, unitHasContent } from "./content-data.js";
 
 const el = (tag, cls, txt) => { const n = document.createElement(tag); if (cls) n.className = cls; if (txt != null) n.textContent = txt; return n; };
 const move = (arr, i, d) => { const j = i + d; if (j < 0 || j >= arr.length) return; [arr[i], arr[j]] = [arr[j], arr[i]]; };
@@ -158,12 +158,12 @@ function unitsSection(units, prefix) {
     units.forEach((u, i) => {
       u.title = u.title || blankI18n();
       const row = el("div", "ci-unit-row");
-      const name = el("span", "ci-unit-name", u.title.ar || u.title.en || `وحدة ${i + 1}`);
+      const name = el("span", "ci-unit-name", u.title.ar || u.title.en || `نموذج ${i + 1}`);
       const edit = el("button", "btn ci-mini", "تعديل"); edit.type = "button"; edit.onclick = () => showEdit(i);
-      row.append(name, edit, rowTools(units, i, showList, "حذف الوحدة؟"));
+      row.append(name, edit, rowTools(units, i, showList, "حذف النموذج؟"));
       listView.appendChild(row);
     });
-    const add = el("button", "btn btn-primary", "+ وحدة"); add.type = "button";
+    const add = el("button", "btn btn-primary", "+ نموذج"); add.type = "button";
     add.onclick = () => { units.push(blankUnit()); showEdit(units.length - 1); };
     listView.appendChild(add);
   };
@@ -175,12 +175,11 @@ function unitsSection(units, prefix) {
     listView.hidden = true; editView.hidden = false; editView.innerHTML = "";
     const field = (lbl, node) => { const d = el("div", "ci-field"); d.append(el("label", "ci-lbl", lbl), node); return d; };
     editView.append(
-      el("h3", "ci-unit-h", `الوحدة ${i + 1}`),
+      el("h3", "ci-unit-h", `النموذج ${i + 1}`),
       field("العنوان", i18nField(u.title)),
       field("الوصف", i18nField(u.description, true)),
       field("السعر", i18nField(u.price)),
       field("المواصفات", pairsEditor(u.specs, "label", "value", "المسمّى", "القيمة", blankPair)),
-      field("معرض صور الوحدة", galleryEditor(u.gallery, prefix)),
       field("المخطط", imageInput(() => u.floorplan || "", (v) => { u.floorplan = v; }, prefix)),
     );
     const done = el("button", "btn btn-primary", "تم"); done.type = "button"; done.onclick = showList;
@@ -195,7 +194,7 @@ function unitsSection(units, prefix) {
 export async function renderProjectContent(root, project, onDone) {
   const finish = () => { if (typeof onDone === "function") onDone(); };
   root.innerHTML = `<div class="formwrap">
-      <div class="fh"><h2>${(project.code || "المشروع")} — المحتوى والوحدات</h2></div>
+      <div class="fh"><h2>${(project.code || "المشروع")} — المحتوى والنماذج</h2></div>
       <div class="fbody" id="cbody"><p class="muted">جارٍ التحميل…</p></div>
     </div>`;
   const cbody = root.querySelector("#cbody");
@@ -210,13 +209,16 @@ export async function renderProjectContent(root, project, onDone) {
   const d = draft.details;
   d.facts = d.facts || []; d.units = d.units || []; d.features = d.features || [];
   d.location = d.location || []; d.unitTypes = d.unitTypes || [];
+  // Seed blank model templates so the editor always offers at least 4 to fill.
+  // Blanks are stripped on save (buildPayload) and never render publicly.
+  while (d.units.length < 4) d.units.push(blankUnit());
   const prefix = "projects";
 
   cbody.innerHTML = "";
   const secs = [
     collapsible("📸", "معرض المشروع", () => draft.gallery.length, () => galleryEditor(draft.gallery, prefix)),
     collapsible("📊", "الحقائق", () => d.facts.length, () => pairsEditor(d.facts, "label", "value", "المسمّى", "القيمة", blankPair)),
-    collapsible("🏠", "الوحدات", () => d.units.length, () => unitsSection(d.units, prefix)),
+    collapsible("🏠", "النماذج", () => d.units.filter(unitHasContent).length, () => unitsSection(d.units, prefix)),
     collapsible("✨", "المميزات", () => d.features.length, () => stringsEditor(d.features)),
     collapsible("📍", "الموقع", () => d.location.length, () => stringsEditor(d.location)),
     collapsible("🏘", "أنواع الوحدات", () => d.unitTypes.length, () => pairsEditor(d.unitTypes, "title", "detail", "العنوان", "التفصيل", blankUnitType)),

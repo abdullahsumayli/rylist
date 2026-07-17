@@ -54,18 +54,33 @@ test("unitsHtml renders rich units as a card grid (all visible, no accordion)", 
   assert.match(html, /٢٠٠ م²/);
 });
 
-test("unitsHtml omits unit photos and floor-plan images (data only)", () => {
+test("unitsHtml shows the floor-plan image inside the card, but not the gallery photo", () => {
   const html = unitsHtml({ units: [richUnit] }, "najd-2", "ar");
-  assert.doesNotMatch(html, /class="punit-card__media"/);   // no unit photo
-  assert.doesNotMatch(html, /class="punit-card__plan"/);    // no floor-plan image
-  assert.doesNotMatch(html, /pgallery__lb/);                // no image lightbox overlays
-  assert.doesNotMatch(html, /u1\.jpg|plan1\.jpg/);          // no image URLs leak through
+  assert.doesNotMatch(html, /class="punit-card__media"/);   // no unit gallery photo
+  assert.doesNotMatch(html, /u1\.jpg|u2\.jpg/);             // gallery URLs not emitted
+  assert.match(html, /class="punit-card__plan"/);           // floor-plan image shown
+  assert.match(html, /plan1\.jpg/);                          // floor-plan URL emitted
+  assert.match(html, /id="fp-najd-2-0-0"/);                  // floor-plan lightbox overlay
+  assert.match(html, /المخطط/);
 });
 
-test("unitsHtml ignores floorplans array (no floor-plan images rendered)", () => {
+test("unitsHtml renders floor plan from a floorplans array", () => {
   const html = unitsHtml({ units: [{ title: { ar: "أ" }, floorplans: ["https://x/a.jpg", "https://x/b.jpg"] }] }, "p", "ar");
-  assert.doesNotMatch(html, /a\.jpg|b\.jpg/);
-  assert.match(html, /class="punit-card"/);   // card still renders with its data
+  assert.match(html, /a\.jpg/);
+  assert.match(html, /id="fp-p-0-0"/);
+  assert.match(html, /class="punit-card"/);
+});
+
+test("unitsHtml skips blank template models (empty slots never render)", () => {
+  const blank = { title: { ar: "", en: "", zh: "" }, price: { ar: "" }, description: { ar: "" }, specs: [], gallery: [], floorplan: "" };
+  const html = unitsHtml({ units: [richUnit, blank, blank, blank] }, "najd-2", "ar");
+  const cards = (html.match(/class="punit-card"/g) || []).length;
+  assert.equal(cards, 1);   // only the filled model renders
+});
+
+test("unitsHtml returns empty string when every model is a blank template", () => {
+  const blank = { title: { ar: "" }, price: { ar: "" }, specs: [], floorplan: "" };
+  assert.equal(unitsHtml({ units: [blank, blank, blank, blank] }, "p", "ar"), "");
 });
 
 test("unitsHtml falls back to legacy unitTypes cards when no units", () => {
@@ -131,7 +146,7 @@ test("renderProjectHtml assembles sections in the correct order", () => {
   // occurrence first and misreports order.
   const iDesc = html.indexOf('class="pdetail__desc"');
   const iFacts = html.indexOf("تفاصيل المشروع");
-  const iUnits = html.indexOf("الوحدات");
+  const iUnits = html.indexOf("النماذج");
   const iFeatures = html.indexOf("المزايا والمرافق");
   const iMap = html.indexOf('class="psec pmap"');
   assert.ok(iGallery > -1 && iDesc > iGallery, "gallery before description");
