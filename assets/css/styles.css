@@ -341,6 +341,17 @@ html[lang="ar"] .badge { font-family: var(--font-ar-body); letter-spacing: 0; te
 .pdetail__loc { color: var(--text-mid); font-size: 0.95rem; margin-top: var(--sp-2); }
 .pdetail__price { color: var(--gold-deep); font-weight: 600; margin-top: var(--sp-2); }
 .pdetail__desc { max-width: 68ch; line-height: 1.9; color: var(--text-dark); }
+/* article (news/blog) detail */
+.adetail__meta { display: flex; align-items: center; gap: var(--sp-3); margin-bottom: var(--sp-3); }
+.adetail__lead { max-width: 68ch; font-size: 1.12rem; line-height: 1.8; color: var(--text-mid); margin-top: var(--sp-3); }
+.adetail__body { font-size: 1.02rem; }
+.adetail__body > :first-child { margin-top: 0; }
+.adetail__body p { margin: 0 0 var(--sp-4); }
+.adetail__body h2 { font-size: 1.4rem; margin: var(--sp-6) 0 var(--sp-3); }
+.adetail__body h3 { font-size: 1.15rem; margin: var(--sp-5) 0 var(--sp-2); }
+.adetail__body ul, .adetail__body ol { margin: 0 0 var(--sp-4); padding-inline-start: 1.5em; }
+.adetail__body li { margin-bottom: var(--sp-2); }
+.adetail__body a { color: var(--gold-deep); }
 /* project gallery + css-only lightbox */
 .pgallery h2 { font-size: 1.3rem; margin-bottom: var(--sp-4); }
 .pgallery__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--sp-3); }

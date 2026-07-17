@@ -98,15 +98,22 @@
     var title = isAr() ? a.titleAr : a.titleEn;
     var cat = isAr() ? a.catAr : a.catEn;
     var excerpt = isAr() ? a.excerptAr : a.excerptEn;
+    var href = a.slug ? "news/" + a.slug + ".html" : "";
+    var media = href
+      ? '<a class="article-card__media" href="' + href + '"><img loading="lazy" src="' + a.img + '" alt="' + esc(title) + '"></a>'
+      : '<span class="article-card__media"><img loading="lazy" src="' + a.img + '" alt="' + esc(title) + '"></span>';
+    var more = href
+      ? '<a class="link-arrow" href="' + href + '">' + t("readMore") + '</a>'
+      : '';
     return '' +
       '<article class="article-card">' +
-        '<a class="article-card__media" href="#"><img loading="lazy" src="' + a.img + '" alt="' + esc(title) + '"></a>' +
+        media +
         '<div class="article-card__cat">' + esc(cat) + '</div>' +
         '<h3 class="article-card__title">' + esc(title) + '</h3>' +
         '<p style="font-size:.92rem">' + esc(excerpt) + '</p>' +
         '<div style="display:flex;justify-content:space-between;align-items:center;gap:1rem">' +
           '<span class="article-card__date">' + localeDate(a.date) + '</span>' +
-          '<a class="link-arrow" href="#">' + t("readMore") + '</a>' +
+          more +
         '</div>' +
       '</article>';
   }

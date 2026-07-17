@@ -3,6 +3,7 @@ import { fetchContent } from "./lib/fetchContent.mjs";
 import { writeDataJs } from "./lib/dataJs.mjs";
 import { renderPages } from "./lib/renderPages.mjs";
 import { renderProjectPages } from "./lib/projectPages.mjs";
+import { renderNewsPages } from "./lib/newsPages.mjs";
 import { writeSitemap } from "./lib/sitemap.mjs";
 
 const OUT = "dist";
@@ -16,6 +17,7 @@ async function main(){
   writeDataJs(OUT, c);
   renderPages(OUT, c, SITE);
   renderProjectPages(OUT, c, SITE);
+  renderNewsPages(OUT, c, SITE);
   writeSitemap(OUT, c, SITE);
   console.log("Build done →", OUT);
 }
