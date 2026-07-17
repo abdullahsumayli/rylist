@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { fmtDate, heroHtml, renderArticleHtml } from "./renderArticle.mjs";
+import { fmtDate, heroHtml, formatBody, renderArticleHtml } from "./renderArticle.mjs";
 import { renderNewsPages } from "./newsPages.mjs";
 import { resolveTheme } from "./theme.mjs";
 
@@ -20,6 +20,18 @@ const sampleNews = {
     body: { ar: "<p>الفقرة الأولى.</p><p>الفقرة الثانية.</p>", en: "<p>First.</p>" },
   },
 };
+
+test("formatBody turns plain-text blocks into paragraphs and drops a duplicated title", () => {
+  const raw = "My Title\nFirst paragraph line one.\nline two.\n\nSecond paragraph.";
+  const html = formatBody(raw, "My Title");
+  assert.equal(html, "<p>First paragraph line one.<br>line two.</p><p>Second paragraph.</p>");
+});
+
+test("formatBody passes through existing HTML and escapes stray < & in plain text", () => {
+  assert.equal(formatBody("<p>hi</p>", "t"), "<p>hi</p>");
+  assert.match(formatBody("a < b & c", "t"), /a &lt; b &amp; c/);
+  assert.equal(formatBody("", "t"), "");
+});
 
 test("heroHtml renders a figure only when an image is present", () => {
   assert.match(heroHtml("https://x/h.jpg", "alt"), /<figure class="pdetail__hero"><img src="https:\/\/x\/h\.jpg" alt="alt">/);
