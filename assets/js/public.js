@@ -1,5 +1,4 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import "./fahem.js"; // ودجت "فاهم" — يحقن الزر العائم واللوحة في كل الصفحات الرئيسية.
 const SUPABASE_URL="https://ghtcwsbtyvczlznviojj.supabase.co", SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdodGN3c2J0eXZjemx6bnZpb2pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM1NTA2NjMsImV4cCI6MjA5OTEyNjY2M30.dv4RFD_e3vfRFFMPTZFaVAYZARTzELgOccSew8rLZXc";
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const lang = document.documentElement.lang || "ar";

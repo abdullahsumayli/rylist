@@ -1,10 +1,9 @@
 /* ==========================================================================
-   فاهم — مستشار rylist العقاري بالمحادثة (ودجت واجهة مستقل بذاته)
-   - يحقن زرًا عائمًا "استشير فاهم" ولوحة محادثة في أي صفحة.
-   - التدفّق الموجّه (الغرض → النوع → الميزانية) أزرار ثابتة في العميل — مضمون
-     100% ومستقل عن تذبذب الموديل. الذكاء (edge) يُستدعى فقط للبحث، ولنص العميل
-     الحر كخيار احتياطي.
-   - يلتقط العميل مباشرة في جدول leads (RLS يسمح لـ anon) بمصدر chat.
+   فاهم — مستشار rylist العقاري (صفحة محادثة مستقلة)
+   - يشتغل داخل صفحة fahem.html: يربط عناصر ثابتة (خيط الرسائل + المُنشئ)
+     ويبدأ المحادثة عند التحميل. لا لوحة منبثقة ولا زر عائم — الأيقونة العائمة
+     في باقي الصفحات مجرّد رابط <a> يودّي لهذه الصفحة.
+   - نفس منطق edge (fahem-chat) والتقاط العميل في جدول leads بمصدر chat.
    ========================================================================== */
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
@@ -20,12 +19,10 @@ const isAr = () => lang() === "ar";
 
 /* ----- النصوص (عربي/إنجليزي) ----- */
 const T = {
-  launcher: { ar: "استشير فاهم", en: "Ask Fahem" },
-  title: { ar: "فاهم", en: "Fahem" },
-  subtitle: { ar: "مستشارك العقاري · rylist", en: "Your real-estate advisor · rylist" },
-  placeholder: { ar: "أو اكتب سؤالك…", en: "Or type your question…" },
-  send: { ar: "إرسال", en: "Send" },
-  close: { ar: "إغلاق", en: "Close" },
+  view: { ar: "شاهد التفاصيل", en: "View details" },
+  beds: { ar: "غرف", en: "beds" },
+  area: { ar: "م²", en: "m²" },
+  priceOnRequest: { ar: "السعر عند الطلب", en: "Price on request" },
   contactTitle: { ar: "بياناتك للتواصل", en: "Your contact details" },
   name: { ar: "الاسم", en: "Name" },
   phone: { ar: "رقم الجوال", en: "Phone number" },
@@ -41,10 +38,6 @@ const T = {
   },
   leadError: { ar: "تعذّر الإرسال، حاول مرة ثانية.", en: "Couldn’t send, please try again." },
   error: { ar: "عذراً، صار خطأ. جرّب مرة ثانية.", en: "Sorry, something went wrong. Please try again." },
-  view: { ar: "شاهد التفاصيل", en: "View details" },
-  beds: { ar: "غرف", en: "beds" },
-  area: { ar: "م²", en: "m²" },
-  priceOnRequest: { ar: "السعر عند الطلب", en: "Price on request" },
   afterSearch: {
     ar: "عجبك مشروع؟ اترك اسمك وجوالك ويتواصل معك فريق rylist ويرتّب لك كل شيء — مجانًا.",
     en: "Like a project? Leave your name and phone and the rylist team will reach out and arrange everything — free.",
@@ -83,98 +76,11 @@ const msgs = []; // [{ role, content, quickReplies?, properties?, showContactFor
 
 let els = {};
 
-/* ----- بناء الهيكل ----- */
-function buildShell() {
-  const fab = document.createElement("button");
-  fab.className = "fahem-fab";
-  fab.type = "button";
-  fab.setAttribute("aria-label", tr("launcher"));
-  fab.innerHTML =
-    '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M11 2l1.6 5.4L18 9l-5.4 1.6L11 16l-1.6-5.4L4 9l5.4-1.6z"/><path d="M18.5 14l.8 2.7 2.7.8-2.7.8-.8 2.7-.8-2.7-2.7-.8 2.7-.8z"/></svg>' +
-    '<span class="fahem-fab__label"></span>';
-
-  const backdrop = document.createElement("div");
-  backdrop.className = "fahem-backdrop";
-
-  const panel = document.createElement("aside");
-  panel.className = "fahem-panel";
-  panel.setAttribute("role", "dialog");
-  panel.setAttribute("aria-modal", "true");
-  panel.setAttribute("aria-label", tr("title"));
-  panel.innerHTML =
-    '<header class="fahem-head">' +
-    '<div class="fahem-head__id">' +
-    '<span class="fahem-head__mark" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M11 2l1.6 5.4L18 9l-5.4 1.6L11 16l-1.6-5.4L4 9l5.4-1.6z"/><path d="M18.5 14l.8 2.7 2.7.8-2.7.8-.8 2.7-.8-2.7-2.7-.8 2.7-.8z"/></svg></span>' +
-    '<span class="fahem-head__text"><b class="fahem-head__title"></b><small class="fahem-head__sub"></small></span>' +
-    "</div>" +
-    '<button class="fahem-head__x" type="button" aria-label=""></button>' +
-    "</header>" +
-    '<div class="fahem-scroll"><div class="fahem-thread"></div></div>' +
-    '<form class="fahem-composer">' +
-    '<input class="fahem-input" type="text" autocomplete="off" enterkeyhint="send">' +
-    '<button class="fahem-sendbtn" type="submit"></button>' +
-    "</form>";
-
-  document.body.appendChild(fab);
-  document.body.appendChild(backdrop);
-  document.body.appendChild(panel);
-
-  els = {
-    fab,
-    backdrop,
-    panel,
-    thread: panel.querySelector(".fahem-thread"),
-    scroll: panel.querySelector(".fahem-scroll"),
-    form: panel.querySelector(".fahem-composer"),
-    input: panel.querySelector(".fahem-input"),
-    sendBtn: panel.querySelector(".fahem-sendbtn"),
-    closeBtn: panel.querySelector(".fahem-head__x"),
-  };
-
-  applyStrings();
-
-  fab.addEventListener("click", open);
-  backdrop.addEventListener("click", close);
-  els.closeBtn.addEventListener("click", close);
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && els.panel.classList.contains("is-open")) close();
-  });
-  els.form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    send(els.input.value);
-  });
+/* ----- النص الحر (المسار الأساسي) → البحث/المحادثة في edge ----- */
+function history() {
+  return msgs.filter((m) => m.role === "user" || m.role === "assistant").map((m) => ({ role: m.role, content: m.content }));
 }
 
-function applyStrings() {
-  els.fab.querySelector(".fahem-fab__label").textContent = tr("launcher");
-  els.fab.setAttribute("aria-label", tr("launcher"));
-  els.panel.querySelector(".fahem-head__title").textContent = tr("title");
-  els.panel.querySelector(".fahem-head__sub").textContent = tr("subtitle");
-  els.closeBtn.setAttribute("aria-label", tr("close"));
-  els.closeBtn.textContent = "✕";
-  els.input.setAttribute("placeholder", tr("placeholder"));
-  els.sendBtn.textContent = tr("send");
-}
-
-/* ----- فتح/إغلاق ----- */
-function open() {
-  els.panel.classList.add("is-open");
-  els.backdrop.classList.add("is-open");
-  document.body.style.overflow = "hidden";
-  if (!started) {
-    started = true;
-    void startChat();
-  }
-  setTimeout(() => els.input.focus(), 260);
-}
-
-function close() {
-  els.panel.classList.remove("is-open");
-  els.backdrop.classList.remove("is-open");
-  document.body.style.overflow = "";
-}
-
-/* ----- الافتتاحية (من edge — يذكر المدن المخدومة ثم سؤال مفتوح) ----- */
 async function startChat() {
   interestCode = null;
   setLoading(true);
@@ -187,11 +93,6 @@ async function startChat() {
   } finally {
     setLoading(false);
   }
-}
-
-/* ----- النص الحر (المسار الأساسي) → البحث/المحادثة في edge ----- */
-function history() {
-  return msgs.filter((m) => m.role === "user" || m.role === "assistant").map((m) => ({ role: m.role, content: m.content }));
 }
 
 async function send(text) {
@@ -344,20 +245,30 @@ function contactFormHtml() {
   );
 }
 
-/* ----- توصيل نقاط الإطلاق ----- */
-function wireLaunchers() {
-  document.querySelectorAll(".nav__cta, [data-fahem-open]").forEach((el) => {
-    el.addEventListener("click", (e) => {
-      e.preventDefault();
-      open();
-    });
-  });
-}
-
+/* ----- الإقلاع ----- */
 function boot() {
-  if (document.querySelector(".fahem-panel")) return; // حماية من التحميل المزدوج.
-  buildShell();
-  wireLaunchers();
+  const thread = document.querySelector(".fahem-thread");
+  if (!thread) return; // لسنا في صفحة فاهم.
+  els = {
+    thread,
+    scroll: document.querySelector(".fahem-scroll"),
+    form: document.querySelector(".fahem-composer"),
+    input: document.querySelector(".fahem-input"),
+    sendBtn: document.querySelector(".fahem-sendbtn"),
+  };
+
+  els.form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    send(els.input.value);
+  });
+
+  if (!started) {
+    started = true;
+    void startChat();
+    // preventScroll: focusing the composer must NOT scroll the intro + chat
+    // header out of view on load.
+    setTimeout(() => els.input.focus({ preventScroll: true }), 200);
+  }
 }
 
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);

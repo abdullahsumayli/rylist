@@ -107,6 +107,8 @@ export function featuresHtml(D, loc) {
 
 const CTA = { ar: "استفسر عبر واتساب", en: "Enquire on WhatsApp", zh: "通过 WhatsApp 咨询" };
 const DL = { ar: "تحميل البروشور", en: "Download brochure", zh: "下载手册" };
+export const FAHEM = { ar: "استشير فاهم", en: "Ask Fahem", zh: "咨询 فاهم" };
+export const fahemHref = (loc) => (loc === "ar" ? "/fahem.html" : `/${loc}/fahem.html`);
 const STATUS = {
   available: { ar: "متاح", en: "Available", zh: "可售" },
   reserved: { ar: "محجوز", en: "Reserved", zh: "已预订" },
@@ -136,6 +138,7 @@ export function renderProjectHtml(tmpl, p, ctx) {
     canonical: url(loc), hreflang,
     themeHead: theme ? `<link rel="stylesheet" href="${theme.href}"><style id="theme-vars">:root{${theme.vars}}</style>` : "",
     assets: loc === "ar" ? ".." : "../..", home: loc === "ar" ? "/" : `/${loc}/`,
+    fahemHref: fahemHref(loc), fahemLabel: FAHEM[loc] || FAHEM.ar,
     image: p.image_url || "", district: p.i18n?.district?.[loc] || "",
     typeLabel: tax("property_type", p.type_key, loc), cityLabel: tax("city", p.city_key, loc),
     price, description: p.i18n?.description?.[loc] || "", whatsapp: wa, cta: CTA[loc] || CTA.ar, brochure,

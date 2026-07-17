@@ -2,7 +2,7 @@
 // Mirrors renderProject.mjs: takes a plain news object, returns an HTML string.
 // No filesystem / no Supabase.
 
-import { tr, fill } from "./renderProject.mjs";
+import { tr, fill, FAHEM, fahemHref } from "./renderProject.mjs";
 import { excerptFrom } from "./dataJs.mjs";
 
 const BACK = { ar: "عودة إلى الأخبار", en: "Back to news", zh: "返回新闻" };
@@ -56,6 +56,7 @@ export function renderArticleHtml(tmpl, n, ctx) {
     themeHead: theme ? `<link rel="stylesheet" href="${theme.href}"><style id="theme-vars">:root{${theme.vars}}</style>` : "",
     assets: loc === "ar" ? ".." : "../..",
     newsHref: loc === "ar" ? "/news.html" : `/${loc}/news.html`,
+    fahemHref: fahemHref(loc), fahemLabel: FAHEM[loc] || FAHEM.ar,
     hero: heroHtml(n.image_url || "", t),
     cat, date, lead, body: formatBody(rawBody, t),
     backCta: BACK[loc] || BACK.ar,
