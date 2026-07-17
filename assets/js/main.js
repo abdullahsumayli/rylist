@@ -48,7 +48,9 @@
   }
 
   function localeDate(iso) {
+    if (!iso) return "";
     var d = new Date(iso + "T00:00:00");
+    if (isNaN(d.getTime())) return "";               // guard against "Invalid Date"
     try { return d.toLocaleDateString(isAr() ? "ar-SA" : "en-GB", { year: "numeric", month: "short", day: "numeric" }); }
     catch (e) { return iso; }
   }
@@ -110,7 +112,7 @@
         media +
         '<div class="article-card__cat">' + esc(cat) + '</div>' +
         '<h3 class="article-card__title">' + esc(title) + '</h3>' +
-        '<p style="font-size:.92rem">' + esc(excerpt) + '</p>' +
+        '<p class="article-card__excerpt">' + esc(excerpt) + '</p>' +
         '<div style="display:flex;justify-content:space-between;align-items:center;gap:1rem">' +
           '<span class="article-card__date">' + localeDate(a.date) + '</span>' +
           more +
