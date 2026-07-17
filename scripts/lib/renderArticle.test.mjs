@@ -59,6 +59,14 @@ test("renderArticleHtml falls back to the excerpt when body is empty", () => {
   assert.ok(html.indexOf("ثلاثة عوامل", bodyStart) > bodyStart, "excerpt used as body fallback");
 });
 
+test("renderArticleHtml derives the meta description from body and omits the lead when no excerpt", () => {
+  const noExcerpt = { ...sampleNews, i18n: { ...sampleNews.i18n, excerpt: {} } };
+  const html = renderArticleHtml(TMPL, noExcerpt, { loc: "ar", dir: "rtl", base: "https://rylist.sa" });
+  assert.doesNotMatch(html, /class="adetail__lead"/);              // no auto-blurb above the body
+  assert.match(html, /name="description" content="الفقرة الأولى\./);  // meta derived from body, HTML stripped
+  assert.doesNotMatch(html, /content="[^"]*<p>/);                  // tags stripped from meta
+});
+
 test("renderArticleHtml injects theme head when a theme is provided, no placeholder when absent", () => {
   const theme = resolveTheme({ font_preset: "elegant", accent_preset: "green" });
   const themed = renderArticleHtml(TMPL, sampleNews, { loc: "ar", dir: "rtl", base: "https://rylist.sa", theme });

@@ -19,7 +19,7 @@ export const ENTITIES = [
     {n:"status",t:"select",l:"الحالة",options:["draft","published"]},
     {n:"published_at",t:"text",l:"تاريخ النشر (ISO)"},
     {n:"image_url",t:"image",l:"الصورة"},
-    {n:"i18n.title",t:"i18n-text",l:"العنوان"},{n:"i18n.excerpt",t:"i18n-text",l:"المقتطف"},
+    {n:"i18n.title",t:"i18n-text",l:"العنوان"},
     {n:"i18n.body",t:"i18n-rich",l:"النص"} ]},
   { key:"partners", label:"الشركاء", table:"partners", order:"sort_order", title:"i18n.name", fields:[
     {n:"logo_url",t:"image",l:"الشعار",hint:"SVG (مفضّل) أو PNG بخلفية شفافة · شعار عرضي ~240×120px · أقصى حجم 200KB",spec:{maxKB:200,maxW:600,maxH:400,recW:240,recH:120}},{n:"sort_order",t:"number",l:"الترتيب"},
