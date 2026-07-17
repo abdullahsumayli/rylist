@@ -1,0 +1,40 @@
+{
+  "persona": "المتردّد كثير الأسئلة (hesitant)",
+  "persona_id": 5,
+  "conversation_id": 5,
+  "intent": "وش الفرق بين مشاريع نجد؟",
+  "turns": [
+    {
+      "user": "شفت عندكم مشاريع اسمها نجد بأرقام مختلفه.. وش الفرق بينها؟ محتار صراحه",
+      "fahem": {
+        "message": "وش اللي يهمك أكثر؟",
+        "properties": [
+          {"code":"NAJD-5","title":"نجد ٥","district":"الجنادرية","city":"الرياض","type":"شقة","type_key":"apartment","price_min":820000,"price_max":1100000,"beds_min":1,"beds_max":2,"area":"61–147","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-5.html"},
+          {"code":"NAJD-3","title":"نجد ٣","district":"الرمال","city":"الرياض","type":"شقة","type_key":"apartment","price_min":1050000,"price_max":1350000,"beds_min":1,"beds_max":2,"area":"72–139","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-3.html"},
+          {"code":"NAJD-4","title":"نجد ٤","district":"الرمال","city":"الرياض","type":"شقة","type_key":"apartment","price_min":1150000,"price_max":1500000,"beds_min":1,"beds_max":2,"area":"59–166","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-4.html"},
+          {"code":"NAJD-2","title":"نجد ٢","district":"الرمال","city":"الرياض","type":"تاون هاوس","type_key":"townhouse","price_min":2200000,"price_max":2250000,"beds_min":3,"beds_max":4,"area":"250–273","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-2.html"},
+          {"code":"NAJD-7","title":"نجد ٧","district":"الرياض","city":"الرياض","type":"على الخارطة","type_key":"offplan","price_min":0,"price_max":0,"beds_min":0,"beds_max":0,"area":"","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"soon","url":"projects/NAJD-7.html"}
+        ],
+        "quickReplies": ["أقل سعر ممكن","شقة في الرمال","تاون هاوس (مساحة أكبر)","أبي أعرف تفاصيل أكثر عن كل مشروع"]
+      }
+    },
+    {
+      "user": "ابي اعرف تفاصيل اكثر عن كل مشروع، وش يميز نجد ٣ عن ٤ عن ٥؟ ونجد ٢ ليش اغلى بكثير؟",
+      "fahem": {
+        "message": "الفرق واضح:\n\n**نجد ٢** (الرمال) — تاون هاوس ٣-٤ غرف، مساحة ٢٥٠-٢٧٣ م²، سعر ٢.٢-٢.٢٥ مليون\n- هذا هو الأغلى لأنه تاون هاوس (منزل متعدد الطوابق) وليس شقة\n\n**نجد ٣** (الرمال) — شقق ١-٢ غرف، ٧٢-١٣٩ م²، سعر ١.٠٥-١.٣٥ مليون\n\n**نجد ٤** (الرمال) — شقق ١-٢ غرف، ٥٩-١٦٦ م²، سعر ١.١٥-١.٥ مليون\n\n**نجد ٥** (الجنادرية) — شقق ١-٢ غرف، ٦١-١٤٧ م²، سعر ٨٢٠ ألف - ١.١ مليون\n\nالسبب الرئيسي لفرق السعر: نوع العقار (تاون هاوس vs شقق) والموقع والمساحة.",
+        "properties": [
+          {"code":"NAJD-2","title":"نجد ٢","district":"الرمال","city":"الرياض","type":"تاون هاوس","type_key":"townhouse","price_min":2200000,"price_max":2250000,"beds_min":3,"beds_max":4,"area":"250–273","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-2.html"}
+        ]
+      }
+    },
+    {
+      "user": "طيب لو ميزانيتي حوالي مليون، تنصحني بأي وحده منهم؟",
+      "fahem": {
+        "message": "أبشر! لقيت لك مشروعًا يناسب طلبك في الرياض:",
+        "properties": [
+          {"code":"NAJD-5","title":"نجد ٥","district":"الجنادرية","city":"الرياض","type":"شقة","type_key":"apartment","price_min":820000,"price_max":1100000,"beds_min":1,"beds_max":2,"area":"61–147","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-5.html"}
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "persona": "مشتري أول شقة (first-time)",
+  "persona_id": 3,
+  "conversation_id": 3,
+  "intent": "يسأل عن نجد ٥ (الأرخص) بالتفصيل",
+  "turns": [
+    {
+      "user": "سمعت عن نجد ٥ انه الارخص عندكم.. ممكن تعطيني تفاصيله كامله؟",
+      "fahem": {"message":"أهلاً! نعم، نجد ٥ هو الأرخص عندنا في الشقق. إليك تفاصيله:\n\n**نجد ٥**\n- الموقع: الجنادرية\n- النوع: شقق\n- عدد الغرف: ١-٢ غرف\n- المساحة: ٦١ - ١٤٧ متر مربع\n- السعر: يبدأ من ٨٢٠,٠٠٠ ريال إلى ١,١٠٠,٠٠٠ ريال\n- الحالة: متاح\n\nهل تبي تعرف تفاصيل أكثر أو تبي نتواصل معك؟","properties":[{"code":"NAJD-5","title":"نجد ٥","district":"الجنادرية","city":"الرياض","type":"شقة","type_key":"apartment","price_min":820000,"price_max":1100000,"beds_min":1,"beds_max":2,"area":"61–147","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-5.html"},{"code":"NAJD-3","title":"نجد ٣","district":"الرمال","city":"الرياض","type":"شقة","type_key":"apartment","price_min":1050000,"price_max":1350000,"beds_min":1,"beds_max":2,"area":"72–139","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-3.html"},{"code":"NAJD-4","title":"نجد ٤","district":"الرمال","city":"الرياض","type":"شقة","type_key":"apartment","price_min":1150000,"price_max":1500000,"beds_min":1,"beds_max":2,"area":"59–166","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-4.html"}]}
+    },
+    {
+      "user": "الجنادريه وين بالضبط؟ بعيده عن وسط الرياض؟",
+      "fahem": {"message":"الجنادرية تقع في شرق الرياض، وتبعد حوالي ٢٥-٣٠ دقيقة عن وسط الرياض بالسيارة. المنطقة قريبة من طريق الملك فهد وطريق الدائري الشرقي، وتتميز بهدوئها وقربها من منطقة الجنادرية التاريخية.\n\nالموقع مناسب جداً للي يبحث عن سكن هادي بأسعار معقولة، مع سهولة الوصول لمناطق الرياض الرئيسية.","properties":[{"code":"NAJD-5","title":"نجد ٥","district":"الجنادرية","city":"الرياض","type":"شقة","type_key":"apartment","price_min":820000,"price_max":1100000,"beds_min":1,"beds_max":2,"area":"61–147","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-5.html"},{"code":"NAJD-3","title":"نجد ٣","district":"الرمال","city":"الرياض","type":"شقة","type_key":"apartment","price_min":1050000,"price_max":1350000,"beds_min":1,"beds_max":2,"area":"72–139","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-3.html"},{"code":"NAJD-4","title":"نجد ٤","district":"الرمال","city":"الرياض","type":"شقة","type_key":"apartment","price_min":1150000,"price_max":1500000,"beds_min":1,"beds_max":2,"area":"59–166","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-4.html"}]}
+    },
+    {
+      "user": "طيب الشقه فيها تشطيب؟ ولا على العظم؟ وفيه ضمانات؟",
+      "fahem": {"message":"تقدر تترك بياناتك وفريقنا بيتواصل معك بكل تفاصيل التشطيب والضمانات في مشروع نجد ٥.","properties":[{"code":"NAJD-5","title":"نجد ٥","district":"الجنادرية","city":"الرياض","type":"شقة","type_key":"apartment","price_min":820000,"price_max":1100000,"beds_min":1,"beds_max":2,"area":"61–147","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-5.html"},{"code":"NAJD-3","title":"نجد ٣","district":"الرمال","city":"الرياض","type":"شقة","type_key":"apartment","price_min":1050000,"price_max":1350000,"beds_min":1,"beds_max":2,"area":"72–139","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-3.html"},{"code":"NAJD-4","title":"نجد ٤","district":"الرمال","city":"الرياض","type":"شقة","type_key":"apartment","price_min":1150000,"price_max":1500000,"beds_min":1,"beds_max":2,"area":"59–166","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-4.html"}],"showContactForm":true,"projectCode":"NAJD-5"}
+    },
+    {
+      "user": "زين.. اعطني رابط الصفحه بس اطلع عليها الحين وبعدين اقرر",
+      "fahem": {"message":"ما عندي رابط مباشر للصفحة، لكن فريقنا يقدر يتواصل معك ويعطيك كل التفاصيل والرابط وأي معلومات ثانية تحتاجها عن مشروع نجد ٥.\n\nتقدر تترك اسمك ورقمك الحين؟"}
+    }
+  ]
+}

@@ -1,0 +1,130 @@
+{
+  "persona": "المستثمر (investor)",
+  "persona_id": 1,
+  "conversation_id": 10,
+  "intent": "الاهتمام بنجد ٢ والرغبة بإكمال الحجز/التواصل — دفع فاهم لطلب البيانات",
+  "turns": [
+    {
+      "user": "تمام، اقتنعت بتاون هاوس نجد ٢. ابي اكمل واحجز، وش الخطوة الجاية؟",
+      "fahem": {
+        "message": "أبشر! لقيت لك مشروعًا يناسب طلبك في الرياض:",
+        "properties": [
+          {
+            "code": "NAJD-2",
+            "title": "نجد ٢",
+            "district": "الرمال",
+            "city": "الرياض",
+            "type": "تاون هاوس",
+            "type_key": "townhouse",
+            "price_min": 2200000,
+            "price_max": 2250000,
+            "beds_min": 3,
+            "beds_max": 4,
+            "area": "250–273",
+            "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg",
+            "status": "available",
+            "url": "projects/NAJD-2.html"
+          }
+        ]
+      }
+    },
+    {
+      "user": "اي هذا اللي ابيه. ابي احد من فريقكم يكلمني ويرتب لي المعاينة والحجز",
+      "fahem": {
+        "message": "أبشر! خلّ بياناتك (الاسم والجوال) وفريقنا بيتواصل معك لترتيب المعاينة والحجز في مشروع نجد ٢.",
+        "properties": [
+          {
+            "code": "NAJD-2",
+            "title": "نجد ٢",
+            "district": "الرمال",
+            "city": "الرياض",
+            "type": "تاون هاوس",
+            "type_key": "townhouse",
+            "price_min": 2200000,
+            "price_max": 2250000,
+            "beds_min": 3,
+            "beds_max": 4,
+            "area": "250–273",
+            "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg",
+            "status": "available",
+            "url": "projects/NAJD-2.html"
+          }
+        ],
+        "showContactForm": true,
+        "projectCode": "NAJD-2"
+      }
+    },
+    {
+      "user": "اسمي فهد العتيبي، جوالي 0555123456. كلموني بعد العصر",
+      "fahem": {
+        "message": "أبشر! هذي 4 مشاريع تناسب طلبك في الرياض:",
+        "properties": [
+          {
+            "code": "NAJD-5",
+            "title": "نجد ٥",
+            "district": "الجنادرية",
+            "city": "الرياض",
+            "type": "شقة",
+            "type_key": "apartment",
+            "price_min": 820000,
+            "price_max": 1100000,
+            "beds_min": 1,
+            "beds_max": 2,
+            "area": "61–147",
+            "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg",
+            "status": "available",
+            "url": "projects/NAJD-5.html"
+          },
+          {
+            "code": "NAJD-3",
+            "title": "نجد ٣",
+            "district": "الرمال",
+            "city": "الرياض",
+            "type": "شقة",
+            "type_key": "apartment",
+            "price_min": 1050000,
+            "price_max": 1350000,
+            "beds_min": 1,
+            "beds_max": 2,
+            "area": "72–139",
+            "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg",
+            "status": "available",
+            "url": "projects/NAJD-3.html"
+          },
+          {
+            "code": "NAJD-4",
+            "title": "نجد ٤",
+            "district": "الرمال",
+            "city": "الرياض",
+            "type": "شقة",
+            "type_key": "apartment",
+            "price_min": 1150000,
+            "price_max": 1500000,
+            "beds_min": 1,
+            "beds_max": 2,
+            "area": "59–166",
+            "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg",
+            "status": "available",
+            "url": "projects/NAJD-4.html"
+          },
+          {
+            "code": "NAJD-2",
+            "title": "نجد ٢",
+            "district": "الرمال",
+            "city": "الرياض",
+            "type": "تاون هاوس",
+            "type_key": "townhouse",
+            "price_min": 2200000,
+            "price_max": 2250000,
+            "beds_min": 3,
+            "beds_max": 4,
+            "area": "250–273",
+            "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg",
+            "status": "available",
+            "url": "projects/NAJD-2.html"
+          }
+        ]
+      }
+    }
+  ]
+}

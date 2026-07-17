@@ -1,0 +1,24 @@
+{
+  "persona": "مشتري أول شقة (first-time)",
+  "persona_id": 3,
+  "conversation_id": 1,
+  "intent": "أول مرة يشتري وميزانيته ٨٠٠ ألف — وش المتاح",
+  "turns": [
+    {
+      "user": "السلام عليكم، اول مره اشتري شقه وميزانيتي ٨٠٠ الف تقريبا.. وش المتاح؟",
+      "fahem": {"message":"للأسف ما لقينا شقق بميزانية ٨٠٠ ألف بالضبط.\n\nلكن عندنا أقرب خيار:\n- **نجد ٥** في الجنادرية - شقق تبدأ من ٨٢٠,٠٠٠ ريال (غرفة أو غرفتين، مساحة ٦١-١٤٧ م²)\n\nتبغى أشوف لك خيارات ثانية؟ عندنا:\n- شقق بميزانيات أعلى\n- تاون هاوس\n- مشاريع على الخارطة","properties":[{"code":"NAJD-5","title":"نجد ٥","district":"الجنادرية","city":"الرياض","type":"شقة","type_key":"apartment","price_min":820000,"price_max":1100000,"beds_min":1,"beds_max":2,"area":"61–147","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-5.html"},{"code":"NAJD-3","title":"نجد ٣","district":"الرمال","city":"الرياض","type":"شقة","type_key":"apartment","price_min":1050000,"price_max":1350000,"beds_min":1,"beds_max":2,"area":"72–139","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-3.html"},{"code":"NAJD-4","title":"نجد ٤","district":"الرمال","city":"الرياض","type":"شقة","type_key":"apartment","price_min":1150000,"price_max":1500000,"beds_min":1,"beds_max":2,"area":"59–166","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-4.html"}]}
+    },
+    {
+      "user": "طيب نجد ٥ حلو.. بس ٨٢٠ يعني اقل شي؟ ما فيه اقل من كذا؟",
+      "fahem": {"message":"للأسف ما عندنا شقق أقل من ٨٢٠ ألف حالياً. أقل سعر موجود هو ٨٢٠,٠٠٠ ريال في مشروع نجد ٥.\n\nبس عندنا خيارات ثانية ممكن تناسبك:\n- **على الخارطة** - مشاريع استثمارية بأسعار متنوعة\n- **تاون هاوس** - ممكن تكون بأسعار قريبة من ميزانيتك\n\nتبيني أعرض لك الخيارات المتاحة؟","properties":[]}
+    },
+    {
+      "user": "اوكي.. الـ٨٢٠ هذي غرفه وحده صح؟ وكم مساحتها؟",
+      "fahem": {"message":"تبي تعرف تفاصيل الوحدات في نجد ٥؟ خلّ اسمك وجوالك وفريقنا بيتواصل معك 😊","properties":[{"code":"NAJD-5","title":"نجد ٥","district":"الجنادرية","city":"الرياض","type":"شقة","type_key":"apartment","price_min":820000,"price_max":1100000,"beds_min":1,"beds_max":2,"area":"61–147","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-5.html"}],"showContactForm":true,"projectCode":"NAJD-5"}
+    },
+    {
+      "user": "تمام بس خليني افكر شوي واقارن.. بارجع لك ان شاء الله",
+      "fahem": {"message":"حياك الله، خذ وقتك 😊\nأنا هنا متى ما رجعت أو احتجت أي استفسار. بالتوفيق!"}
+    }
+  ]
+}

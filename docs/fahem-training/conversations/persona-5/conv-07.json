@@ -1,0 +1,38 @@
+{
+  "persona": "المتردّد كثير الأسئلة (hesitant)",
+  "persona_id": 5,
+  "conversation_id": 7,
+  "intent": "وش يعني على الخارطة؟ (نجد ٧)",
+  "notes": "فاهم اخترع ضمانات (اعتماد وزارة الشؤون البلدية + ضمانات عقدية) غير مذكورة في الحقائق، وأنكر وجود نجد ٧ رغم أنه ظهر كمشروع (offplan/soon) في محادثات أخرى. كذلك خطأ إملائي 'الوحدة.best' و'ميزتك'.",
+  "turns": [
+    {
+      "user": "وش يعني مشروع على الخارطه؟ شفت نجد ٧ مكتوب عليه كذا.. ما فهمت",
+      "fahem": {
+        "message": "مشروع \"على الخارطة\" يعني مشروع عقاري لسه تحت الإنشاء أو في مرحلة التخطيط، يعني ما اكتمل بناؤه بعد.\n\nالمميزات:\n- سعره عادة أقل من المشاريع الجاهزة\n- تقدر تشتري وتقسط أثناء فترة البناء\n- تختار الوحدة.best في المشروع قبل ما يخلص\n\nلما يخلص المشروع ويتسلم، يقدر قيمته يزيد عن سعر الشراء الأصلي.\n\nتبغى أشوف لك مشاريع على الخارطة متاحة الحين؟"
+      }
+    },
+    {
+      "user": "بس هذا يخوف شوي.. يعني ادفع وانا ما شفت الوحده؟ وش لو تأخر التسليم او ما خلصوه اصلاً؟ ونجد ٧ متى يتسلم؟",
+      "fahem": {
+        "message": "خوفك طبيعي، بس خلني أطمئنك:\n\n- المشاريع على الخارطة عندنا كلها معتمدة من وزارة الشؤون البلدية، وفيها ضمانات عقدية على التسليم.\n- الدفع يكون مرتبط بمراحل البناء، مو دفعة وحدة.\n- العقود فيها شروط واضحة للتأخير وتعويضات.\n\nبس لازم أكون صريح معك: **ما عندي \"نجد ٧\" في مخزوننا الحالي**. اللي عندي من مشاريع نجد هي:\n\n- **نجد ٣** (الرمال) — شقق ١-٢ غرف، ١.٠٥ - ١.٣٥ مليون\n- **نجد ٤** (الرمال) — شقق ١-٢ غرف، ١.١٥ - ١.٥ مليون\n- **نجد ٥** (الجنادرية) — شقق ١-٢ غرف، ٨٢٠ - ١.١ مليون\n\nكلها شقق جاهزة أو شبه جاهزة. تبغى تفاصيل أكثر عن أي منها؟",
+        "properties": [
+          {"code":"NAJD-5","title":"نجد ٥","district":"الجنادرية","city":"الرياض","type":"شقة","type_key":"apartment","price_min":820000,"price_max":1100000,"beds_min":1,"beds_max":2,"area":"61–147","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-5.html"},
+          {"code":"NAJD-3","title":"نجد ٣","district":"الرمال","city":"الرياض","type":"شقة","type_key":"apartment","price_min":1050000,"price_max":1350000,"beds_min":1,"beds_max":2,"area":"72–139","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-3.html"},
+          {"code":"NAJD-4","title":"نجد ٤","district":"الرمال","city":"الرياض","type":"شقة","type_key":"apartment","price_min":1150000,"price_max":1500000,"beds_min":1,"beds_max":2,"area":"59–166","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-4.html"}
+        ]
+      }
+    },
+    {
+      "user": "طيب انت متأكد ما عندكم نجد ٧؟ لأني اشوفه بالموقع.. المهم انا اميل للجاهز عشان اطمن اكثر",
+      "fahem": {
+        "message": "عشان أرشح لك الأنسب، وش ميزتك التقريبية؟",
+        "properties": [
+          {"code":"NAJD-5","title":"نجد ٥","district":"الجنادرية","city":"الرياض","type":"شقة","type_key":"apartment","price_min":820000,"price_max":1100000,"beds_min":1,"beds_max":2,"area":"61–147","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-5.html"},
+          {"code":"NAJD-3","title":"نجد ٣","district":"الرمال","city":"الرياض","type":"شقة","type_key":"apartment","price_min":1050000,"price_max":1350000,"beds_min":1,"beds_max":2,"area":"72–139","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-3.html"},
+          {"code":"NAJD-4","title":"نجد ٤","district":"الرمال","city":"الرياض","type":"شقة","type_key":"apartment","price_min":1150000,"price_max":1500000,"beds_min":1,"beds_max":2,"area":"59–166","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-4.html"}
+        ],
+        "quickReplies": ["أقل من مليون","مليون إلى مليون ونص","مليون ونص إلى مليونين","أكثر من مليونين"]
+      }
+    }
+  ]
+}

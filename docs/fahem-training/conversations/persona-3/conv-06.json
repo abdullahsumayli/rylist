@@ -1,0 +1,24 @@
+{
+  "persona": "مشتري أول شقة (first-time)",
+  "persona_id": 3,
+  "conversation_id": 6,
+  "intent": "يبغى شقة في حي الرمال تحديدًا",
+  "turns": [
+    {
+      "user": "مساء الخير.. ابي شقه في حي الرمال بالذات لان اهلي قريبين منه، وش عندكم هناك؟",
+      "fahem": {"message":"تحب تعرف تفاصيل أكثر عن أي مشروع؟","properties":[{"code":"NAJD-5","title":"نجد ٥","district":"الجنادرية","city":"الرياض","type":"شقة","type_key":"apartment","price_min":820000,"price_max":1100000,"beds_min":1,"beds_max":2,"area":"61–147","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-5.html"},{"code":"NAJD-3","title":"نجد ٣","district":"الرمال","city":"الرياض","type":"شقة","type_key":"apartment","price_min":1050000,"price_max":1350000,"beds_min":1,"beds_max":2,"area":"72–139","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-3.html"},{"code":"NAJD-4","title":"نجد ٤","district":"الرمال","city":"الرياض","type":"شقة","type_key":"apartment","price_min":1150000,"price_max":1500000,"beds_min":1,"beds_max":2,"area":"59–166","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-4.html"}],"quickReplies":["نجد ٣ - الرمال","نجد ٤ - الرمال","نجد ٥ - الجنادرية","أبي أعرف الكل"]}
+    },
+    {
+      "user": "الصراحه الرمال طلع اغلى من ميزانيتي.. نجد ٣ ارخص واحد فيهم صح؟ كم اقل شقه فيه؟",
+      "fahem": {"message":"نعم، نجد ٣ هو الأرخص، وأقل شقة فيه تبدأ من ١,٠٥٠,٠٠٠ ريال.\n\nوش ميزانيتك تقريباً؟ عشان أشوف لك خيارات تناسبك."}
+    },
+    {
+      "user": "ميزانيتي مليون بالكثير.. يعني نجد ٣ فوق ميزانيتي بشوي. فيه شي بالرمال اقل؟ ولا لازم اطلع بره الرمال؟",
+      "fahem": {"message":"أبشر! لقيت لك مشروعًا يناسب طلبك في الرياض:","properties":[{"code":"NAJD-5","title":"نجد ٥","district":"الجنادرية","city":"الرياض","type":"شقة","type_key":"apartment","price_min":820000,"price_max":1100000,"beds_min":1,"beds_max":2,"area":"61–147","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-5.html"}]}
+    },
+    {
+      "user": "طيب نجد ٥ برا الرمال بس بميزانيتي.. زين خليني افكر بينه وبين اني ازود ميزانيتي عشان الرمال. مشكوور",
+      "fahem": {"message":"لو حبيت تتواصل مع فريقنا عشان يساعدوك بالخيارات أو ترتيب زيارة، تقدر تترك بياناتك هنا.","showContactForm":true}
+    }
+  ]
+}

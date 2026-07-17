@@ -1,5 +1,4 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import "./fahem.js"; // ودجت "فاهم" — يحقن الزر العائم واللوحة في كل الصفحات الرئيسية.
 const SUPABASE_URL="https://ghtcwsbtyvczlznviojj.supabase.co", SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdodGN3c2J0eXZjemx6bnZpb2pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM1NTA2NjMsImV4cCI6MjA5OTEyNjY2M30.dv4RFD_e3vfRFFMPTZFaVAYZARTzELgOccSew8rLZXc";
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const lang = document.documentElement.lang || "ar";
@@ -10,7 +9,7 @@ if(form) form.addEventListener("submit", async (e)=>{
   e.preventDefault(); const d = new FormData(form);
   const { error } = await sb.from("leads").insert({
     name:d.get("name"), phone:d.get("phone"), email:d.get("email"),
-    project_code:d.get("project"), message:d.get("message"), source:"form", locale:lang });
+    project_code:d.get("interest"), message:d.get("message"), source:"form", locale:lang });
   const msg=document.getElementById("formMsg");
   if(msg) msg.textContent = error
     ? (lang==="ar" ? "تعذّر الإرسال، حاول مجددًا" : "Couldn’t send, please try again")

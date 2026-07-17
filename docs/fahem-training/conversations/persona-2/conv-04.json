@@ -1,0 +1,38 @@
+{
+  "persona": "عائلة تبحث عن فيلا (family)",
+  "persona_id": 2,
+  "conversation_id": 4,
+  "intent": "ميزانية مليونين وطلب فيلا",
+  "turns": [
+    {
+      "user": "ميزانيتي مليونين ريال وابغى فيلا للعائلة، وش تنصحني؟",
+      "fahem": {
+        "message": "وجدت لك خيار متاح ضمن ميزانيتك:\n\n**نجد ٥** - الجنادرية\n- شقق من ١ إلى ٢ غرفة نوم\n- المساحة: ٦١ إلى ١٤٧ متر مربع\n- السعر: يبدأ من ٨٢٠,٠٠٠ ريال\n\nهل تود معرفة المزيد عن هذا المشروع أو تفضل خيارات أخرى؟",
+        "properties": [
+          {"code": "NAJD-5", "title": "نجد ٥", "district": "الجنادرية", "city": "الرياض", "type": "شقة", "type_key": "apartment", "price_min": 820000, "price_max": 1100000, "beds_min": 1, "beds_max": 2, "area": "61–147", "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg", "status": "available", "url": "projects/NAJD-5.html"}
+        ]
+      }
+    },
+    {
+      "user": "بس انا قلت فيلا وميزانيتي مليونين، الشقة ذي صغيرة على عائلة. فيه فيلا بمليونين؟",
+      "fahem": {
+        "message": "هل تبي تفاصيل أكثر عن المشروع ولا تبي نتواصل معك؟",
+        "properties": [
+          {"code": "NAJD-5", "title": "نجد ٥", "district": "الجنادرية", "city": "الرياض", "type": "شقة", "type_key": "apartment", "price_min": 820000, "price_max": 1100000, "beds_min": 1, "beds_max": 2, "area": "61–147", "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg", "status": "available", "url": "projects/NAJD-5.html"}
+        ],
+        "quickReplies": ["أبي تفاصيل أكثر", "تواصلوا معي"]
+      }
+    },
+    {
+      "user": "جاوبني اول: بمليونين فيه فيلا او لا؟ لا تعيد نفس الشقة",
+      "fahem": {
+        "message": "عندنا 3 مشاريع شقق فيها غرفتين:\n\n**نجد 5** - الجنادرية\n- السعر: 820,000 - 1,100,000 ريال\n- المساحة: 61-147 م²\n\n**نجد 3** - الرمال\n- السعر: 1,050,000 - 1,350,000 ريال\n- المساحة: 72-139 م²\n\n**نجد 4** - الرمال\n- السعر: 1,150,000 - 1,500,000 ريال\n- المساحة: 59-166 م²\n\nأي مشروع يلفت نظرك؟",
+        "properties": [
+          {"code": "NAJD-5", "title": "نجد ٥", "district": "الجنادرية", "city": "الرياض", "type": "شقة", "type_key": "apartment", "price_min": 820000, "price_max": 1100000, "beds_min": 1, "beds_max": 2, "area": "61–147", "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg", "status": "available", "url": "projects/NAJD-5.html"},
+          {"code": "NAJD-3", "title": "نجد ٣", "district": "الرمال", "city": "الرياض", "type": "شقة", "type_key": "apartment", "price_min": 1050000, "price_max": 1350000, "beds_min": 1, "beds_max": 2, "area": "72–139", "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg", "status": "available", "url": "projects/NAJD-3.html"},
+          {"code": "NAJD-4", "title": "نجد ٤", "district": "الرمال", "city": "الرياض", "type": "شقة", "type_key": "apartment", "price_min": 1150000, "price_max": 1500000, "beds_min": 1, "beds_max": 2, "area": "59–166", "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg", "status": "available", "url": "projects/NAJD-4.html"}
+        ]
+      }
+    }
+  ]
+}

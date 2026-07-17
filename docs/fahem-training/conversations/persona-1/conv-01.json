@@ -1,0 +1,87 @@
+{
+  "persona": "المستثمر (investor)",
+  "persona_id": 1,
+  "conversation_id": 1,
+  "intent": "سؤال عام: وش أفضل فرصة استثمارية بالرياض؟",
+  "turns": [
+    {
+      "user": "السلام عليكم، انا مستثمر ودور على افضل فرصة استثمارية عندكم بالرياض. وش تنصحني؟",
+      "fahem": {
+        "message": "وش ميزانيتك التقريبية للاستثمار؟",
+        "quickReplies": ["أقل من ٥٠٠ ألف", "٥٠٠ ألف - مليون", "مليون - مليون ونص", "مليون ونص - ٢ مليون", "أكثر من ٢ مليون"]
+      }
+    },
+    {
+      "user": "اكثر من ٢ مليون، بس اهم شي العائد الايجاري يكون كويس. وش عندك؟",
+      "fahem": {
+        "message": "أبشر! لقيت لك مشروعًا يناسب طلبك في الرياض:",
+        "properties": [
+          {
+            "code": "NAJD-5",
+            "title": "نجد ٥",
+            "district": "الجنادرية",
+            "city": "الرياض",
+            "type": "شقة",
+            "type_key": "apartment",
+            "price_min": 820000,
+            "price_max": 1100000,
+            "beds_min": 1,
+            "beds_max": 2,
+            "area": "61–147",
+            "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg",
+            "status": "available",
+            "url": "projects/NAJD-5.html"
+          }
+        ]
+      }
+    },
+    {
+      "user": "طيب هذي شقة رخيصة نسبيا وانا ميزانيتي فوق ٢ مليون. ما عندك شي اكبر؟ وكم العائد الايجاري المتوقع على نجد ٥؟",
+      "fahem": {
+        "message": "أبشر! لقيت لك مشروعًا يناسب طلبك في الرياض:",
+        "properties": [
+          {
+            "code": "NAJD-5",
+            "title": "نجد ٥",
+            "district": "الجنادرية",
+            "city": "الرياض",
+            "type": "شقة",
+            "type_key": "apartment",
+            "price_min": 820000,
+            "price_max": 1100000,
+            "beds_min": 1,
+            "beds_max": 2,
+            "area": "61–147",
+            "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg",
+            "status": "available",
+            "url": "projects/NAJD-5.html"
+          }
+        ]
+      }
+    },
+    {
+      "user": "سمعت عندكم تاون هاوس نجد ٢، هذا يناسب ميزانيتي اكثر. تقدر تعطيني تفاصيله؟",
+      "fahem": {
+        "message": "أبشر! لقيت لك مشروعًا يناسب طلبك في الرياض:",
+        "properties": [
+          {
+            "code": "NAJD-2",
+            "title": "نجد ٢",
+            "district": "الرمال",
+            "city": "الرياض",
+            "type": "تاون هاوس",
+            "type_key": "townhouse",
+            "price_min": 2200000,
+            "price_max": 2250000,
+            "beds_min": 3,
+            "beds_max": 4,
+            "area": "250–273",
+            "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg",
+            "status": "available",
+            "url": "projects/NAJD-2.html"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "persona": "مشتري أول شقة (first-time)",
+  "persona_id": 3,
+  "conversation_id": 5,
+  "intent": "يسأل مباشرة: وش أقل سعر شقة عندكم",
+  "turns": [
+    {
+      "user": "وش اقل سعر شقه عندكم؟ بدون لف ودوران بس اباه رقم",
+      "fahem": {"message":"820,000 ريال","properties":[{"code":"NAJD-5","title":"نجد ٥","district":"الجنادرية","city":"الرياض","type":"شقة","type_key":"apartment","price_min":820000,"price_max":1100000,"beds_min":1,"beds_max":2,"area":"61–147","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-5.html"},{"code":"NAJD-3","title":"نجد ٣","district":"الرمال","city":"الرياض","type":"شقة","type_key":"apartment","price_min":1050000,"price_max":1350000,"beds_min":1,"beds_max":2,"area":"72–139","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-3.html"},{"code":"NAJD-4","title":"نجد ٤","district":"الرمال","city":"الرياض","type":"شقة","type_key":"apartment","price_min":1150000,"price_max":1500000,"beds_min":1,"beds_max":2,"area":"59–166","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-4.html"}]}
+    },
+    {
+      "user": "تمام هذا الرقم اللي ابيه.. هذا يشمل الرسوم والضريبه ولا زياده عليه؟",
+      "fahem": {"message":"عشان نعطيك تفاصيل كاملة عن الأسعار والرسوم والضريبة، خلّ بياناتك وبيتواصل معك فريقنا","properties":[{"code":"NAJD-5","title":"نجد ٥","district":"الجنادرية","city":"الرياض","type":"شقة","type_key":"apartment","price_min":820000,"price_max":1100000,"beds_min":1,"beds_max":2,"area":"61–147","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-5.html"},{"code":"NAJD-3","title":"نجد ٣","district":"الرمال","city":"الرياض","type":"شقة","type_key":"apartment","price_min":1050000,"price_max":1350000,"beds_min":1,"beds_max":2,"area":"72–139","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-3.html"},{"code":"NAJD-4","title":"نجد ٤","district":"الرمال","city":"الرياض","type":"شقة","type_key":"apartment","price_min":1150000,"price_max":1500000,"beds_min":1,"beds_max":2,"area":"59–166","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-4.html"}],"showContactForm":true,"projectCode":"NAJD-5"}
+    },
+    {
+      "user": "اوكي فهمت.. شكرا على الصراحه بالسعر، بكمل بحثي واذا قررت بتواصل",
+      "fahem": {"message":"العفو! لو حبيت نتواصل معك لاحقاً أو لما تقرر، خلّ بياناتك هنا وفريقنا بيساعدك.","showContactForm":true,"projectCode":"najd-5"}
+    }
+  ]
+}

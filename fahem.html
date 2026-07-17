@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title data-en="News & Insights — RYLIST">الأخبار والرؤى — RYLIST</title>
-<meta name="description" data-en="RYLIST insights and news: market analysis, off-plan, neighborhoods, and financing." content="رؤى وأخبار RYLIST العقارية: تحليلات السوق، البيع على الخارطة، الأحياء، والتمويل.">
+<title data-en="Ask Fahem — RYLIST">استشير فاهم — RYLIST</title>
+<meta name="description" data-en="Chat with Fahem, RYLIST’s real-estate advisor: tell him what you’re looking for and he’ll help you choose the right project — free." content="حادث فاهم، مستشار RYLIST العقاري: قل له عمّا تبحث عنه ويساعدك تختار المشروع المناسب — مجانًا.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -47,30 +47,29 @@
 </header>
 <div class="nav-backdrop"></div>
 
-<main id="main">
-
-  <section class="page-banner has-summit">
-    <div class="container page-banner__inner">
-      <span class="eyebrow" data-en="Insights" data-zh="">رؤى عقارية</span>
-      <h1 class="display" data-en="Your guide to a confident real-estate decision." data-zh="">دليلك لاتخاذ قرارك عقاري</h1>
-      <p class="lead" data-en="Short, evidence-led notes on the Saudi real estate market." data-zh="">ملاحظات موجزة مبنية على الأدلّة حول السوق العقاري السعودي.</p>
+<main id="main" class="fahem-page">
+  <div class="container fahem-page__inner">
+    <div class="fahem-page__intro">
+      <span class="eyebrow" data-en="Ask Fahem" data-zh="">استشير فاهم</span>
+      <h1 class="fahem-page__ttl" data-en="Your real-estate advisor, right here." data-zh="">مستشارك العقاري، هنا بين يديك.</h1>
+      <p class="fahem-page__lead" data-en="Tell Fahem what you’re looking for — city, type, and budget — and he’ll suggest the right projects and connect you with the RYLIST team. Free, no commission." data-zh="">قل لفاهم عمّا تبحث عنه — المدينة والنوع والميزانية — ويقترح لك المشاريع المناسبة ويوصلك بفريق RYLIST. مجانًا وبلا عمولة.</p>
     </div>
-  </section>
 
-  <section class="section">
-    <div class="container">
-      <div id="newsGrid" class="grid grid-3"></div>
-    </div>
-  </section>
-
-  <section class="section section--ink has-summit cta-band">
-    <div class="container">
-      <div class="gold-rule gold-rule--center"></div>
-      <h2 class="h1" data-en="Have a question about a property?" data-zh="">عندك سؤال عن عقار؟</h2>
-      <div class="btn-row" style="justify-content:center"><a class="btn btn--primary" href="contact.html" data-en="Contact us" data-zh="">تواصل معنا</a></div>
-    </div>
-  </section>
-
+    <section class="fahem-chat" aria-label="محادثة فاهم">
+      <header class="fahem-chat__head">
+        <span class="fahem-chat__ava"><img src="assets/img/fahem-avatar.png" alt="فاهم" width="56" height="56" onerror="this.style.display='none'"></span>
+        <span class="fahem-chat__id">
+          <b class="fahem-chat__name">فاهم</b>
+          <small class="fahem-chat__sub" data-en="Your real-estate advisor · rylist" data-zh="">مستشارك العقاري · rylist</small>
+        </span>
+      </header>
+      <div class="fahem-scroll"><div class="fahem-thread"></div></div>
+      <form class="fahem-composer">
+        <input class="fahem-input" type="text" autocomplete="off" enterkeyhint="send" placeholder="أو اكتب سؤالك…" data-en-ph="Or type your question…" aria-label="اكتب رسالتك">
+        <button class="fahem-sendbtn" type="submit" data-en="Send" data-zh="">إرسال</button>
+      </form>
+    </section>
+  </div>
 </main>
 
 <footer class="site-footer has-summit">
@@ -113,13 +112,10 @@
 <script src="assets/js/data.js"></script>
 <script src="assets/js/i18n.js"></script>
 <script src="assets/js/main.js"></script>
-<a class="fahem-fab" href="fahem.html" aria-label="استشير فاهم">
-  <span class="fahem-fab__ava"><img src="assets/img/fahem-avatar.png" alt="فاهم" width="40" height="40" onerror="this.style.display='none'"></span>
-  <span class="fahem-fab__label" data-en="Ask Fahem" data-zh="">استشير فاهم</span>
-</a>
 <a class="wa-float" data-wa-float target="_blank" rel="noopener" aria-label="WhatsApp">
   <svg viewBox="0 0 24 24" width="28" height="28"><path fill="#fff" d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-3.2-.9-2.7-1.2-4.4-4-4.5-4.2-.1-.2-1.1-1.4-1.1-2.7 0-1.3.7-1.9.9-2.2.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.1.1.3 0 .5l-.4.5-.3.3c-.1.1-.3.3-.1.5.1.3.7 1.1 1.4 1.7.9.8 1.7 1.1 1.9 1.2.2.1.4.1.5-.1l.7-.8c.2-.2.4-.2.6-.1l1.9.9c.2.1.4.2.4.3.1.2.1.7-.1 1.2z"/></svg>
 </a>
 <script type="module" src="assets/js/public.js"></script>
+<script type="module" src="assets/js/fahem-chat.js"></script>
 </body>
 </html>

@@ -42,7 +42,6 @@
       <a href="about.html" data-cms="nav_about" data-en="About" data-zh="">من نحن</a>
       <a href="news.html" data-cms="nav_news" data-en="News" data-zh="">الأخبار</a>
       <a href="contact.html" data-cms="nav_contact" data-en="Contact" data-zh="">تواصل</a>
-      <a class="btn btn--primary nav__cta" href="contact.html" aria-label="استشير فاهم" data-fahem-open><svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true"><path d="M11 2l1.6 5.4L18 9l-5.4 1.6L11 16l-1.6-5.4L4 9l5.4-1.6z"/><path d="M18.5 14l.8 2.7 2.7.8-2.7.8-.8 2.7-.8-2.7-2.7-.8 2.7-.8z"/></svg><span data-en="Ask Fahem" data-zh="">استشير فاهم</span></a>
     </nav>
   </div>
 </header>
@@ -53,42 +52,19 @@
   <section class="page-banner has-summit">
     <div class="container page-banner__inner">
       <span class="eyebrow" data-en="Contact" data-zh="">تواصل</span>
-      <h1 class="display" data-en="Request a consultation." data-zh="">اطلب استشارة عقارية.</h1>
-      <p class="lead" data-en="Tell us what you’re looking for and we’ll help you choose the right property. We reply on WhatsApp or by email." data-zh="">أخبرنا عمّا تبحث عنه، ونساعدك تختار العقار المناسب. نردّ عبر واتساب أو البريد.</p>
+      <h1 class="display" data-en="Let’s talk." data-zh="">لنتحدّث.</h1>
+      <p class="lead" data-en="Tell us what you’re looking for and we’ll help you choose the right property. We usually reply within working hours on WhatsApp or by email." data-zh="">أخبرنا عمّا تبحث عنه ونساعدك تختار العقار المناسب. نردّ عادةً خلال ساعات العمل عبر واتساب أو البريد.</p>
     </div>
   </section>
 
   <section class="section">
-    <div class="container two-col">
+    <div class="container contact-layout">
 
-      <!-- بطاقات التواصل -->
-      <div class="grid grid-2">
-        <div class="info-card">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M21 15.5a2 2 0 0 1-2 2A16 16 0 0 1 4.5 5a2 2 0 0 1 2-2h2l1.5 4-2 1.5a12 12 0 0 0 5.5 5.5L15 12l4 1.5v2z"/></svg>
-          <h3 data-en="WhatsApp / Phone" data-zh="">واتساب / هاتف</h3>
-          <p><a data-wa target="_blank" rel="noopener" data-en="Message on WhatsApp" data-zh="">راسلنا على واتساب</a></p>
-          <p><a data-phone data-phone-text href="#">+966 11 000 0000</a></p>
-        </div>
-        <div class="info-card">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
-          <h3 data-en="Email" data-zh="">البريد</h3>
-          <p><a data-email data-email-text href="#">info@rylist.sa</a></p>
-        </div>
-        <div class="info-card">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
-          <h3 data-en="Office" data-zh="">المكتب</h3>
-          <p data-en="Riyadh, Saudi Arabia" data-zh="">الرياض، المملكة العربية السعودية</p>
-        </div>
-        <div class="info-card">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-          <h3 data-en="Hours" data-zh="">ساعات العمل</h3>
-          <p data-en="Sun – Thu · 9am – 6pm" data-zh="">الأحد – الخميس · ٩ص – ٦م</p>
-        </div>
-      </div>
-
-      <!-- النموذج -->
-      <div>
+      <!-- لوح النموذج (البطل) -->
+      <div class="contact-form-panel">
         <span class="eyebrow" data-en="Consultation request" data-zh="">طلب استشارة</span>
+        <h2 data-en="Request your consultation" data-zh="">اطلب استشارتك</h2>
+        <p class="muted contact-form-panel__sub" data-en="Fill in the form and we’ll get back to you. No account needed." data-zh="">عبّئ النموذج ونعود إليك — لا حاجة لحساب.</p>
         <form class="form" id="interestForm" novalidate>
           <div class="field">
             <label for="f-name" data-en="Full name" data-zh="">الاسم الكامل</label>
@@ -97,6 +73,10 @@
           <div class="field">
             <label for="f-phone" data-en="Phone" data-zh="">رقم الجوال</label>
             <input id="f-phone" name="phone" type="tel" required data-en-ph="05x xxx xxxx" data-zh-ph="" placeholder="05x xxx xxxx">
+          </div>
+          <div class="field">
+            <label for="f-email" data-en="Email (optional)" data-zh="">البريد الإلكتروني (اختياري)</label>
+            <input id="f-email" name="email" type="email" data-en-ph="you@example.com" data-zh-ph="" placeholder="you@example.com">
           </div>
           <div class="field">
             <label for="f-interest" data-en="I’m interested in" data-zh="">اهتمامي بـ</label>
@@ -119,13 +99,64 @@
         </form>
       </div>
 
+      <!-- شريط القنوات -->
+      <aside class="contact-rail" aria-label="طرق التواصل المباشر">
+        <a class="wa-cta" data-wa target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-3.2-.9-2.7-1.2-4.4-4-4.5-4.2-.1-.2-1.1-1.4-1.1-2.7 0-1.3.7-1.9.9-2.2.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.1.1.3 0 .5l-.4.5-.3.3c-.1.1-.3.3-.1.5.1.3.7 1.1 1.4 1.7.9.8 1.7 1.1 1.9 1.2.2.1.4.1.5-.1l.7-.8c.2-.2.4-.2.6-.1l1.9.9c.2.1.4.2.4.3.1.2.1.7-.1 1.2z"/></svg>
+          <span class="wa-cta__body">
+            <span class="wa-cta__label" data-en="Chat on WhatsApp" data-zh="">راسلنا على واتساب</span>
+            <span class="wa-cta__sub" data-en="The fastest way to reach us" data-zh="">أسرع طريقة للوصول إلينا</span>
+          </span>
+          <svg class="wa-cta__arrow" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+        </a>
+
+        <ul class="contact-rail__list">
+          <li class="channel">
+            <svg class="channel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M21 15.5a2 2 0 0 1-2 2A16 16 0 0 1 4.5 5a2 2 0 0 1 2-2h2l1.5 4-2 1.5a12 12 0 0 0 5.5 5.5L15 12l4 1.5v2z"/></svg>
+            <span class="channel__body">
+              <span class="channel__label" data-en="Phone" data-zh="">هاتف</span>
+              <a class="channel__val" data-phone data-phone-text href="#">+966 11 000 0000</a>
+            </span>
+          </li>
+          <li class="channel">
+            <svg class="channel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+            <span class="channel__body">
+              <span class="channel__label" data-en="Email" data-zh="">البريد</span>
+              <a class="channel__val" data-email data-email-text href="#">info@rylist.sa</a>
+            </span>
+          </li>
+          <li class="channel">
+            <svg class="channel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            <span class="channel__body">
+              <span class="channel__label" data-en="Office" data-zh="">المكتب</span>
+              <span class="channel__val" data-en="Riyadh, Saudi Arabia" data-zh="">الرياض، المملكة العربية السعودية</span>
+            </span>
+          </li>
+          <li class="channel">
+            <svg class="channel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            <span class="channel__body">
+              <span class="channel__label" data-en="Hours" data-zh="">ساعات العمل</span>
+              <span class="channel__val" data-en="Sun – Thu · 9am – 6pm" data-zh="">الأحد – الخميس · ٩ص – ٦م</span>
+            </span>
+          </li>
+        </ul>
+
+        <p class="contact-rail__note" data-en="We usually reply within working hours." data-zh="">نردّ عادةً خلال ساعات العمل.</p>
+      </aside>
+
     </div>
   </section>
 
   <section class="section section--tight">
     <div class="container">
-      <div class="map-frame">
-        <iframe data-map title="RYLIST location" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <div class="map-wrap">
+        <div class="map-tag">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+          <span data-en="Riyadh, Saudi Arabia" data-zh="">الرياض، المملكة العربية السعودية</span>
+        </div>
+        <div class="map-frame">
+          <iframe data-map title="RYLIST location" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
       </div>
     </div>
   </section>
@@ -172,6 +203,10 @@
 <script src="assets/js/data.js"></script>
 <script src="assets/js/i18n.js"></script>
 <script src="assets/js/main.js"></script>
+<a class="fahem-fab" href="fahem.html" aria-label="استشير فاهم">
+  <span class="fahem-fab__ava"><img src="assets/img/fahem-avatar.png" alt="فاهم" width="40" height="40" onerror="this.style.display='none'"></span>
+  <span class="fahem-fab__label" data-en="Ask Fahem" data-zh="">استشير فاهم</span>
+</a>
 <a class="wa-float" data-wa-float target="_blank" rel="noopener" aria-label="WhatsApp">
   <svg viewBox="0 0 24 24" width="28" height="28"><path fill="#fff" d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-3.2-.9-2.7-1.2-4.4-4-4.5-4.2-.1-.2-1.1-1.4-1.1-2.7 0-1.3.7-1.9.9-2.2.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.1.1.3 0 .5l-.4.5-.3.3c-.1.1-.3.3-.1.5.1.3.7 1.1 1.4 1.7.9.8 1.7 1.1 1.9 1.2.2.1.4.1.5-.1l.7-.8c.2-.2.4-.2.6-.1l1.9.9c.2.1.4.2.4.3.1.2.1.7-.1 1.2z"/></svg>
 </a>

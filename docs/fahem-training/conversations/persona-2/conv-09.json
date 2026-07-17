@@ -1,0 +1,33 @@
+{
+  "persona": "عائلة تبحث عن فيلا (family)",
+  "persona_id": 2,
+  "conversation_id": 9,
+  "intent": "مقارنة نجد ٢ (تاون هاوس) مع شقة كبيرة للعائلة",
+  "turns": [
+    {
+      "user": "احتار بين تاون هاوس وشقة كبيرة للعائلة، ايهما احسن لنا؟",
+      "fahem": {
+        "message": "أهلاً! يبدو أن رسالتك ما وصلت واضحة. \n\nممكن تكتب لي مرة ثانية وش تبحث عنه؟ مثلاً:\n- نوع العقار (شقة، تاون هاوس، أرض)\n- الميزانية\n- المنطقة المفضلة"
+      }
+    },
+    {
+      "user": "ابغى اقارن: التاون هاوس نجد ٢ مقابل شقة كبيرة نجد ٤. ايهم افضل لعائلة فيها عيال؟",
+      "fahem": {
+        "message": "تبغى نعدل شي؟",
+        "properties": [],
+        "quickReplies": ["غير الميزانية", "غير عدد الغرف", "شوف تاون هاوس", "شوف مشاريع على الخارطة"]
+      }
+    },
+    {
+      "user": "اعرض لي التاون هاوس عشان اقارنه بالشقة",
+      "fahem": {
+        "message": "ممتاز! عندنا ٣ مشاريع شقق تناسب ميزانيتك (حتى ٤ مليون) وبغرفتين نوم:\n\n**نجد ٥** - الجنادرية\n- شقق من ٨٢٠,٠٠٠ إلى ١,١٠٠,٠٠٠ ريال\n- ١-٢ غرف نوم\n- مساحة ٦١-١٤٧ م²\n\n**نجد ٣** - الرمال\n- شقق من ١,٠٥٠,٠٠٠ إلى ١,٣٥٠,٠٠٠ ريال\n- ١-٢ غرف نوم\n- مساحة ٧٢-١٣٩ م²\n\n**نجد ٤** - الرمال\n- شقق من ١,١٥٠,٠٠٠ إلى ١,٥٠٠,٠٠٠ ريال\n- ١-٢ غرف نوم\n- مساحة ٥٩-١٦٦ م²\n\nأي مشروع يثير اهتمامك أكثر؟",
+        "properties": [
+          {"code": "NAJD-5", "title": "نجد ٥", "district": "الجنادرية", "city": "الرياض", "type": "شقة", "type_key": "apartment", "price_min": 820000, "price_max": 1100000, "beds_min": 1, "beds_max": 2, "area": "61–147", "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg", "status": "available", "url": "projects/NAJD-5.html"},
+          {"code": "NAJD-3", "title": "نجد ٣", "district": "الرمال", "city": "الرياض", "type": "شقة", "type_key": "apartment", "price_min": 1050000, "price_max": 1350000, "beds_min": 1, "beds_max": 2, "area": "72–139", "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg", "status": "available", "url": "projects/NAJD-3.html"},
+          {"code": "NAJD-4", "title": "نجد ٤", "district": "الرمال", "city": "الرياض", "type": "شقة", "type_key": "apartment", "price_min": 1150000, "price_max": 1500000, "beds_min": 1, "beds_max": 2, "area": "59–166", "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg", "status": "available", "url": "projects/NAJD-4.html"}
+        ]
+      }
+    }
+  ]
+}
