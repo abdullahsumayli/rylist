@@ -294,3 +294,4 @@
 .ci-unit-h { margin: 0 0 10px; }
 .ci-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
 .ci-imageinput { display: flex; flex-direction: column; gap: 6px; }
+.cta .mini-add { color: var(--accent); font-weight: 600; }

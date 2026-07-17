@@ -68,7 +68,8 @@ export async function renderProjects(root) {
           <div class="bar"><div class="fill" style="width:${Number(p.sold) || 0}%"></div></div></div>
         <div class="cta"><button class="mini" data-edit="${esc(p.id)}">تعديل</button>
           <button class="mini" data-content="${esc(p.id)}">المحتوى</button>
-          <button class="mini" data-del="${esc(p.id)}">حذف</button></div>
+          <button class="mini" data-del="${esc(p.id)}">حذف</button>
+          <button class="mini mini-add" data-add="1">إضافة</button></div>
       </div></article>`;
   };
   grid.innerHTML = rows.length ? rows.map(card).join("") : `<p class="muted">لا توجد عقارات بعد. اضغط «إضافة عقار» للبدء.</p>`;
@@ -94,7 +95,8 @@ export async function renderProjects(root) {
   root.querySelector("#addBtn").onclick = () => renderForm(root, ENT(), {}, () => renderProjects(root));
   root.querySelector("#importBtn").onclick = () => alert("رفع العقارات من ملف Excel/CSV — قريبًا (الجزء ج).");
   grid.addEventListener("click", async (e) => {
-    const ed = e.target.closest("[data-edit]"), dl = e.target.closest("[data-del]"), ct = e.target.closest("[data-content]");
+    const ed = e.target.closest("[data-edit]"), dl = e.target.closest("[data-del]"), ct = e.target.closest("[data-content]"), ad = e.target.closest("[data-add]");
+    if (ad) { renderForm(root, ENT(), {}, () => renderProjects(root)); return; }
     if (ed) { const row = rows.find((r) => String(r.id) === ed.dataset.edit); renderForm(root, ENT(), row, () => renderProjects(root)); }
     if (ct) { const row = rows.find((r) => String(r.id) === ct.dataset.content); renderProjectContent(root, row, () => renderProjects(root)); }
     if (dl) { if (!confirm("حذف العقار؟")) return; const { error: e2 } = await sb.from("projects").delete().eq("id", dl.dataset.del); if (e2) { alert(e2.message); return; } renderProjects(root); }
