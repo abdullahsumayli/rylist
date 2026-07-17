@@ -218,7 +218,7 @@ export async function renderProjectContent(root, project, onDone) {
   const secs = [
     collapsible("📸", "معرض المشروع", () => draft.gallery.length, () => galleryEditor(draft.gallery, prefix)),
     collapsible("📊", "الحقائق", () => d.facts.length, () => pairsEditor(d.facts, "label", "value", "المسمّى", "القيمة", blankPair)),
-    collapsible("🏠", "النماذج", () => d.units.filter(unitHasContent).length, () => unitsSection(d.units, prefix)),
+    collapsible("📐", "النماذج", () => d.units.filter(unitHasContent).length, () => unitsSection(d.units, prefix)),
     collapsible("✨", "المميزات", () => d.features.length, () => stringsEditor(d.features)),
     collapsible("📍", "الموقع", () => d.location.length, () => stringsEditor(d.location)),
     collapsible("🏘", "أنواع الوحدات", () => d.unitTypes.length, () => pairsEditor(d.unitTypes, "title", "detail", "العنوان", "التفصيل", blankUnitType)),
