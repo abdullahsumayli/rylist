@@ -10,7 +10,7 @@ if(form) form.addEventListener("submit", async (e)=>{
   e.preventDefault(); const d = new FormData(form);
   const { error } = await sb.from("leads").insert({
     name:d.get("name"), phone:d.get("phone"), email:d.get("email"),
-    project_code:d.get("project"), message:d.get("message"), source:"form", locale:lang });
+    project_code:d.get("interest"), message:d.get("message"), source:"form", locale:lang });
   const msg=document.getElementById("formMsg");
   if(msg) msg.textContent = error
     ? (lang==="ar" ? "تعذّر الإرسال، حاول مجددًا" : "Couldn’t send, please try again")
