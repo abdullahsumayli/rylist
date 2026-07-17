@@ -36,37 +36,24 @@ export function unitsHtml(D, code, loc) {
   const units = Array.isArray(D?.units) ? D.units : [];
   if (units.length) {
     const H = { ar: "الوحدات", en: "Units", zh: "单元" }[loc] || "الوحدات";
-    const fpLabel = { ar: "المخطط", en: "Floor plan", zh: "户型图" }[loc] || "المخطط";
     // Units render as a card grid (like the homepage project grid) — all visible at once.
-    let overlays = "";
-    const lb = (id, url) =>
-      `<div class="pgallery__lb" id="${id}"><a class="pgallery__bg" href="#"></a><img src="${url}" alt=""><a class="pgallery__x" href="#" aria-label="إغلاق">×</a></div>`;
-    const cards = units.map((u, ui) => {
+    // Data only: unit photos and floor-plan images are intentionally omitted.
+    const cards = units.map((u) => {
       const title = tr(u.title, loc);
       const price = tr(u.price, loc);
       const desc = tr(u.description, loc);
       const specs = Array.isArray(u.specs) ? u.specs : [];
-      const g = Array.isArray(u.gallery) ? u.gallery : [];
-      const plans = Array.isArray(u.floorplans) ? u.floorplans : (u.floorplan ? [u.floorplan] : []);
-      g.forEach((url, ii) => { overlays += lb(`u-${code}-${ui}-${ii}`, url); });
-      plans.forEach((url, pi) => { overlays += lb(`fp-${code}-${ui}-${pi}`, url); });
-      const media = g.length
-        ? `<a class="punit-card__media" href="#u-${code}-${ui}-0"><img loading="lazy" src="${g[0]}" alt="${title}"></a>`
-        : "";
       const specsHtml = specs.length
         ? `<div class="punit-card__meta">` + specs.map((s) => `<span>${tr(s.label, loc)}: ${tr(s.value, loc)}</span>`).join("") + `</div>`
         : "";
-      const planLink = plans.length
-        ? `<a class="punit-card__plan" href="#fp-${code}-${ui}-0"><img loading="lazy" src="${plans[0]}" alt="${title} ${fpLabel}"><span>${fpLabel}</span></a>`
-        : "";
-      return `<article class="punit-card">${media}<div class="punit-card__body">`
+      return `<article class="punit-card"><div class="punit-card__body">`
         + `<h3 class="punit-card__title">${title}</h3>`
         + (price ? `<div class="punit-card__price">${price}</div>` : "")
         + (desc ? `<p class="punit-card__desc">${desc}</p>` : "")
-        + specsHtml + planLink
+        + specsHtml
         + `</div></article>`;
     }).join("");
-    return `<section class="psec"><h2>${H}</h2><div class="grid grid-3 punits-grid">${cards}</div>${overlays}</section>`;
+    return `<section class="psec"><h2>${H}</h2><div class="grid grid-3 punits-grid">${cards}</div></section>`;
   }
   // Legacy fallback: simple unitTypes cards (existing behavior preserved verbatim).
   const legacy = Array.isArray(D?.unitTypes) ? D.unitTypes : [];

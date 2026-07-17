@@ -47,7 +47,6 @@ test("unitsHtml renders rich units as a card grid (all visible, no accordion)", 
   assert.match(html, /<div class="grid grid-3 punits-grid">/);
   assert.match(html, /<article class="punit-card">/);
   assert.doesNotMatch(html, /<details/);                            // no accordion — all visible
-  assert.match(html, /class="punit-card__media"/);                  // first unit shows its photo
   assert.match(html, /class="punit-card__price"/);                  // price shown per unit
   assert.match(html, /٢٬٢٠٠٬٠٠٠ ريال/);
   assert.match(html, /تاون هاوس ٣ غرف/);
@@ -55,18 +54,18 @@ test("unitsHtml renders rich units as a card grid (all visible, no accordion)", 
   assert.match(html, /٢٠٠ م²/);
 });
 
-test("unitsHtml renders unit gallery + floor plan with unique lightbox ids", () => {
+test("unitsHtml omits unit photos and floor-plan images (data only)", () => {
   const html = unitsHtml({ units: [richUnit] }, "najd-2", "ar");
-  assert.match(html, /id="u-najd-2-0-0"/);   // unit gallery image 0
-  assert.match(html, /id="u-najd-2-0-1"/);   // unit gallery image 1
-  assert.match(html, /id="fp-najd-2-0-0"/);  // unit floor plan 0
-  assert.match(html, /المخطط/);
+  assert.doesNotMatch(html, /class="punit-card__media"/);   // no unit photo
+  assert.doesNotMatch(html, /class="punit-card__plan"/);    // no floor-plan image
+  assert.doesNotMatch(html, /pgallery__lb/);                // no image lightbox overlays
+  assert.doesNotMatch(html, /u1\.jpg|plan1\.jpg/);          // no image URLs leak through
 });
 
-test("unitsHtml supports floorplans array", () => {
+test("unitsHtml ignores floorplans array (no floor-plan images rendered)", () => {
   const html = unitsHtml({ units: [{ title: { ar: "أ" }, floorplans: ["https://x/a.jpg", "https://x/b.jpg"] }] }, "p", "ar");
-  assert.match(html, /id="fp-p-0-0"/);
-  assert.match(html, /id="fp-p-0-1"/);
+  assert.doesNotMatch(html, /a\.jpg|b\.jpg/);
+  assert.match(html, /class="punit-card"/);   // card still renders with its data
 });
 
 test("unitsHtml falls back to legacy unitTypes cards when no units", () => {
