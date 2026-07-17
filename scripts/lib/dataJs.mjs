@@ -40,6 +40,7 @@ function flatNews(news) {
   return (news || []).map((n) => {
     const title = n.i18n?.title || {}, excerpt = n.i18n?.excerpt || {}, cat = n.i18n?.category || {};
     return {
+      slug: n.slug || "",
       titleAr: name(title, "ar"), titleEn: name(title, "en"),
       catAr: pick(cat, "ar"), catEn: pick(cat, "en"),
       excerptAr: name(excerpt, "ar"), excerptEn: name(excerpt, "en"),
