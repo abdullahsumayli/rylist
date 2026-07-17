@@ -46,10 +46,12 @@ function imageInput(getVal, setVal, prefix) {
   return box;
 }
 
-// galleryEditor(arr, prefix) -> element. arr is an array of URL strings, mutated in place.
-function galleryEditor(arr, prefix) {
+// galleryEditor(arr, prefix, onChange?) -> element. arr is an array of URL strings,
+// mutated in place. onChange (optional) fires whenever the list length changes.
+function galleryEditor(arr, prefix, onChange) {
   const wrap = el("div", "ci-list");
   const listEl = el("div");
+  const changed = () => { if (typeof onChange === "function") onChange(); };
   const render = () => {
     listEl.innerHTML = "";
     arr.forEach((url, i) => {
@@ -57,7 +59,7 @@ function galleryEditor(arr, prefix) {
       const thumb = document.createElement("img"); thumb.className = "ci-thumb"; thumb.alt = ""; thumb.src = url || "";
       const input = document.createElement("input"); input.value = url || ""; input.placeholder = "رابط الصورة";
       input.oninput = () => { arr[i] = input.value; thumb.src = input.value; };
-      row.append(thumb, input, rowTools(arr, i, render, "حذف الصورة؟"));
+      row.append(thumb, input, rowTools(arr, i, () => { render(); changed(); }, "حذف الصورة؟"));
       listEl.appendChild(row);
     });
   };
@@ -69,11 +71,11 @@ function galleryEditor(arr, prefix) {
     up.disabled = true; status.hidden = false; status.className = "uploadstatus is-busy"; status.textContent = "⏳ جارٍ الرفع…";
     const url = await uploadImage(prefix, file);
     up.disabled = false; up.value = "";
-    if (url) { arr.push(url); render(); status.className = "uploadstatus is-ok"; status.textContent = "✓ تم الرفع"; }
+    if (url) { arr.push(url); render(); changed(); status.className = "uploadstatus is-ok"; status.textContent = "✓ تم الرفع"; }
     else { status.className = "uploadstatus is-err"; status.textContent = "✗ تعذّر الرفع"; }
   };
   const addUrl = el("button", "btn", "+ رابط"); addUrl.type = "button";
-  addUrl.onclick = () => { arr.push(""); render(); };
+  addUrl.onclick = () => { arr.push(""); render(); changed(); };
   actions.append(up, addUrl, status);
   wrap.append(listEl, actions); render();
   return wrap;
@@ -98,6 +100,38 @@ function pairsEditor(arr, aKey, bKey, aLabel, bLabel, mkBlank) {
   };
   const add = el("button", "btn", "+ صف"); add.type = "button";
   add.onclick = () => { arr.push(mkBlank()); render(); };
+  wrap.append(listEl, add); render();
+  return wrap;
+}
+
+// unitTypesEditor(arr, prefix) -> element. Like pairsEditor (title/detail) but each
+// row also carries a multi-image gallery (صور/مخططات) revealed by a per-row 🖼 toggle.
+function unitTypesEditor(arr, prefix) {
+  const wrap = el("div", "ci-list");
+  const listEl = el("div");
+  const render = () => {
+    listEl.innerHTML = "";
+    arr.forEach((u, i) => {
+      u.title = u.title || blankI18n();
+      u.detail = u.detail || blankI18n();
+      u.images = Array.isArray(u.images) ? u.images : [];
+      const row = el("div", "ci-unittype-row");
+      const top = el("div", "ci-pair-row");
+      const a = el("div", "ci-col"); a.append(el("label", "ci-lbl", "العنوان"), i18nField(u.title));
+      const b = el("div", "ci-col"); b.append(el("label", "ci-lbl", "التفصيل"), i18nField(u.detail));
+      const imgs = el("div", "ci-unittype-imgs"); imgs.hidden = true;
+      const toggle = el("button", "btn ci-mini ci-img-toggle"); toggle.type = "button";
+      const label = () => `🖼 صور/مخططات${u.images.length ? ` (${u.images.length})` : ""}`;
+      toggle.textContent = label();
+      toggle.onclick = () => { imgs.hidden = !imgs.hidden; };
+      imgs.appendChild(galleryEditor(u.images, prefix, () => { toggle.textContent = label(); }));
+      top.append(a, b, toggle, rowTools(arr, i, render, "حذف الصف؟"));
+      row.append(top, imgs);
+      listEl.appendChild(row);
+    });
+  };
+  const add = el("button", "btn", "+ صف"); add.type = "button";
+  add.onclick = () => { arr.push(blankUnitType()); render(); };
   wrap.append(listEl, add); render();
   return wrap;
 }
@@ -221,7 +255,7 @@ export async function renderProjectContent(root, project, onDone) {
     collapsible("📐", "النماذج", () => d.units.filter(unitHasContent).length, () => unitsSection(d.units, prefix)),
     collapsible("✨", "المميزات", () => d.features.length, () => stringsEditor(d.features)),
     collapsible("📍", "الموقع", () => d.location.length, () => stringsEditor(d.location)),
-    collapsible("🏘", "أنواع الوحدات", () => d.unitTypes.length, () => pairsEditor(d.unitTypes, "title", "detail", "العنوان", "التفصيل", blankUnitType)),
+    collapsible("🏘", "أنواع الوحدات", () => d.unitTypes.length, () => unitTypesEditor(d.unitTypes, prefix)),
   ];
   secs.forEach((s) => cbody.appendChild(s));
 

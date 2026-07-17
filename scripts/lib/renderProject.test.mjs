@@ -91,6 +91,22 @@ test("unitsHtml falls back to legacy unitTypes cards when no units", () => {
   assert.doesNotMatch(html, /punit-rich/);
 });
 
+test("unitsHtml renders unitType images as lightbox thumbs", () => {
+  const html = unitsHtml({ unitTypes: [
+    { title: { ar: "٣ غرف" }, detail: { ar: "تفاصيل" }, images: ["https://x/a.jpg", "", "https://x/b.jpg"] },
+  ] }, "p", "ar");
+  assert.match(html, /class="punit__imgs"/);
+  assert.match(html, /href="#ut-p-0-0"/);          // first image lightbox link
+  assert.match(html, /id="ut-p-0-1"/);             // second image overlay (blank url skipped)
+  assert.match(html, /https:\/\/x\/b\.jpg/);
+  assert.doesNotMatch(html, /src=""/);             // blank url filtered out, no empty img
+});
+
+test("unitsHtml legacy cards omit image markup when no images", () => {
+  const html = unitsHtml({ unitTypes: [{ title: { ar: "٣ غرف" }, detail: { ar: "تفاصيل" } }] }, "p", "ar");
+  assert.doesNotMatch(html, /punit__imgs/);
+});
+
 test("unitsHtml returns empty string when no unit data at all", () => {
   assert.equal(unitsHtml({}, "p", "ar"), "");
   assert.equal(unitsHtml({ units: [] }, "p", "ar"), "");

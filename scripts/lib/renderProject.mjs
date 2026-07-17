@@ -83,9 +83,19 @@ export function unitsHtml(D, code, loc) {
   const legacy = Array.isArray(D?.unitTypes) ? D.unitTypes : [];
   if (legacy.length) {
     const H = { ar: "أنواع الوحدات", en: "Unit types" }[loc] || "أنواع الوحدات";
-    return `<section class="psec"><h2>${H}</h2><div class="punits">`
-      + legacy.map((u) => `<div class="punit"><h3>${tr(u.title, loc)}</h3><p>${tr(u.detail, loc)}</p></div>`).join("")
-      + `</div></section>`;
+    let overlays = "";
+    const cards = legacy.map((u, ui) => {
+      const title = tr(u.title, loc);
+      const imgs = (Array.isArray(u.images) ? u.images : []).filter((s) => typeof s === "string" && s.trim() !== "");
+      let imgHtml = "";
+      if (imgs.length) {
+        const lb = lightboxCells(imgs, `ut-${code}-${ui}`, title, "punit__thumb");
+        imgHtml = `<div class="punit__imgs">${lb.cells}</div>`;
+        overlays += lb.overlays;
+      }
+      return `<div class="punit"><h3>${title}</h3><p>${tr(u.detail, loc)}</p>${imgHtml}</div>`;
+    }).join("");
+    return `<section class="psec"><h2>${H}</h2><div class="punits">${cards}</div>${overlays}</section>`;
   }
   return "";
 }

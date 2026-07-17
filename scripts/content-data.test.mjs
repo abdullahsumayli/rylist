@@ -49,6 +49,6 @@ test("buildPayload leaves details.units untouched when key absent", () => {
 test("blank factories produce the trilingual shapes", () => {
   assert.deepEqual(blankI18n(), { ar: "", en: "", zh: "" });
   assert.deepEqual(Object.keys(blankPair()).sort(), ["label", "value"]);
-  assert.deepEqual(Object.keys(blankUnitType()).sort(), ["detail", "title"]);
+  assert.deepEqual(Object.keys(blankUnitType()).sort(), ["detail", "images", "title"]);
   assert.deepEqual(Object.keys(blankUnit()).sort(), ["description", "floorplan", "gallery", "price", "specs", "title"]);
 });
