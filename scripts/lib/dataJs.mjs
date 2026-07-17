@@ -11,6 +11,15 @@ const pick = (o, loc) => (o && o[loc]) || "";
 // اسم مترجَم مع سقوط للعربية ثم لأي قيمة متاحة
 const name = (o, loc) => pick(o, loc) || pick(o, "ar") || "";
 
+// يشتق مقتطفًا قصيرًا من نص المقال: يزيل وسوم HTML ويأخذ أوّل ~160 حرفًا.
+// يخلّي الفريق يكتب المقال فقط دون كتابة مقتطف منفصل.
+export const stripTags = (s) => String(s || "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+export function excerptFrom(bodyStr, max = 160) {
+  const s = stripTags(bodyStr);
+  if (s.length <= max) return s;
+  return s.slice(0, max).replace(/\s+\S*$/, "") + "…";
+}
+
 // فهرس تسميات التصنيفات: { city: { riyadh: {ar,en} }, property_type: {...} }
 function taxIndex(taxonomies) {
   const idx = {};
@@ -38,12 +47,14 @@ function flatProjects(projects, tax) {
 
 function flatNews(news) {
   return (news || []).map((n) => {
-    const title = n.i18n?.title || {}, excerpt = n.i18n?.excerpt || {}, cat = n.i18n?.category || {};
+    const title = n.i18n?.title || {}, excerpt = n.i18n?.excerpt || {}, cat = n.i18n?.category || {}, body = n.i18n?.body || {};
     return {
       slug: n.slug || "",
       titleAr: name(title, "ar"), titleEn: name(title, "en"),
       catAr: pick(cat, "ar"), catEn: pick(cat, "en"),
-      excerptAr: name(excerpt, "ar"), excerptEn: name(excerpt, "en"),
+      // المقتطف: يُشتق من المقال تلقائيًا (أو يُستخدم المقتطف الصريح إن وُجد)
+      excerptAr: name(excerpt, "ar") || excerptFrom(name(body, "ar")),
+      excerptEn: name(excerpt, "en") || excerptFrom(name(body, "en")),
       img: n.image_url || "", date: (n.published_at || "").slice(0, 10),
     };
   });
