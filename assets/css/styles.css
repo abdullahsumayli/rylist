@@ -436,6 +436,7 @@ html[lang="ar"] .stat__num { font-family: var(--font-ar-display); }
 .article-card__cat { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-deep); }
 html[lang="ar"] .article-card__cat { font-family: var(--font-ar-body); letter-spacing: 0; text-transform: none; font-size: 0.8rem; }
 .article-card__title { font-size: 1.3rem; }
+.article-card__excerpt { font-size: 0.92rem; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; }
 .article-card__date { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-mid); }
 html[lang="ar"] .article-card__date { font-family: var(--font-ar-body); }
 
