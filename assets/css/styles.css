@@ -665,7 +665,7 @@ html[lang="ar"] .punit-card__price { font-family: var(--font-ar-display); }
 /* الأيقونة العائمة "استشير فاهم" — أعلى يسار الصفحة، بعيدة عن زر واتساب (أسفل).
    رابط <a> يودّي لصفحة fahem.html — لا لوحة منبثقة. موجودة في كل صفحات الموقع. */
 .fahem-fab {
-  position: fixed; inset-block-start: calc(74px + 16px); left: 20px; z-index: 45;
+  position: fixed; inset-block-start: calc(74px + 44px); left: 20px; z-index: 45;
   display: inline-flex; align-items: center; gap: 0.5rem;
   padding: 0.35rem; padding-inline-end: 0.95rem; border-radius: 999px;
   background: var(--ink); color: var(--bone);
