@@ -1,0 +1,85 @@
+{
+  "persona": "المستثمر (investor)",
+  "persona_id": 1,
+  "conversation_id": 9,
+  "intent": "السؤال عن أفضل الأحياء للنمو والاستثمار بالرياض",
+  "turns": [
+    {
+      "user": "وش افضل الاحياء للنمو والاستثمار العقاري بالرياض حاليا برايك؟",
+      "fahem": {
+        "message": "وش نوع العقار اللي تفكر فيه؟",
+        "quickReplies": ["شقة", "تاون هاوس", "على الخارطة", "مو متأكد، أبي أشوف الخيارات"]
+      }
+    },
+    {
+      "user": "مو متأكد، بس اهم شي الحي يكون واعد ونمو اسعاره قوي. انت وش تنصح بين الرمال والجنادرية؟",
+      "fahem": {
+        "message": "عشان أقدر أساعدك بشكل أفضل، وش نوع العقار اللي تفكر فيه؟",
+        "quickReplies": ["شقة", "تاون هاوس", "مو متأكد - أبي أشوف الخيارات"]
+      }
+    },
+    {
+      "user": "مو متأكد - أبي أشوف الخيارات في الحيين وقارن لي",
+      "fahem": {
+        "message": "عشان أقارن لك الخيارات بين الرمال والجنادرية، وش نوع العقار اللي تبي تشوفه؟",
+        "quickReplies": ["شقة", "تاون هاوس", "على الخارطة"]
+      }
+    },
+    {
+      "user": "شقة",
+      "fahem": {
+        "message": "أبشر! هذي 3 مشاريع تناسب طلبك في الرياض:",
+        "properties": [
+          {
+            "code": "NAJD-5",
+            "title": "نجد ٥",
+            "district": "الجنادرية",
+            "city": "الرياض",
+            "type": "شقة",
+            "type_key": "apartment",
+            "price_min": 820000,
+            "price_max": 1100000,
+            "beds_min": 1,
+            "beds_max": 2,
+            "area": "61–147",
+            "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg",
+            "status": "available",
+            "url": "projects/NAJD-5.html"
+          },
+          {
+            "code": "NAJD-3",
+            "title": "نجد ٣",
+            "district": "الرمال",
+            "city": "الرياض",
+            "type": "شقة",
+            "type_key": "apartment",
+            "price_min": 1050000,
+            "price_max": 1350000,
+            "beds_min": 1,
+            "beds_max": 2,
+            "area": "72–139",
+            "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg",
+            "status": "available",
+            "url": "projects/NAJD-3.html"
+          },
+          {
+            "code": "NAJD-4",
+            "title": "نجد ٤",
+            "district": "الرمال",
+            "city": "الرياض",
+            "type": "شقة",
+            "type_key": "apartment",
+            "price_min": 1150000,
+            "price_max": 1500000,
+            "beds_min": 1,
+            "beds_max": 2,
+            "area": "59–166",
+            "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg",
+            "status": "available",
+            "url": "projects/NAJD-4.html"
+          }
+        ]
+      }
+    }
+  ]
+}

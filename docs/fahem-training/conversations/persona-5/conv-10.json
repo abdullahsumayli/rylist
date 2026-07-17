@@ -1,0 +1,37 @@
+{
+  "persona": "المتردّد كثير الأسئلة (hesitant)",
+  "persona_id": 5,
+  "conversation_id": 10,
+  "intent": "اقتنع أخيرًا ويبغى يتواصل — طلب بياناته",
+  "notes": "تناقض مخزون: قال 'حالياً لا تتوفر شقق في الرمال' مع أن نجد ٣ و٤ شقق في الرمال، ثم عرضها في الدور التالي. showContactForm ظهر بشكل صحيح، لكن بعد إعطاء الاسم والجوال لم يؤكد استلام البيانات بل رجّع قائمة مشاريع. أيضاً بالبداية رشّح نجد ٥ (الجنادرية) رغم طلب الرمال ١.٢ مليون.",
+  "turns": [
+    {
+      "user": "طيب اقتنعت.. ابغى شقه في الرمال حدود ١.٢ مليون، وابغى فريقكم يكلمني",
+      "fahem": {
+        "message": "أبشر! لقيت لك مشروعًا يناسب طلبك في الرياض:",
+        "properties": [
+          {"code":"NAJD-5","title":"نجد ٥","district":"الجنادرية","city":"الرياض","type":"شقة","type_key":"apartment","price_min":820000,"price_max":1100000,"beds_min":1,"beds_max":2,"area":"61–147","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-5.html"}
+        ]
+      }
+    },
+    {
+      "user": "انا قلت الرمال مو الجنادرية 🙂 المهم نجد ٣ او ٤ يبونها.. عموماً خلاص ابغى احد من فريقكم يتواصل معي، وش تحتاج مني؟",
+      "fahem": {
+        "message": "شكراً لتصحيحك. حالياً لا تتوفر شقق في الرمال، لكن لدينا خيارات أخرى في الرياض. يسعدنا أن يتواصل معك فريقنا قريباً. يرجى ترك اسمك ورقم جوالك.",
+        "showContactForm": true
+      }
+    },
+    {
+      "user": "اسمي فهد العتيبي وجوالي ٠٥٥١٢٣٤٥٦٧، كلموني بعد العصر لو تكرمتوا",
+      "fahem": {
+        "message": "أبشر! هذي 4 مشاريع تناسب طلبك في الرياض:",
+        "properties": [
+          {"code":"NAJD-5","title":"نجد ٥","district":"الجنادرية","city":"الرياض","type":"شقة","type_key":"apartment","price_min":820000,"price_max":1100000,"beds_min":1,"beds_max":2,"area":"61–147","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-5.html"},
+          {"code":"NAJD-3","title":"نجد ٣","district":"الرمال","city":"الرياض","type":"شقة","type_key":"apartment","price_min":1050000,"price_max":1350000,"beds_min":1,"beds_max":2,"area":"72–139","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-3.html"},
+          {"code":"NAJD-4","title":"نجد ٤","district":"الرمال","city":"الرياض","type":"شقة","type_key":"apartment","price_min":1150000,"price_max":1500000,"beds_min":1,"beds_max":2,"area":"59–166","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-4.html"},
+          {"code":"NAJD-2","title":"نجد ٢","district":"الرمال","city":"الرياض","type":"تاون هاوس","type_key":"townhouse","price_min":2200000,"price_max":2250000,"beds_min":3,"beds_max":4,"area":"250–273","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-2.html"}
+        ]
+      }
+    }
+  ]
+}

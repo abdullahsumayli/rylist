@@ -1,0 +1,87 @@
+{
+  "persona": "المستثمر (investor)",
+  "persona_id": 1,
+  "conversation_id": 6,
+  "intent": "ميزانية ٥ مليون وشراء أكثر من وحدة — طلب توصية وتوزيعة استثمارية",
+  "turns": [
+    {
+      "user": "ميزانيتي ٥ مليون وابي اشتري اكثر من وحدة للاستثمار والتأجير. وش تنصحني؟",
+      "fahem": {
+        "message": "أبشر! لقيت لك مشروعًا يناسب طلبك في الرياض:",
+        "properties": [
+          {
+            "code": "NAJD-5",
+            "title": "نجد ٥",
+            "district": "الجنادرية",
+            "city": "الرياض",
+            "type": "شقة",
+            "type_key": "apartment",
+            "price_min": 820000,
+            "price_max": 1100000,
+            "beds_min": 1,
+            "beds_max": 2,
+            "area": "61–147",
+            "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg",
+            "status": "available",
+            "url": "projects/NAJD-5.html"
+          }
+        ]
+      }
+    },
+    {
+      "user": "انا قلت ٥ مليون وابي كذا وحدة مو وحدة. مثلا اجمع بين تاون هاوس نجد ٢ وكم شقة. تقدر تعطيني توزيعة؟",
+      "fahem": {
+        "message": "أبشر! لقيت لك مشروعًا يناسب طلبك في الرياض:",
+        "properties": [
+          {
+            "code": "NAJD-2",
+            "title": "نجد ٢",
+            "district": "الرمال",
+            "city": "الرياض",
+            "type": "تاون هاوس",
+            "type_key": "townhouse",
+            "price_min": 2200000,
+            "price_max": 2250000,
+            "beds_min": 3,
+            "beds_max": 4,
+            "area": "250–273",
+            "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg",
+            "status": "available",
+            "url": "projects/NAJD-2.html"
+          }
+        ]
+      }
+    },
+    {
+      "user": "طيب لو اخذت تاون هاوس نجد ٢ بـ٢.٢ مليون يبقى لي ٢.٨ مليون، كم شقة اقدر اضيف من نجد ٣ او ٤؟ سوّي لي الحسبة",
+      "fahem": {
+        "message": "أبشر! لقيت لك مشروعًا يناسب طلبك في الرياض:",
+        "properties": [
+          {
+            "code": "NAJD-2",
+            "title": "نجد ٢",
+            "district": "الرمال",
+            "city": "الرياض",
+            "type": "تاون هاوس",
+            "type_key": "townhouse",
+            "price_min": 2200000,
+            "price_max": 2250000,
+            "beds_min": 3,
+            "beds_max": 4,
+            "area": "250–273",
+            "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg",
+            "status": "available",
+            "url": "projects/NAJD-2.html"
+          }
+        ]
+      }
+    },
+    {
+      "user": "يبدو ما تقدر تسوي الحسبة. طيب وصّلني بفريقكم عشان نرتب صفقة كذا وحدة",
+      "fahem": {
+        "message": "أبشر! خلّ لنا بياناتك وراح يتواصل معك فريق rylist لترتيب صفقة وحدات استثمارية تناسب ميزانيتك.",
+        "showContactForm": true
+      }
+    }
+  ]
+}

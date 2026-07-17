@@ -1,0 +1,24 @@
+{
+  "persona": "مشتري أول شقة (first-time)",
+  "persona_id": 3,
+  "conversation_id": 9,
+  "intent": "يبغى مساحة صغيرة تكفي عزابي",
+  "turns": [
+    {
+      "user": "انا عازب واشتغل، ابي شي صغير يكفيني.. مساحه صغيره وسعر مناسب. وش تنصح؟",
+      "fahem": {"message":"وش الميزانية التقريبية اللي تفكر فيها؟","properties":[{"code":"NAJD-5","title":"نجد ٥","district":"الجنادرية","city":"الرياض","type":"شقة","type_key":"apartment","price_min":820000,"price_max":1100000,"beds_min":1,"beds_max":2,"area":"61–147","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-5.html"},{"code":"NAJD-3","title":"نجد ٣","district":"الرمال","city":"الرياض","type":"شقة","type_key":"apartment","price_min":1050000,"price_max":1350000,"beds_min":1,"beds_max":2,"area":"72–139","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-3.html"},{"code":"NAJD-4","title":"نجد ٤","district":"الرمال","city":"الرياض","type":"شقة","type_key":"apartment","price_min":1150000,"price_max":1500000,"beds_min":1,"beds_max":2,"area":"59–166","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-4.html"}],"quickReplies":["أقل من مليون","مليون إلى مليون ونص","مليون ونص إلى مليونين","أكثر من مليونين"]}
+    },
+    {
+      "user": "اقل من مليون.. وابي اصغر مساحه لان عزابي ما احتاج كبيره",
+      "fahem": {"message":"أبشر! لقيت لك مشروعًا يناسب طلبك في الرياض:","properties":[{"code":"NAJD-5","title":"نجد ٥","district":"الجنادرية","city":"الرياض","type":"شقة","type_key":"apartment","price_min":820000,"price_max":1100000,"beds_min":1,"beds_max":2,"area":"61–147","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-5.html"}]}
+    },
+    {
+      "user": "اصغر شقه في نجد ٥ كم مساحتها؟ وتكفي واحد عازب؟",
+      "fahem": {"message":"أبشر! أصغر شقة في **نجد ٥** مساحتها **٦١ متر مربع**، وهي شقة بغرفة نوم واحدة، وتكفي عازب تمامًا.\n\nالسعر يبدأ من **٨٢٠ ألف ريال**، والجنادرية منطقة هادئة ومناسبة.\n\nتبغى أحجز لك موعد مع فريقنا عشان يوضحون لك التفاصيل ويأخذون جولة؟","properties":[{"code":"NAJD-5","title":"نجد ٥","district":"الجنادرية","city":"الرياض","type":"شقة","type_key":"apartment","price_min":820000,"price_max":1100000,"beds_min":1,"beds_max":2,"area":"61–147","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-5.html"}]}
+    },
+    {
+      "user": "٦١ متر يكفيني عدل.. طيب كيف اقدر ازور الشقه او اشوفها؟",
+      "fahem": {"message":"أبشر! خل اسمك ورقمك هنا، وفريقنا بيتواصل معك لترتيب زيارة الشقة في نجد ٥.","showContactForm":true,"projectCode":"najd5"}
+    }
+  ]
+}

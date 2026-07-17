@@ -1,0 +1,24 @@
+{
+  "persona": "مشتري أول شقة (first-time)",
+  "persona_id": 3,
+  "conversation_id": 2,
+  "intent": "يبغى شقة غرفة نوم وحدة تكفيه",
+  "turns": [
+    {
+      "user": "هلا.. انا لحالي وابغى شقه غرفه نوم وحده بس تكفيني، وش عندكم؟",
+      "fahem": {"message":"أي مشروع يعجبك أكثر، أو تبي نحدد حسب الميزانية؟","properties":[{"code":"NAJD-5","title":"نجد ٥","district":"الجنادرية","city":"الرياض","type":"شقة","type_key":"apartment","price_min":820000,"price_max":1100000,"beds_min":1,"beds_max":2,"area":"61–147","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-5.html"},{"code":"NAJD-3","title":"نجد ٣","district":"الرمال","city":"الرياض","type":"شقة","type_key":"apartment","price_min":1050000,"price_max":1350000,"beds_min":1,"beds_max":2,"area":"72–139","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-3.html"},{"code":"NAJD-4","title":"نجد ٤","district":"الرمال","city":"الرياض","type":"شقة","type_key":"apartment","price_min":1150000,"price_max":1500000,"beds_min":1,"beds_max":2,"area":"59–166","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-4.html"}],"quickReplies":["نجد ٥ (الأقل سعر)","نجد ٣","نجد ٤","حدد لي حسب ميزانيتي"]}
+    },
+    {
+      "user": "حدد لي حسب ميزانيتي.. ميزانيتي حدود ٩٠٠ الف",
+      "fahem": {"message":"أبشر! لقيت لك مشروعًا يناسب طلبك في الرياض:","properties":[{"code":"NAJD-5","title":"نجد ٥","district":"الجنادرية","city":"الرياض","type":"شقة","type_key":"apartment","price_min":820000,"price_max":1100000,"beds_min":1,"beds_max":2,"area":"61–147","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-5.html"}]}
+    },
+    {
+      "user": "حلو.. الغرفه الوحده منها كم مساحتها وكم سعرها بالضبط؟",
+      "fahem": {"message":"بناءً على المعلومات المتوفرة عن مشروع **نجد ٥** في الجنادرية:\n\n- **المساحة الإجمالية للشقق**: تتراوح بين ٦١ و ١٤٧ متر مربع\n- **السعر**: يبدأ من ٨٢٠,٠٠٠ ريال (ضمن ميزانيتك)\n\nلكن للحصول على **المساحة الدقيقة والسعر المحدد للغرفة الواحدة**، تحتاج تفاصيل أكثر من المطور. \n\nهل تبي أحجز لك استشارة مجانية مع فريق rylist؟ بياخذون بياناتك ويتواصلون معك بكل التفاصيل بدون أي عمولة عليك.","properties":[{"code":"NAJD-5","title":"نجد ٥","district":"الجنادرية","city":"الرياض","type":"شقة","type_key":"apartment","price_min":820000,"price_max":1100000,"beds_min":1,"beds_max":2,"area":"61–147","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-5.html"}]}
+    },
+    {
+      "user": "لا مشكوور توني ابدا ابحث.. بس ابي اشوف الموقع بروحي الاول",
+      "fahem": {"message":"تمام، ما في مشكلة! خذ وقتك في البحث والتعرف على الموقع. إذا احتجت أي مساعدة أو تبي تفاصيل أكثر لاحقًا، أنا هنا. بالتوفيق! 🏡","properties":[{"code":"NAJD-5","title":"نجد ٥","district":"الجنادرية","city":"الرياض","type":"شقة","type_key":"apartment","price_min":820000,"price_max":1100000,"beds_min":1,"beds_max":2,"area":"61–147","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-5.html"}]}
+    }
+  ]
+}

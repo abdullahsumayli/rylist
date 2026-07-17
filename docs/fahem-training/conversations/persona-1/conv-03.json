@@ -1,0 +1,95 @@
+{
+  "persona": "المستثمر (investor)",
+  "persona_id": 1,
+  "conversation_id": 3,
+  "intent": "السؤال عن مشاريع على الخارطة (نجد ٧) — التسليم والأسعار",
+  "turns": [
+    {
+      "user": "عندكم مشاريع على الخارطة؟ سمعت عن نجد ٧. متى التسليم وكم الاسعار؟",
+      "fahem": {
+        "message": "أبشر! لقيت لك مشروعًا يناسب طلبك في الرياض:",
+        "properties": [
+          {
+            "code": "NAJD-7",
+            "title": "نجد ٧",
+            "district": "الرياض",
+            "city": "الرياض",
+            "type": "على الخارطة",
+            "type_key": "offplan",
+            "price_min": 0,
+            "price_max": 0,
+            "beds_min": 0,
+            "beds_max": 0,
+            "area": "",
+            "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg",
+            "status": "soon",
+            "url": "projects/NAJD-7.html"
+          }
+        ]
+      }
+    },
+    {
+      "user": "طيب كم سعر المتر او الوحدة تقريبا؟ وايش تاريخ التسليم المتوقع؟",
+      "fahem": {
+        "message": "للأسف، مشروع **نجد ٧** غير متوفر حالياً في مخزوننا. لكن عندنا مشاريع أخرى من سلسلة **نجد** متاحة الآن:\n\n**نجد ٥** - الجنادرية\n- شقق من ١ إلى ٢ غرف\n- المساحة: ٦١ - ١٤٧ م²\n- السعر: ٨٢٠,٠٠٠ - ١,١٠٠,٠٠٠ ريال\n\n**نجد ٣** - الرمال\n- شقق من ١ إلى ٢ غرف\n- المساحة: ٧٢ - ١٣٩ م²\n- السعر: ١,٠٥٠,٠٠٠ - ١,٣٥٠,٠٠٠ ريال\n\n**نجد ٤** - الرمال\n- شقق من ١ إلى ٢ غرف\n- المساحة: ٥٩ - ١٦٦ م²\n- السعر: ١,١٥٠,٠٠٠ - ١,٥٠٠,٠٠٠ ريال\n\nبالنسبة لسعر المتر وتاريخ التسليم، هذه التفاصيل متوفرة لدى فريقنا. هل تود أن أتواصل معك لأخذ التفاصيل الكاملة؟",
+        "properties": [
+          {
+            "code": "NAJD-5",
+            "title": "نجد ٥",
+            "district": "الجنادرية",
+            "city": "الرياض",
+            "type": "شقة",
+            "type_key": "apartment",
+            "price_min": 820000,
+            "price_max": 1100000,
+            "beds_min": 1,
+            "beds_max": 2,
+            "area": "61–147",
+            "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg",
+            "status": "available",
+            "url": "projects/NAJD-5.html"
+          },
+          {
+            "code": "NAJD-3",
+            "title": "نجد ٣",
+            "district": "الرمال",
+            "city": "الرياض",
+            "type": "شقة",
+            "type_key": "apartment",
+            "price_min": 1050000,
+            "price_max": 1350000,
+            "beds_min": 1,
+            "beds_max": 2,
+            "area": "72–139",
+            "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg",
+            "status": "available",
+            "url": "projects/NAJD-3.html"
+          },
+          {
+            "code": "NAJD-4",
+            "title": "نجد ٤",
+            "district": "الرمال",
+            "city": "الرياض",
+            "type": "شقة",
+            "type_key": "apartment",
+            "price_min": 1150000,
+            "price_max": 1500000,
+            "beds_min": 1,
+            "beds_max": 2,
+            "area": "59–166",
+            "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg",
+            "status": "available",
+            "url": "projects/NAJD-4.html"
+          }
+        ]
+      }
+    },
+    {
+      "user": "اي زين، انا مهتم بالاوف بلان لان دخوله ارخص. سجل بياناتي عشان تخبروني اول ما ينزل نجد ٧",
+      "fahem": {
+        "message": "سجل بياناتك هنا، وفريقنا بيتواصل معك أول بأول بخصوص مشاريعنا على الخارطة المتاحة حالياً، وأي مستجدات في مشاريع نجد.",
+        "showContactForm": true
+      }
+    }
+  ]
+}

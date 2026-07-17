@@ -1,0 +1,42 @@
+{
+  "persona": "عائلة تبحث عن فيلا (family)",
+  "persona_id": 2,
+  "conversation_id": 5,
+  "intent": "طلب حي هادئ قريب من مدارس للعائلة",
+  "turns": [
+    {
+      "user": "ابغى حي هادي وقريب من مدارس عشان العيال، وش عندكم؟",
+      "fahem": {
+        "message": "ما نوع العقار اللي تبحث عنه؟",
+        "quickReplies": ["شقة", "تاون هاوس", "على الخارطة"]
+      }
+    },
+    {
+      "user": "تاون هاوس لأنه احسن للعائلة، بس المهم الحي يكون هادي وفيه مدارس قريبة",
+      "fahem": {
+        "message": "للأسف ما عندنا فيلا حاليًا في الرياض. المتوفر عندنا: على الخارطة، شقة وتاون هاوس. تحب أعرض لك المتوفر؟",
+        "properties": [
+          {"code": "NAJD-5", "title": "نجد ٥", "district": "الجنادرية", "city": "الرياض", "type": "شقة", "type_key": "apartment", "price_min": 820000, "price_max": 1100000, "beds_min": 1, "beds_max": 2, "area": "61–147", "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg", "status": "available", "url": "projects/NAJD-5.html"},
+          {"code": "NAJD-3", "title": "نجد ٣", "district": "الرمال", "city": "الرياض", "type": "شقة", "type_key": "apartment", "price_min": 1050000, "price_max": 1350000, "beds_min": 1, "beds_max": 2, "area": "72–139", "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg", "status": "available", "url": "projects/NAJD-3.html"},
+          {"code": "NAJD-4", "title": "نجد ٤", "district": "الرمال", "city": "الرياض", "type": "شقة", "type_key": "apartment", "price_min": 1150000, "price_max": 1500000, "beds_min": 1, "beds_max": 2, "area": "59–166", "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg", "status": "available", "url": "projects/NAJD-4.html"}
+        ],
+        "quickReplies": ["على الخارطة", "شقة", "تاون هاوس"]
+      }
+    },
+    {
+      "user": "طيب اي حي احسن للعائلة والهدوء، الرمال ولا الجنادرية؟ وفيه مدارس قريبة؟",
+      "fahem": {
+        "message": "للأسف ما لقينا شقق بـ 3 غرف ضمن ميزانية 800 ألف ريال حالياً.\n\nعندنا خيارات ثانية ممكن تناسبك:\n- **شقق** بميزانيات أعلى\n- **تاون هاوس** \n- **على الخارطة** (مشاريع مستقبلية)\n\nتبيني أبحث لك بميزانية أعلى للشقق، أو تبي نشوف التاون هاوس أو المشاريع على الخارطة؟",
+        "properties": []
+      }
+    },
+    {
+      "user": "انا ما ذكرت ٨٠٠ الف. بس ودي اعرف: حي الرمال مناسب لعائلة وفيه مدارس؟",
+      "fahem": {
+        "message": "تحب نرفع الميزانية شوي أو نشوف خيارات ثانية؟",
+        "properties": [],
+        "quickReplies": ["رفع الميزانية", "شوف تاون هاوس", "شوف مشاريع على الخارطة", "خلني أفكر"]
+      }
+    }
+  ]
+}

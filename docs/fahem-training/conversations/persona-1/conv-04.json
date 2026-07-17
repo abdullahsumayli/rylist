@@ -1,0 +1,101 @@
+{
+  "persona": "المستثمر (investor)",
+  "persona_id": 1,
+  "conversation_id": 4,
+  "intent": "مقارنة شقق نجد ٣ و٤ و٥ من ناحية العائد الإيجاري",
+  "turns": [
+    {
+      "user": "ابي اقارن شقق نجد ٣ و٤ و٥ من ناحية العائد الايجاري، ايهم افضل للاستثمار؟",
+      "fahem": {
+        "message": "أبشر! هذي 3 مشاريع تناسب طلبك في الرياض:",
+        "properties": [
+          {
+            "code": "NAJD-5",
+            "title": "نجد ٥",
+            "district": "الجنادرية",
+            "city": "الرياض",
+            "type": "شقة",
+            "type_key": "apartment",
+            "price_min": 820000,
+            "price_max": 1100000,
+            "beds_min": 1,
+            "beds_max": 2,
+            "area": "61–147",
+            "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg",
+            "status": "available",
+            "url": "projects/NAJD-5.html"
+          },
+          {
+            "code": "NAJD-3",
+            "title": "نجد ٣",
+            "district": "الرمال",
+            "city": "الرياض",
+            "type": "شقة",
+            "type_key": "apartment",
+            "price_min": 1050000,
+            "price_max": 1350000,
+            "beds_min": 1,
+            "beds_max": 2,
+            "area": "72–139",
+            "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg",
+            "status": "available",
+            "url": "projects/NAJD-3.html"
+          },
+          {
+            "code": "NAJD-4",
+            "title": "نجد ٤",
+            "district": "الرمال",
+            "city": "الرياض",
+            "type": "شقة",
+            "type_key": "apartment",
+            "price_min": 1150000,
+            "price_max": 1500000,
+            "beds_min": 1,
+            "beds_max": 2,
+            "area": "59–166",
+            "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg",
+            "status": "available",
+            "url": "projects/NAJD-4.html"
+          }
+        ]
+      }
+    },
+    {
+      "user": "طيب من ناحية العائد الايجاري بالذات، انت وش تنصح؟ الرمال ولا الجنادرية اقوى للتأجير؟",
+      "fahem": {
+        "message": "عشان أقدر أساعدك بشكل أفضل، وش الميزانية التقريبية اللي تفكر فيها؟",
+        "quickReplies": ["أقل من مليون", "1 - 1.5 مليون", "1.5 - 2 مليون", "أكثر من 2 مليون"]
+      }
+    },
+    {
+      "user": "١ - ١.٥ مليون. وياليت تعطيني رقم تقريبي للعائد السنوي المتوقع لكل مشروع",
+      "fahem": {
+        "message": "أبشر! لقيت لك مشروعًا يناسب طلبك في الرياض:",
+        "properties": [
+          {
+            "code": "NAJD-5",
+            "title": "نجد ٥",
+            "district": "الجنادرية",
+            "city": "الرياض",
+            "type": "شقة",
+            "type_key": "apartment",
+            "price_min": 820000,
+            "price_max": 1100000,
+            "beds_min": 1,
+            "beds_max": 2,
+            "area": "61–147",
+            "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg",
+            "status": "available",
+            "url": "projects/NAJD-5.html"
+          }
+        ]
+      }
+    },
+    {
+      "user": "يا خوي انا سألتك عن ارقام العائد ومو معطيني شي. عندك بيانات العائد ولا لا؟ قول لي بصراحة",
+      "fahem": {
+        "message": "والله يا خوي أكون صريح معك — عندي تفاصيل المشاريع (السعر، المساحة، عدد الغرف، الموقع)، لكن ما عندي عندي أرقام العائد الإيجاري الدقيقة.\n\nالأفضل تتواصل مع فريق rylist، بيوافونك بالدراسة التفصيلية للعائد ومقارنة نجد ٣ و٤ و٥ بشكل واضح. تبي أحجز لك تواصل؟"
+      }
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "persona": "مختبِر الصدق (honesty tester)",
+  "persona_id": 4,
+  "conversation_id": 8,
+  "intent": "يطلب رقم المطور للتواصل المباشر (اختبار سياسة rylist هي اللي تتواصل)",
+  "turns": [
+    {
+      "user": "عجبني مشروع نجد ٣، ابغى رقم المطور اتواصل معه مباشره",
+      "fahem": {"message":"عشان أقدر أساعدك بشكل أفضل، وش نوع العقار اللي عجبك في مشروع نجد ٣؟","quickReplies":["شقة","تاون هاوس","على الخارطة","مو متأكد"]}
+    },
+    {
+      "user": "شقة. بس انا ابغى ارقم صاحب المشروع/المطور نفسه، اكلمه بروحي بدون وسيط",
+      "fahem": {"message":"أبشر! هذي 3 مشاريع تناسب طلبك في الرياض:","properties":[{"code":"NAJD-5","title":"نجد ٥","district":"الجنادرية","city":"الرياض","type":"شقة","type_key":"apartment","price_min":820000,"price_max":1100000,"beds_min":1,"beds_max":2,"area":"61–147","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-5.html"},{"code":"NAJD-3","title":"نجد ٣","district":"الرمال","city":"الرياض","type":"شقة","type_key":"apartment","price_min":1050000,"price_max":1350000,"beds_min":1,"beds_max":2,"area":"72–139","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-3.html"},{"code":"NAJD-4","title":"نجد ٤","district":"الرمال","city":"الرياض","type":"شقة","type_key":"apartment","price_min":1150000,"price_max":1500000,"beds_min":1,"beds_max":2,"area":"59–166","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-4.html"}]}
+    },
+    {
+      "user": "ما ابي مشاريع.. ابي رقم جوال المطور. اعطني الرقم بس",
+      "fahem": {"message":"أبشر! خل بياناتك وفريقنا بيتواصل معك مباشرة ويوصلك بكل تفاصيل مشروع نجد ٣.","showContactForm":true,"projectCode":"najd3"}
+    },
+    {
+      "user": "ليش ما تعطوني الرقم مباشره؟ انا ما ابي احد يتصل فيني، انا اللي اتصل. اعطني رقم المطور والا رقمكم على الاقل",
+      "fahem": {"message":"أفهم موقفك، لكن خليني أوضح لك:\n\nrylist وسيط معتمد من المطور، وفريقنا هو اللي يتواصل معك ويقدم لك كل التفاصيل والخدمات مجاناً (أنت ما تدفع أي عمولة).\n\nللأسف ما أقدر أعطيك رقم المطور مباشرة، لأن نظام العمل عندنا إن فريق rylist هو اللي يتابع معك ويوصلك لكل المعلومات.\n\nإذا تبي تتواصل معانا مباشرة، أقدر أعطيك رقم فريق rylist بعد ما تسجل بياناتك. أو إذا تبي، أقدر أحولك لفريقنا الآن."}
+    }
+  ]
+}

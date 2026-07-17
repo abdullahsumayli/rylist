@@ -9,6 +9,7 @@
 //   (اختياري: OPENROUTER_MODEL — الافتراضي qwen/qwen3.7-plus · SITE_URL للـ attribution)
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { faqBlock, fewShot } from "./knowledge.ts";
 
 const DEFAULT_MODEL = "qwen/qwen3.7-plus"; // يُبدّل بالسر OPENROUTER_MODEL.
 const MAX_TURNS = 40; // سقف طول السجل الوارد (حماية إساءة).
@@ -92,6 +93,25 @@ function detectBudget(text: string): { budget_max?: number } {
   return {};
 }
 
+// كود مشروع صريح (NAJD-2 / نجد ٢) — للبحث بالاسم/الكود مباشرة (يعالج استرجاع نجد ٢).
+function detectProjectCode(text: string): string | undefined {
+  const t = text.replace(/[٠-٩]/g, (d) => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)));
+  const m = t.match(/(?:najd|نجد)\s*[-]?\s*([1-9])\b/i);
+  return m ? `NAJD-${m[1]}` : undefined;
+}
+
+// التقاط اسم/جوال مكتوب داخل الشات (حجز إنلاين بلا ودجت). الجوال السعودي: 05xxxxxxxx أو +9665…
+function detectContact(text: string): { phone?: string; name?: string } {
+  const norm = text.replace(/[٠-٩]/g, (d) => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)));
+  const digits = norm.replace(/[\s\-()]/g, "");
+  const pm = digits.match(/(?:(?:\+?966|00966)5\d{8})|(?:05\d{8})/);
+  const phone = pm ? pm[0] : undefined;
+  let name: string | undefined;
+  const nm = text.match(/(?:اسمي|أنا|انا|name is|i am|i'm)\s+([^\d\n,،.]{2,30}?)(?:\s*(?:،|,|\.|و?جوال|و?رقم|رقمي|my|phone|\d)|$)/i);
+  if (nm) name = nm[1].trim().replace(/\s+/g, " ");
+  return { phone, name };
+}
+
 // الافتتاحية الحتمية — تذكر المدن المخدومة (من المخزون) ثم سؤال مفتوح. بلا نداء نموذج.
 function opening(lang: Lang, facts: Facts): { message: string } {
   const cities = joinList(facts.cities, lang) || (lang === "ar" ? "الرياض" : "Riyadh");
@@ -109,7 +129,7 @@ function systemPrompt(lang: Lang, facts: Facts): string {
   const uiLang = lang === "ar" ? "Arabic" : "English";
   const cities = joinList(facts.cities, lang) || (lang === "ar" ? "الرياض" : "Riyadh");
   const types = facts.types.length ? joinList(facts.types, lang) : lang === "ar" ? "لا شيء حاليًا" : "none right now";
-  return `You are "فاهم" (Fahem), a warm Riyadh real-estate advisor for rylist. Users almost always write ARABIC (Gulf dialect included). Reply short, in their language (fallback: ${uiLang}). Always prefer calling a tool over plain text.
+  return `You are "فاهم" (Fahem), a warm Riyadh real-estate advisor for rylist. Users almost always write ARABIC (Gulf dialect included). Reply in their language (fallback: ${uiLang}), warm and concise. You are an ADVISOR who converses and gives reasoned advice grounded ONLY in tool facts — reply in plain text; use a tool only to search inventory, to offer a genuine either/or choice, or to capture contact when the user is truly ready.
 
 INVENTORY YOU HAVE — this is the ONLY stock that exists. Never invent anything beyond it:
 - Cities served: ${cities}. rylist has properties ONLY in these. NEVER ask the user which city, and never claim stock in any city outside this list.
@@ -127,9 +147,12 @@ HOW TO ACT — top to bottom, every turn:
 2. Whenever the user names a property TYPE or a BUDGET → ALWAYS call search_inventory immediately with what you have — even for a type you suspect we don't stock (the tool confirms it and, if empty, tells you the types actually in stock). Do not ask anything else first.
 3. NEVER claim we have a type, city, or project that the tool did not return. If the search comes back empty, say plainly we don't have it and offer the in-stock types (${types}).
 4. Describe matches BY NAME with area/rooms/price from the tool output ONLY. NEVER invent a project, price, district, or detail.
-5. When the user likes a project or asks how to proceed → CALL request_contact (pass project_code when known).
+5. Use request_contact ONLY when the user shows real buying intent or asks to proceed / visit / be contacted — NEVER as a way to dodge a question you can answer. Pass project_code when known.
+6. When asked to compare or "which is better and why", give real reasoning FROM the tool facts (space, price, rooms, district trade-offs) — advise, don't just re-list cards. Never re-ask something the user already said.
 
-rylist is a broker: the client pays ZERO commission (the developer pays); the rylist team — never the developer — contacts and follows up; projects are public, so name them openly.`;
+rylist is a broker: the client pays ZERO commission (the developer pays); the rylist team — never the developer — contacts and follows up; projects are public, so name them openly.
+
+${faqBlock(lang)}`;
 }
 
 // أدوات بصيغة OpenAI (function calling).
@@ -191,7 +214,7 @@ const tools = [
   },
 ];
 
-type SearchArgs = { type?: string; budget_min?: number; budget_max?: number; beds_min?: number };
+type SearchArgs = { type?: string; budget_min?: number; budget_max?: number; beds_min?: number; code?: string };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function searchInventory(admin: any, args: SearchArgs, lang: Lang) {
@@ -199,6 +222,7 @@ async function searchInventory(admin: any, args: SearchArgs, lang: Lang) {
     .from("projects")
     .select("code, city_key, type_key, status, price_min, price_max, beds_min, beds_max, area, image_url, i18n")
     .in("status", ["available", "soon"]);
+  if (args.code) q = q.eq("code", args.code);
   if (args.type) q = q.eq("type_key", args.type);
   if (args.budget_max) q = q.lte("price_min", args.budget_max);
   if (args.budget_min) q = q.gte("price_min", args.budget_min);
@@ -306,12 +330,6 @@ Deno.serve(async (req) => {
         content: m.content.slice(0, MAX_CONTENT),
       }));
 
-    const key = Deno.env.get("OPENROUTER_API_KEY");
-    if (!key) {
-      console.error("[fahem-chat] OPENROUTER_API_KEY not set");
-      return json({ message: genericError });
-    }
-
     // 3) حقائق المخزون تُحقن في البرومبت وتغني نتيجة البحث الفارغة (صدق بلا اختراع).
     const facts = await inventoryFacts(admin, lang);
     const cityStr = joinList(facts.cities, lang) || (lang === "ar" ? "الرياض" : "Riyadh");
@@ -326,46 +344,116 @@ Deno.serve(async (req) => {
         ? "ما لقيت مطابق تمامًا لطلبك — جرّب نطاق ميزانية أوسع أو نوع ثاني."
         : "I couldn't find an exact match — try a wider budget or a different type.";
 
-    // 3.5) مسار حتمي (بلا نموذج): لو ذكر العميل نوعًا أو ميزانية صراحةً في آخر رسالة،
-    //      نبحث أو نرفض بصدق مباشرة — مضمون ومستقل عن تذبذب الموديل في نداء الأدوات.
     const lastUser =
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       [...history].reverse().find((m: any) => m.role === "user")?.content || "";
-    const detType = detectType(lastUser);
-    if (detType) {
-      if (!facts.typeKeys.includes(detType)) {
-        // نوع غير متوفر → رفض صادق + عرض المتوفر كأزرار.
-        const notAvail = label(TYPE, detType, lang);
-        const have = joinList(facts.types, lang);
-        return json({
-          message:
-            lang === "ar"
-              ? `للأسف ما عندنا ${notAvail} حاليًا في ${cityStr}. المتوفر عندنا: ${have}. تحب أعرض لك المتوفر؟`
-              : `Sorry, we don't have ${notAvail} right now in ${cityStr}. What we do have: ${have}. Want me to show it?`,
-          quickReplies: facts.types.slice(0, 5),
+
+    // 3.1) التقاط اسم/جوال مكتوب داخل الشات (حجز إنلاين بلا ودجت) — حتمي وأولوية.
+    const contact = detectContact(lastUser);
+    if (contact.phone) {
+      try {
+        await admin.from("leads").insert({
+          name: contact.name || (lang === "ar" ? "عميل من المحادثة" : "Chat lead"),
+          phone: contact.phone,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          message: [...history].filter((m: any) => m.role === "user").map((m: any) => m.content).join(" | ").slice(0, 1000),
+          source: "chat",
+          locale: lang,
         });
+      } catch (e) {
+        console.error("[fahem-chat] inline lead insert failed:", e);
       }
-      // نوع متوفر → بحث حتمي (مع تراجع عن فلتر السعر لو أفرغ النتيجة).
-      const budget = detectBudget(lastUser);
+      const who = contact.name ? ` يا ${contact.name}` : "";
+      return json({
+        message:
+          lang === "ar"
+            ? `تم${who}! سجّلنا طلبك وفريق rylist بيتواصل معك قريب على ${contact.phone}. تحب تعطيني تفاصيل أكثر عن العقار اللي يهمك؟`
+            : `Done${contact.name ? `, ${contact.name}` : ""}! We saved your request and the rylist team will reach out soon on ${contact.phone}. Want to tell me more about what you're looking for?`,
+      });
+    }
+
+    // 3.5) مسار حتمي: نكتشف الكود/النوع/الميزانية ونبحث مسبقًا، لكن بدل الإرجاع نحقن الحقائق
+    //      للموديل ليحاور ويعلّل (هجين). fallback = رد حتمي صادق لو الذكاء واقف.
+    const code = detectProjectCode(lastUser);
+    const detType = detectType(lastUser);
+    const budget = detectBudget(lastUser);
+    let prefetchNote = ""; // سياق حقائق للموديل (تعليمات، ليست للعميل)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let prefetchProps: any[] | undefined;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let fallback: Record<string, any> | null = null;
+    const inStock = joinList(facts.types, lang);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const compact = (ps: any[]) =>
+      ps.map((p) => ({
+        code: p.code,
+        title: p.title,
+        district: p.district,
+        type: p.type,
+        price_min: p.price_min,
+        price_max: p.price_max,
+        beds_min: p.beds_min,
+        beds_max: p.beds_max,
+        area: p.area,
+        status: p.status,
+      }));
+
+    if (code) {
+      const props = await searchInventory(admin, { code }, lang);
+      if (props.length) {
+        prefetchProps = props;
+        prefetchNote = `CONTEXT: The user referenced project ${code}. The inventory tool returned it (already shown as a card): ${JSON.stringify(compact(props))}. Advise conversationally using ONLY these facts. Do not search again unless criteria change.`;
+        fallback = { message: foundMsg(props.length), properties: props };
+      } else {
+        prefetchNote = `CONTEXT: The user referenced project ${code}, which is not available. In-stock types: ${inStock}. Be honest about that, then offer what exists.`;
+        fallback = { message: noMatchMsg };
+      }
+    } else if (detType && !facts.typeKeys.includes(detType)) {
+      const notAvail = label(TYPE, detType, lang);
+      prefetchNote = `CONTEXT: The user asked for "${notAvail}", which is NOT in stock. In-stock types: ${inStock}. Say this honestly in one sentence, then advise on the alternatives conversationally.`;
+      fallback = {
+        message:
+          lang === "ar"
+            ? `للأسف ما عندنا ${notAvail} حاليًا في ${cityStr}. المتوفر عندنا: ${inStock}. تحب أعرض لك المتوفر؟`
+            : `Sorry, we don't have ${notAvail} right now in ${cityStr}. What we do have: ${inStock}. Want me to show it?`,
+        quickReplies: facts.types.slice(0, 5),
+      };
+    } else if (detType) {
       let props = await searchInventory(admin, { type: detType, ...budget }, lang);
       if (!props.length && budget.budget_max) props = await searchInventory(admin, { type: detType }, lang);
-      return json({ message: props.length ? foundMsg(props.length) : noMatchMsg, properties: props });
-    }
-    // بلا نوع لكن بميزانية واضحة → بحث حتمي بالميزانية عبر كل الأنواع المتوفرة.
-    const budgetOnly = detectBudget(lastUser);
-    if (budgetOnly.budget_max) {
-      const props = await searchInventory(admin, budgetOnly, lang);
-      return json({ message: props.length ? foundMsg(props.length) : noMatchMsg, properties: props });
+      prefetchProps = props;
+      prefetchNote = props.length
+        ? `CONTEXT: The inventory tool ran for the user's stated criteria and returned these real projects (already shown as cards): ${JSON.stringify(compact(props))}. Describe, compare and recommend using ONLY these facts. Do not search again unless criteria change.`
+        : `CONTEXT: No project matched the user's criteria. In-stock types: ${inStock}. Be honest about the gap and suggest adjusting the criteria.`;
+      fallback = { message: props.length ? foundMsg(props.length) : noMatchMsg, properties: props };
+    } else if (budget.budget_max) {
+      const props = await searchInventory(admin, budget, lang);
+      prefetchProps = props;
+      prefetchNote = props.length
+        ? `CONTEXT: The inventory tool ran for the user's budget and returned these real projects (already shown as cards): ${JSON.stringify(compact(props))}. Advise using ONLY these facts. Do not search again unless criteria change.`
+        : `CONTEXT: Nothing matched the user's budget. In-stock types: ${inStock}. Be honest and suggest adjusting the budget.`;
+      fallback = { message: props.length ? foundMsg(props.length) : noMatchMsg, properties: props };
     }
 
-    // 4) لا معايير واضحة → دع الموديل يحاور (ترحيب، غرض، أسئلة مفتوحة).
+    // 4) الموديل يقود الحوار. مفتاح الذكاء مطلوب هنا فقط؛ لو غائب/فشل نرجع الرد الحتمي.
+    const key = Deno.env.get("OPENROUTER_API_KEY");
+    if (!key) {
+      console.error("[fahem-chat] OPENROUTER_API_KEY not set");
+      return json(fallback || { message: genericError });
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const messages: any[] = [{ role: "system", content: systemPrompt(lang, facts) }];
+    // أمثلة few-shot مقطَّرة من محادثات حقيقية (تثبيت الصدق والنبرة والتعليل) قبل سجل العميل.
+    for (const ex of fewShot(lang)) messages.push({ role: ex.role, content: ex.content });
     for (const turn of history) messages.push({ role: turn.role, content: turn.content });
+    // حقائق البحث المسبق تُحقن كتعليمات سياق (الموديل يحاور بناءً عليها بدل بحث جديد).
+    if (prefetchNote) messages.push({ role: "system", content: prefetchNote });
 
-    // 4) حلقة الأدوات.
+    // 4) حلقة الأدوات — لو فشل الذكاء نرجع fallback الحتمي بدل خطأ عام.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const response: Record<string, any> = { message: "" };
+    const response: Record<string, any> = prefetchProps ? { message: "", properties: prefetchProps } : { message: "" };
+    try {
     for (let i = 0; i < MAX_LOOP; i++) {
       const data = await openrouterChat(key, messages);
       const msg = data.choices?.[0]?.message;
@@ -422,7 +510,15 @@ Deno.serve(async (req) => {
             messages.push({ role: "tool", tool_call_id: call.id, name, content: JSON.stringify(toolContent) });
           } else if (name === "present_options") {
             response.message = (args.question as string) || msg.content || fallbackMsg(lang);
-            response.quickReplies = Array.isArray(args.options) ? (args.options as string[]) : [];
+            // حارس: أسقط أي خيار بنوع غير متوفر (فيلا/أرض…) كي لا نوهم بتوفره.
+            const outLabels = new Set(
+              Object.keys(TYPE)
+                .filter((k) => !facts.typeKeys.includes(k))
+                .flatMap((k) => [TYPE[k].ar, TYPE[k].en]),
+            );
+            const rawOpts = Array.isArray(args.options) ? (args.options as string[]) : [];
+            const kept = rawOpts.filter((o) => !outLabels.has(String(o).trim()));
+            response.quickReplies = kept.length >= 2 ? kept : rawOpts;
             terminate = true;
             break; // أداة منهِية — لا تشغّل بقية أدوات الدفعة.
           } else if (name === "request_contact") {
@@ -454,6 +550,11 @@ Deno.serve(async (req) => {
         : genericError;
     }
     return json(response);
+    } catch (modelErr) {
+      // الذكاء فشل (OpenRouter/شبكة) → رجّع الرد الحتمي الصادق إن وُجد بدل خطأ عام.
+      console.error("[fahem-chat] model error:", modelErr);
+      return json(fallback || { message: genericError });
+    }
   } catch (e) {
     console.error("[fahem-chat] error:", e);
     return json({

@@ -1,0 +1,69 @@
+{
+  "persona": "عائلة تبحث عن فيلا (family)",
+  "persona_id": 2,
+  "conversation_id": 10,
+  "intent": "اقتنع بنجد ٢ ويبغى زيارة/تواصل — طلب أخذ البيانات",
+  "turns": [
+    {
+      "user": "عجبني التاون هاوس نجد ٢، ابغى ازوره واتواصل معكم",
+      "fahem": {
+        "message": "وجدت لك 3 مشاريع شقق متاحة في الرياض بغرفتين نوم:\n\n**نجد ٥** - الجنادرية\n- السعر: ٨٢٠,٠٠٠ - ١,١٠٠,٠٠٠ ريال\n- المساحة: ٦١ - ١٤٧ م²\n- غرف: ١-٢\n\n**نجد ٣** - الرمال\n- السعر: ١,٠٥٠,٠٠٠ - ١,٣٥٠,٠٠٠ ريال\n- المساحة: ٧٢ - ١٣٩ م²\n- غرف: ١-٢\n\n**نجد ٤** - الرمال\n- السعر: ١,١٥٠,٠٠٠ - ١,٥٠٠,٠٠٠ ريال\n- المساحة: ٥٩ - ١٦٦ م²\n- غرف: ١-٢\n\nأي مشروع يعجبك أكثر؟",
+        "properties": [
+          {"code": "NAJD-5", "title": "نجد ٥", "district": "الجنادرية", "city": "الرياض", "type": "شقة", "type_key": "apartment", "price_min": 820000, "price_max": 1100000, "beds_min": 1, "beds_max": 2, "area": "61–147", "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg", "status": "available", "url": "projects/NAJD-5.html"},
+          {"code": "NAJD-3", "title": "نجد ٣", "district": "الرمال", "city": "الرياض", "type": "شقة", "type_key": "apartment", "price_min": 1050000, "price_max": 1350000, "beds_min": 1, "beds_max": 2, "area": "72–139", "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg", "status": "available", "url": "projects/NAJD-3.html"},
+          {"code": "NAJD-4", "title": "نجد ٤", "district": "الرمال", "city": "الرياض", "type": "شقة", "type_key": "apartment", "price_min": 1150000, "price_max": 1500000, "beds_min": 1, "beds_max": 2, "area": "59–166", "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg", "status": "available", "url": "projects/NAJD-4.html"}
+        ]
+      }
+    },
+    {
+      "user": "خلاص ابغى احد من فريقكم يتواصل معي ويرتب لي زيارة",
+      "fahem": {
+        "message": "أي مشروع يعجبك أو تبي تفاصيل أكثر عنه؟",
+        "properties": [
+          {"code": "NAJD-5", "title": "نجد ٥", "district": "الجنادرية", "city": "الرياض", "type": "شقة", "type_key": "apartment", "price_min": 820000, "price_max": 1100000, "beds_min": 1, "beds_max": 2, "area": "61–147", "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg", "status": "available", "url": "projects/NAJD-5.html"},
+          {"code": "NAJD-3", "title": "نجد ٣", "district": "الرمال", "city": "الرياض", "type": "شقة", "type_key": "apartment", "price_min": 1050000, "price_max": 1350000, "beds_min": 1, "beds_max": 2, "area": "72–139", "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg", "status": "available", "url": "projects/NAJD-3.html"},
+          {"code": "NAJD-4", "title": "نجد ٤", "district": "الرمال", "city": "الرياض", "type": "شقة", "type_key": "apartment", "price_min": 1150000, "price_max": 1500000, "beds_min": 1, "beds_max": 2, "area": "59–166", "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg", "status": "available", "url": "projects/NAJD-4.html"}
+        ],
+        "quickReplies": ["نجد ٥ – الجنادرية", "نجد ٣ – الرمال", "نجد ٤ – الرمال", "أبي تفاصيل أكثر"]
+      }
+    },
+    {
+      "user": "نجد ٤ الرمال، وابغى زيارة له. تواصلوا معي",
+      "fahem": {
+        "message": "للأسف ما عندنا شقق بـ 4 غرف حالياً.\n\nعندنا خيارات ثانية متاحة:\n- شقق (بغرف أقل)\n- تاون هاوس\n- مشاريع على الخارطة\n\nتبيني أعرض لك الشقق المتاحة أو التاون هاوس؟",
+        "properties": []
+      }
+    },
+    {
+      "user": "لا اقصد مشروع نجد رقم ٤. عالعموم خذ رقمي وخلي الفريق يكلمني",
+      "fahem": {
+        "message": "ما لقينا شقق 4 غرف بميزانية مليون ونص أو أكثر.\n\nلكن عندنا **تاون هاوس نجد ٢** في حي الرمال:\n- 3-4 غرف نوم\n- مساحة 250-273 م²\n- السعر: 2,200,000 - 2,250,000 ريال\n\nتبغى تفاصيل أكثر عنه؟",
+        "properties": [
+          {"code": "NAJD-2", "title": "نجد ٢", "district": "الرمال", "city": "الرياض", "type": "تاون هاوس", "type_key": "townhouse", "price_min": 2200000, "price_max": 2250000, "beds_min": 3, "beds_max": 4, "area": "250–273", "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg", "status": "available", "url": "projects/NAJD-2.html"}
+        ]
+      }
+    },
+    {
+      "user": "ايه هذا اللي ابغاه بالضبط! نجد ٢. رتبولي زيارة وخذوا بياناتي",
+      "fahem": {
+        "message": "تمام! لقيت لك 3 خيارات لشقق 2 غرفة ضمن ميزانيتك:\n\n**نجد 5** - الجنادرية\n- السعر: 820,000 - 1,100,000 ريال\n- المساحة: 61-147 م²\n\n**نجد 3** - الرمال\n- السعر: 1,050,000 - 1,350,000 ريال\n- المساحة: 72-139 م²\n\n**نجد 4** - الرمال\n- السعر: 1,150,000 - 1,500,000 ريال\n- المساحة: 59-166 م²\n\nأي مشروع يعجبك أكثر؟",
+        "properties": [
+          {"code": "NAJD-5", "title": "نجد ٥", "district": "الجنادرية", "city": "الرياض", "type": "شقة", "type_key": "apartment", "price_min": 820000, "price_max": 1100000, "beds_min": 1, "beds_max": 2, "area": "61–147", "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg", "status": "available", "url": "projects/NAJD-5.html"},
+          {"code": "NAJD-3", "title": "نجد ٣", "district": "الرمال", "city": "الرياض", "type": "شقة", "type_key": "apartment", "price_min": 1050000, "price_max": 1350000, "beds_min": 1, "beds_max": 2, "area": "72–139", "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg", "status": "available", "url": "projects/NAJD-3.html"},
+          {"code": "NAJD-4", "title": "نجد ٤", "district": "الرمال", "city": "الرياض", "type": "شقة", "type_key": "apartment", "price_min": 1150000, "price_max": 1500000, "beds_min": 1, "beds_max": 2, "area": "59–166", "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg", "status": "available", "url": "projects/NAJD-4.html"}
+        ]
+      }
+    },
+    {
+      "user": "لا ابغى اتواصل مع فريق المبيعات، خذ اسمي ورقمي وكلموني",
+      "fahem": {
+        "message": "عندنا 3 خيارات شقق 2 غرفة نوم:\n\n- **نجد ٥** — الجنادرية، 61–147 م²، 820,000 – 1,100,000 ريال\n- **نجد ٣** — الرمال، 72–139 م²، 1,050,000 – 1,350,000 ريال\n- **نجد ٤** — الرمال، 59–166 م²، 1,150,000 – 1,500,000 ريال\n\nأي مشروع يعجبك أو تبي تفاصيل أكثر عن واحد منهم؟",
+        "properties": [
+          {"code": "NAJD-5", "title": "نجد ٥", "district": "الجنادرية", "city": "الرياض", "type": "شقة", "type_key": "apartment", "price_min": 820000, "price_max": 1100000, "beds_min": 1, "beds_max": 2, "area": "61–147", "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg", "status": "available", "url": "projects/NAJD-5.html"},
+          {"code": "NAJD-3", "title": "نجد ٣", "district": "الرمال", "city": "الرياض", "type": "شقة", "type_key": "apartment", "price_min": 1050000, "price_max": 1350000, "beds_min": 1, "beds_max": 2, "area": "72–139", "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg", "status": "available", "url": "projects/NAJD-3.html"},
+          {"code": "NAJD-4", "title": "نجد ٤", "district": "الرمال", "city": "الرياض", "type": "شقة", "type_key": "apartment", "price_min": 1150000, "price_max": 1500000, "beds_min": 1, "beds_max": 2, "area": "59–166", "image_url": "https://rylist.sa/assets/img/brand-placeholder.svg", "status": "available", "url": "projects/NAJD-4.html"}
+        ]
+      }
+    }
+  ]
+}

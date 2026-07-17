@@ -1,0 +1,36 @@
+{
+  "persona": "المتردّد كثير الأسئلة (hesitant)",
+  "persona_id": 5,
+  "conversation_id": 8,
+  "intent": "متردد بين تاون هاوس وشقة — يبغى نصيحة",
+  "notes": "ضعف واضح: فاهم ما قدّم أي نصيحة نوعية أو مقارنة إيجابيات/سلبيات بين التاون هاوس والشقة رغم طلبها ٣ مرات، وكرّر نفس بطاقة نجد ٢ التاون هاوس بشكل آلي.",
+  "turns": [
+    {
+      "user": "محتار بين تاون هاوس وشقه.. انا وزوجتي وطفلين. وش تنصحني؟",
+      "fahem": {
+        "message": "أبشر! لقيت لك مشروعًا يناسب طلبك في الرياض:",
+        "properties": [
+          {"code":"NAJD-2","title":"نجد ٢","district":"الرمال","city":"الرياض","type":"تاون هاوس","type_key":"townhouse","price_min":2200000,"price_max":2250000,"beds_min":3,"beds_max":4,"area":"250–273","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-2.html"}
+        ]
+      }
+    },
+    {
+      "user": "عطني وجهة نظرك.. ليش تنصحني بالتاون هاوس بدل الشقه لعائلتي؟ وش ايجابيات وسلبيات كل وحده؟",
+      "fahem": {
+        "message": "أبشر! لقيت لك مشروعًا يناسب طلبك في الرياض:",
+        "properties": [
+          {"code":"NAJD-2","title":"نجد ٢","district":"الرمال","city":"الرياض","type":"تاون هاوس","type_key":"townhouse","price_min":2200000,"price_max":2250000,"beds_min":3,"beds_max":4,"area":"250–273","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-2.html"}
+        ]
+      }
+    },
+    {
+      "user": "لا تعرض لي مشاريع الحين، بس ابغى نصيحه بالكلام: عائله من ٤ افراد، الافضل لها تاون هاوس ولا شقه؟ وليش؟",
+      "fahem": {
+        "message": "أبشر! لقيت لك مشروعًا يناسب طلبك في الرياض:",
+        "properties": [
+          {"code":"NAJD-2","title":"نجد ٢","district":"الرمال","city":"الرياض","type":"تاون هاوس","type_key":"townhouse","price_min":2200000,"price_max":2250000,"beds_min":3,"beds_max":4,"area":"250–273","image_url":"https://rylist.sa/assets/img/brand-placeholder.svg","status":"available","url":"projects/NAJD-2.html"}
+        ]
+      }
+    }
+  ]
+}
