@@ -5,7 +5,7 @@
 import { tr, fill, FAHEM, fahemHref } from "./renderProject.mjs";
 import { excerptFrom } from "./dataJs.mjs";
 
-const BACK = { ar: "عودة إلى الأخبار", en: "Back to news", zh: "返回新闻" };
+const BACK = { ar: "عودة إلى المدونة", en: "Back to blog", zh: "返回博客" };
 
 // Localized date, matching the card's localeDate() in main.js.
 export function fmtDate(iso, loc) {

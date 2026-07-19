@@ -14,7 +14,7 @@ export const ENTITIES = [
     {n:"map_lng",t:"number",l:"إحداثي الطول (Lng)",hint:"اختياري — الرقم الثاني من الإحداثيات"},
     {n:"i18n.title",t:"i18n-text",l:"العنوان"},{n:"i18n.district",t:"i18n-text",l:"الحي"},
     {n:"i18n.description",t:"i18n-rich",l:"الوصف"} ]},
-  { key:"news", label:"الأخبار/المدونة", table:"news", order:"published_at", title:"i18n.title", fields:[
+  { key:"news", label:"المدونة", table:"news", order:"published_at", title:"i18n.title", fields:[
     {n:"slug",t:"text",l:"المعرّف slug",req:true},
     {n:"status",t:"select",l:"الحالة",options:["draft","published"]},
     {n:"published_at",t:"text",l:"تاريخ النشر (ISO)"},
@@ -68,7 +68,7 @@ export const ENTITIES = [
     {n:"i18n.nav_projects",t:"i18n-text",l:"القائمة — المشاريع"},
     {n:"i18n.nav_services",t:"i18n-text",l:"القائمة — الخدمات"},
     {n:"i18n.nav_about",t:"i18n-text",l:"القائمة — من نحن"},
-    {n:"i18n.nav_news",t:"i18n-text",l:"القائمة — الأخبار"},
+    {n:"i18n.nav_news",t:"i18n-text",l:"القائمة — المدونة"},
     {n:"i18n.nav_contact",t:"i18n-text",l:"القائمة — تواصل"},
     {n:"i18n.nav_cta",t:"i18n-text",l:"القائمة — زر الاستشارة"},
     {n:"i18n.topbar_city",t:"i18n-text",l:"الشريط العلوي — المدينة"},
