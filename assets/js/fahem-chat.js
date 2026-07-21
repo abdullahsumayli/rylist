@@ -20,20 +20,6 @@ const isAr = () => lang() === "ar";
 /* ----- النصوص (عربي/إنجليزي) ----- */
 const T = {
   priceOnRequest: { ar: "السعر عند الطلب", en: "Price on request" },
-  contactTitle: { ar: "بياناتك للتواصل", en: "Your contact details" },
-  name: { ar: "الاسم", en: "Name" },
-  phone: { ar: "رقم الجوال", en: "Phone number" },
-  submit: { ar: "اطلب يتواصلون معك", en: "Request a call back" },
-  trustFree: { ar: "خدمتنا مجانية — ما تدفع أي عمولة", en: "Our service is free — you pay no commission" },
-  trustRouting: {
-    ar: "فريق rylist نفسه يتواصل معك ويتابع معك كل شيء",
-    en: "The rylist team itself contacts you and follows up on everything",
-  },
-  thanks: {
-    ar: "تم! فريق rylist بيتواصل معك قريبًا ويتابع معك خطوة بخطوة. خدمتنا مجانية 100%.",
-    en: "Done! The rylist team will contact you soon and follow up step by step. Our service is 100% free.",
-  },
-  leadError: { ar: "تعذّر الإرسال، حاول مرة ثانية.", en: "Couldn’t send, please try again." },
   error: { ar: "عذراً، صار خطأ. جرّب مرة ثانية.", en: "Sorry, something went wrong. Please try again." },
 };
 const tr = (k) => T[k][isAr() ? "ar" : "en"];
@@ -55,7 +41,16 @@ function fmtPrice(min, max) {
 let started = false;
 let loading = false;
 let interestCode = null; // مشروع أبدى العميل اهتمامًا به (لربط الـ lead).
-const msgs = []; // [{ role, content, quickReplies?, properties?, showContactForm? }]
+const msgs = []; // [{ role, content, quickReplies?, properties? }]
+
+// جوال سعودي مكتوب داخل الشات (05xxxxxxxx أو +9665…) — الالتقاط يتم في edge بالخدمة،
+// وهذا فقط لتوسيم المحادثة كمحوّلة لطلب في الأرشيف.
+function detectPhone(text) {
+  const norm = String(text || "").replace(/[٠-٩]/g, (d) => "٠١٢٣٤٥٦٧٨٩".indexOf(d));
+  const digits = norm.replace(/[\s\-()]/g, "");
+  const m = digits.match(/(?:(?:\+?966|00966)5\d{8})|(?:05\d{8})/);
+  return m ? m[0] : null;
+}
 
 // أرشفة المحادثة: معرّف جلسة يُولّد مرّة، وحالة تحوّلها لطلب (lead).
 let sessionId = null;
@@ -132,6 +127,12 @@ async function send(text) {
   const clean = (text || "").trim();
   if (!clean || loading) return;
   msgs.push({ role: "user", content: clean });
+  // العميل كتب رقمه داخل المحادثة → التقاط الطلب يتم في edge؛ نوسم المحادثة محوّلة.
+  const ph = detectPhone(clean);
+  if (ph) {
+    leadCaptured = true;
+    leadPhone = ph;
+  }
   els.input.value = "";
   render();
   setLoading(true);
@@ -153,8 +154,6 @@ function pushAssistant(data) {
     content: (data && data.message) || "",
     quickReplies: (data && data.quickReplies) || null,
     properties: (data && data.properties) || null,
-    // الفورم يظهر فقط لما الموديل يقرّره (نية شراء واضحة) — لا بعد كل بحث.
-    showContactForm: !!(data && data.showContactForm),
   });
   render();
   void persistConversation();
@@ -164,35 +163,6 @@ function setLoading(v) {
   loading = v;
   els.sendBtn.disabled = v;
   render();
-}
-
-/* ----- التقاط العميل مباشرة في leads ----- */
-async function submitContact(name, phone, msgEl, formEl) {
-  const summary = msgs
-    .filter((m) => m.role === "user")
-    .map((m) => m.content)
-    .filter(Boolean)
-    .join(" | ")
-    .slice(0, 1000);
-  const { error } = await sb.from("leads").insert({
-    name: name,
-    phone: phone,
-    message: summary,
-    project_code: interestCode || null,
-    source: "chat",
-    locale: lang(),
-  });
-  if (error) {
-    if (msgEl) msgEl.textContent = tr("leadError");
-    return;
-  }
-  if (formEl) formEl.setAttribute("data-done", "1");
-  // اربط المحادثة بالطلب (يظهر في أرشيف المحادثات كمحوّلة لطلب).
-  leadCaptured = true;
-  leadPhone = phone;
-  msgs.push({ role: "assistant", content: tr("thanks") });
-  render();
-  void persistConversation();
 }
 
 /* ----- الرسم ----- */
@@ -233,9 +203,6 @@ function render() {
         m.quickReplies.map((q, k) => '<button type="button" class="fahem-chip" data-k="' + k + '">' + esc(q) + "</button>").join("") +
         "</div>";
     }
-    if (i === lastIdx && m.showContactForm) {
-      html += contactFormHtml();
-    }
   });
   if (loading) {
     html += '<div class="fahem-row fahem-row--assistant"><div class="fahem-typing"><span></span><span></span><span></span></div></div>';
@@ -247,31 +214,7 @@ function render() {
     b.addEventListener("click", () => send(b.textContent));
   });
 
-  const cf = els.thread.querySelector(".fahem-lead");
-  if (cf && !cf.getAttribute("data-done")) {
-    cf.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const name = cf.querySelector('[name="name"]').value.trim();
-      const phone = cf.querySelector('[name="phone"]').value.trim();
-      const note = cf.querySelector(".fahem-lead__msg");
-      if (name && phone) submitContact(name, phone, note, cf);
-    });
-  }
-
   els.scroll.scrollTop = els.scroll.scrollHeight;
-}
-
-function contactFormHtml() {
-  return (
-    '<form class="fahem-lead">' +
-    '<div class="fahem-lead__ttl">' + tr("contactTitle") + "</div>" +
-    '<input class="fahem-lead__in" name="name" required placeholder="' + esc(tr("name")) + '">' +
-    '<input class="fahem-lead__in" name="phone" required inputmode="tel" placeholder="' + esc(tr("phone")) + '">' +
-    '<button class="fahem-lead__btn" type="submit">' + esc(tr("submit")) + "</button>" +
-    '<div class="fahem-lead__trust"><div>✓ ' + esc(tr("trustFree")) + "</div><div>✓ " + esc(tr("trustRouting")) + "</div></div>" +
-    '<div class="fahem-lead__msg" role="status"></div>' +
-    "</form>"
-  );
 }
 
 /* ----- الإقلاع ----- */

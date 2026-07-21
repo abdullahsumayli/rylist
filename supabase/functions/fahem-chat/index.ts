@@ -109,6 +109,21 @@ function detectContact(text: string): { phone?: string; name?: string } {
   let name: string | undefined;
   const nm = text.match(/(?:اسمي|أنا|انا|name is|i am|i'm)\s+([^\d\n,،.]{2,30}?)(?:\s*(?:،|,|\.|و?جوال|و?رقم|رقمي|my|phone|\d)|$)/i);
   if (nm) name = nm[1].trim().replace(/\s+/g, " ");
+  // احتياطي: ردّ مختصر يجمع الاسم والرقم بلا بادئة (مثل "عبدالله ٠٥٠…"). نزيل
+  // الرقم وكلمات الحشو، وإن بقيت كلمة/كلمتان أحرفٌ فقط اعتبرناها الاسم.
+  if (!name && phone) {
+    const stop =
+      /^(?:أبغى|ابغى|أبي|ابي|أريد|اريد|ودي|حاب|أبحث|ابحث|اشتري|أشتري|شراء|أشوف|اشوف|عن|في|فيلا|شقة|شقه|أرض|ارض|تاون|هاوس|بكم|كم|وش|ايش|إيش|هلا|مرحبا|السلام|عليكم|شكرا|شكراً|نعم|لا|طيب|تمام|اوكي|أوكي|جوالي|جوال|رقمي|رقم|واتساب|هذا|هو|و|my|name|is|phone|number|the)$/i;
+    const tokens = norm
+      .replace(/\+?\d[\d\s\-()]*\d/g, " ")
+      .replace(/[،,.\-|/؛:]/g, " ")
+      .split(/\s+/)
+      .filter((w) => w && !stop.test(w) && /^[\p{L}]+$/u.test(w));
+    if (tokens.length >= 1 && tokens.length <= 2) {
+      const cand = tokens.join(" ");
+      if (cand.length >= 2 && cand.length <= 30) name = cand;
+    }
+  }
   return { phone, name };
 }
 
@@ -146,7 +161,7 @@ HOW A REAL CONVERSATION FLOWS — follow this rhythm:
 3. Do NOT search on the first mention of a type or budget. Search (call search_inventory) only AFTER you understand enough to give a genuinely useful shortlist — roughly: their purpose PLUS a type or budget or who it's for. Understanding the "why" comes before the "what".
 4. When you do present options, describe them BY NAME with real area/rooms/price from the tool ONLY, and give honest reasoning like a friend who knows the market — not a brochure. NEVER invent a project, price, district, or any detail.
 5. Answer policy questions (commission, who follows up, why rylist, negotiation) immediately, directly and warmly — never stall them behind "what type do you want?".
-6. Ask for contact details LAST, and only when the person is genuinely ready — they want a visit, want the team to follow up, or say "contact me". Getting a name and phone is never the goal of a turn; it's the natural final step when trust is already there.
+6. Ask for contact details LAST, and only when the person is genuinely ready — they want a visit, want the team to follow up, or say "contact me". When that moment comes, do NOT show a form: simply ask them, warmly and in plain chat text, for their name and phone number in one short line, and tell them you'll hand it to the rylist sales team to call them — e.g. "خلاص، عشان أوصّلك لفريق المبيعات وأخلّيهم يتصلون عليك: اكتب لي اسمك ورقم جوالك." Getting a name and phone is never the goal of a turn; it's the natural final step when trust is already there. The moment they send a phone number in the chat, it's captured automatically — just thank them warmly by name.
 
 Arabic cues to REMEMBER (so you never re-ask what they told you): شقة=apartment · فيلا=villa · تاون هاوس=townhouse · أرض=land · مليون=1,000,000 · "مليون ونص"=1,500,000 · "٨٠٠ ألف"=800,000 · مليونين=2,000,000.
 
@@ -157,7 +172,7 @@ INVENTORY YOU HAVE — the ONLY stock that exists. Never invent beyond it:
 TOOLS (reach for one only when the moment truly calls for it — most turns are just warm plain-text conversation):
 - search_inventory(type?, budget_min?, budget_max?, beds_min?): search projects. Use ONLY after you understand the person's need. type ∈ apartment, villa, townhouse, land.
 - present_options(question, options[]): offer ONE gentle question with 2-5 tappable choices when it genuinely eases the conversation. Never leave either empty.
-- request_contact(message, project_code?): show a name/phone form — ONLY at clear, real buying intent (see rule 6). Pass project_code when known.
+There is NO contact form and no contact tool: to capture a lead you simply ASK, in plain chat text, for the person's name and phone number (rule 6). When they type a Saudi phone number, the system saves the lead and notifies the rylist team automatically.
 
 HONESTY IS NON-NEGOTIABLE:
 - If they want a type/city/project we don't have, say so plainly in one warm sentence, then — like a good advisor — ask what drew them to it and offer the closest real fit. Never label a non-match as "matches your request".
@@ -203,25 +218,6 @@ const tools = [
           },
         },
         required: ["question", "options"],
-      },
-    },
-  },
-  {
-    type: "function",
-    function: {
-      name: "request_contact",
-      description:
-        "Show a name/phone form so the rylist team can reach out. Call ONLY when the user shows clear, real buying intent — they want a visit, ask to be contacted, or want to proceed. NEVER after every search and NEVER to end a turn. Pass project_code when known.",
-      parameters: {
-        type: "object",
-        properties: {
-          message: {
-            type: "string",
-            description: "A short friendly message inviting the user to leave their contact, in the user's language.",
-          },
-          project_code: { type: "string", description: "The code of the project the user is interested in, if known." },
-        },
-        required: ["message"],
       },
     },
   },
@@ -508,12 +504,6 @@ Deno.serve(async (req) => {
             const rawOpts = Array.isArray(args.options) ? (args.options as string[]) : [];
             const kept = rawOpts.filter((o) => !outLabels.has(String(o).trim()));
             response.quickReplies = kept.length >= 2 ? kept : rawOpts;
-            terminate = true;
-            break; // أداة منهِية — لا تشغّل بقية أدوات الدفعة.
-          } else if (name === "request_contact") {
-            response.message = (args.message as string) || msg.content || fallbackMsg(lang);
-            response.showContactForm = true;
-            if (typeof args.project_code === "string") response.projectCode = args.project_code;
             terminate = true;
             break; // أداة منهِية — لا تشغّل بقية أدوات الدفعة.
           } else {
