@@ -19,9 +19,6 @@ const isAr = () => lang() === "ar";
 
 /* ----- النصوص (عربي/إنجليزي) ----- */
 const T = {
-  view: { ar: "شاهد التفاصيل", en: "View details" },
-  beds: { ar: "غرف", en: "beds" },
-  area: { ar: "م²", en: "m²" },
   priceOnRequest: { ar: "السعر عند الطلب", en: "Price on request" },
   contactTitle: { ar: "بياناتك للتواصل", en: "Your contact details" },
   name: { ar: "الاسم", en: "Name" },
@@ -52,16 +49,6 @@ function fmtPrice(min, max) {
   const f = (x) => Number(x).toLocaleString("en-US");
   const range = lo === hi ? f(lo) : f(lo) + " – " + f(hi);
   return isAr() ? range + " ريال" : "SAR " + range;
-}
-
-function metaLine(p) {
-  const parts = [];
-  if (p.area) parts.push(p.area + " " + tr("area"));
-  if (p.beds_max > 0) {
-    const beds = p.beds_min === p.beds_max ? String(p.beds_min) : p.beds_min + "–" + p.beds_max;
-    parts.push(beds + " " + tr("beds"));
-  }
-  return parts.join(" · ");
 }
 
 /* ----- الحالة ----- */
@@ -225,14 +212,9 @@ function propertyCardHtml(p) {
     '<a class="fahem-card" href="' + esc(p.url) + '">' +
     img +
     '<div class="fahem-card__body">' +
-    (loc ? '<div class="fahem-card__loc">' + loc + "</div>" : "") +
     '<div class="fahem-card__title">' + esc(p.title) + "</div>" +
-    (p.type ? '<div class="fahem-card__type">' + esc(p.type) + "</div>" : "") +
-    '<div class="fahem-card__foot">' +
-    '<b class="fahem-card__price">' + esc(fmtPrice(p.price_min, p.price_max)) + "</b>" +
-    '<span class="fahem-card__link">' + tr("view") + " " + (isAr() ? "←" : "→") + "</span>" +
-    "</div>" +
-    (metaLine(p) ? '<div class="fahem-card__meta">' + esc(metaLine(p)) + "</div>" : "") +
+    (loc ? '<div class="fahem-card__loc">' + loc + "</div>" : "") +
+    '<div class="fahem-card__price">' + esc(fmtPrice(p.price_min, p.price_max)) + "</div>" +
     "</div></a>"
   );
 }
