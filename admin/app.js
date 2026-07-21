@@ -3,6 +3,7 @@ import { ENTITIES } from "./entities.js";
 import { renderProjects } from "./projects.js";
 import { renderList } from "./list.js";
 import { renderLeads } from "./leads.js";
+import { renderConversations } from "./conversations.js";
 import { renderPublish } from "./publish.js";
 import { mountShell } from "./shell.js";
 
@@ -30,6 +31,7 @@ async function buildSections() {
 
   return [
     { key: "leads", label: "الطلبات", icon: "leads", badge: newLeads || null, render: (v) => renderLeads(v) },
+    { key: "conversations", label: "المحادثات", icon: "chat", render: (v) => renderConversations(v) },
     ...entitySections,
     { key: "publish", label: "نشر", icon: "home", render: (v) => renderPublish(v) },
   ];

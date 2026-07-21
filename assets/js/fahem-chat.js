@@ -74,6 +74,56 @@ let loading = false;
 let interestCode = null; // مشروع أبدى العميل اهتمامًا به (لربط الـ lead).
 const msgs = []; // [{ role, content, quickReplies?, properties?, showContactForm? }]
 
+// أرشفة المحادثة: معرّف جلسة يُولّد مرّة، وحالة تحوّلها لطلب (lead).
+let sessionId = null;
+let leadCaptured = false;
+let leadPhone = null;
+function ensureSession() {
+  if (sessionId) return;
+  sessionId =
+    (typeof crypto !== "undefined" && crypto.randomUUID && crypto.randomUUID()) ||
+    Date.now().toString(16) + "-" + Math.random().toString(16).slice(2);
+}
+
+/* ----- أرشفة المحادثة في fahem_conversations (best-effort) ----- */
+async function persistConversation() {
+  // لا نحفظ زيارة بلا أي رسالة عميل (تفادي صفوف فارغة لكل فتح للصفحة).
+  const firstUser = msgs.find((m) => m.role === "user");
+  if (!firstUser) return;
+  ensureSession();
+  const transcript = msgs
+    .filter((m) => m.role === "user" || m.role === "assistant")
+    .map((m) => {
+      const row = { role: m.role, content: m.content || "" };
+      if (m.properties && m.properties.length) {
+        row.properties = m.properties.map((p) => ({
+          code: p.code,
+          title: p.title,
+          price_min: p.price_min,
+          price_max: p.price_max,
+        }));
+      }
+      return row;
+    });
+  const payload = {
+    session_id: sessionId,
+    transcript,
+    lang: lang(),
+    msg_count: transcript.length,
+    first_message: firstUser.content.slice(0, 500),
+    became_lead: leadCaptured,
+  };
+  if (leadPhone) payload.phone = leadPhone;
+  try {
+    // إضافة فقط: كل دور يكتب صفًّا يحمل النص الكامل حتى الآن؛ الأدمن يأخذ الأكمل
+    // لكل session_id. (RLS يمنع anon من UPDATE، فالإضافة أأمن وبلا تسريب.) created_at
+    // يُدار من الـ DB.
+    await sb.from("fahem_conversations").insert(payload);
+  } catch {
+    /* أرشفة best-effort — لا تعطّل المحادثة */
+  }
+}
+
 let els = {};
 
 /* ----- النص الحر (المسار الأساسي) → البحث/المحادثة في edge ----- */
@@ -128,6 +178,7 @@ function pushAssistant(data) {
     msgs.push({ role: "assistant", content: tr("afterSearch"), showContactForm: true });
   }
   render();
+  void persistConversation();
 }
 
 function setLoading(v) {
@@ -157,8 +208,12 @@ async function submitContact(name, phone, msgEl, formEl) {
     return;
   }
   if (formEl) formEl.setAttribute("data-done", "1");
+  // اربط المحادثة بالطلب (يظهر في أرشيف المحادثات كمحوّلة لطلب).
+  leadCaptured = true;
+  leadPhone = phone;
   msgs.push({ role: "assistant", content: tr("thanks") });
   render();
+  void persistConversation();
 }
 
 /* ----- الرسم ----- */
