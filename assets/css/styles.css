@@ -741,24 +741,25 @@ html[lang="en"] .fahem-fab__label { font-family: var(--font-en-body); letter-spa
 }
 .fahem-chip:hover { background: var(--ink); color: var(--bone); border-color: var(--ink); }
 
-/* بطاقات المشاريع داخل المحادثة */
-.fahem-cards { display: flex; flex-direction: column; gap: var(--sp-3); }
+/* بطاقات المشاريع داخل المحادثة — مدمجة وأنيقة: صورة مصغّرة صغيرة بدل صورة كبيرة */
+.fahem-cards { display: flex; flex-direction: column; gap: var(--sp-2); align-self: flex-start; width: 100%; max-width: 340px; }
 .fahem-card {
-  display: block; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius);
-  overflow: hidden; color: var(--ink); transition: border-color .25s, transform .2s, box-shadow .25s;
+  display: flex; align-items: stretch; background: var(--white); border: 1px solid var(--line);
+  border-radius: 12px; overflow: hidden; color: var(--ink);
+  transition: border-color .25s, transform .2s, box-shadow .25s;
 }
-.fahem-card:hover { border-color: var(--champagne); transform: translateY(-2px); box-shadow: 0 12px 30px rgba(23,20,15,0.1); }
-.fahem-card__media { aspect-ratio: 4 / 3; overflow: hidden; background: var(--bg-soft); }
+.fahem-card:hover { border-color: var(--champagne); transform: translateY(-1px); box-shadow: 0 8px 20px rgba(23,20,15,0.08); }
+.fahem-card__media { flex: 0 0 76px; width: 76px; overflow: hidden; background: var(--bg-soft); }
 .fahem-card__media img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(0.15) saturate(0.9); }
-.fahem-card__body { padding: var(--sp-3) var(--sp-4); display: flex; flex-direction: column; gap: 0.3rem; }
-.fahem-card__loc { font-size: 0.76rem; color: var(--text-mid); }
-.fahem-card__title { font-size: 1.1rem; font-weight: 600; }
-.fahem-card__type { font-family: var(--font-ar-body); font-size: 0.78rem; color: var(--gold-deep); }
+.fahem-card__body { flex: 1; min-width: 0; padding: var(--sp-2) var(--sp-3); display: flex; flex-direction: column; justify-content: center; gap: 0.12rem; }
+.fahem-card__loc { font-size: 0.7rem; color: var(--text-mid); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fahem-card__title { font-size: 0.92rem; font-weight: 600; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fahem-card__type { font-family: var(--font-ar-body); font-size: 0.7rem; color: var(--gold-deep); }
 html[lang="en"] .fahem-card__type { font-family: var(--font-en-body); }
-.fahem-card__foot { display: flex; align-items: baseline; justify-content: space-between; gap: var(--sp-3); margin-top: 0.2rem; }
-.fahem-card__price { font-size: 1.05rem; font-weight: 600; }
-.fahem-card__link { font-size: 0.8rem; color: var(--ink); border-bottom: 1px solid var(--champagne); padding-bottom: 1px; white-space: nowrap; }
-.fahem-card__meta { font-size: 0.76rem; color: var(--text-mid); }
+.fahem-card__foot { display: flex; align-items: baseline; justify-content: space-between; gap: var(--sp-2); margin-top: 0.1rem; }
+.fahem-card__price { font-size: 0.86rem; font-weight: 600; white-space: nowrap; }
+.fahem-card__link { font-size: 0.7rem; color: var(--ink); border-bottom: 1px solid var(--champagne); padding-bottom: 1px; white-space: nowrap; }
+.fahem-card__meta { font-size: 0.7rem; color: var(--text-mid); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* مؤشر "يكتب" */
 .fahem-typing { display: inline-flex; gap: 4px; padding: 0.8rem 0.9rem; background: var(--white); border: 1px solid var(--line); border-radius: 14px; border-start-start-radius: 4px; }
