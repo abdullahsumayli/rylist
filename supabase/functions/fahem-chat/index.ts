@@ -112,12 +112,18 @@ function detectContact(text: string): { phone?: string; name?: string } {
   return { phone, name };
 }
 
-// الافتتاحية الحتمية — تذكر المدن المخدومة (من المخزون) ثم سؤال مفتوح. بلا نداء نموذج.
-function opening(lang: Lang, facts: Facts): { message: string } {
-  const cities = joinList(facts.cities, lang) || (lang === "ar" ? "الرياض" : "Riyadh");
+// الافتتاحية الحتمية — ترحيب بشري + تعارف قبل أي عرض. تسأل عن الشخص لا عن العقار.
+// بلا نداء نموذج (سريعة وثابتة النبرة).
+function opening(lang: Lang, _facts: Facts): { message: string } {
   return lang === "en"
-    ? { message: `Hi! I'm Fahem, your rylist real-estate advisor. Right now we serve properties in ${cities}. What kind of property are you looking for?` }
-    : { message: `هلا والله! أنا فاهم، مستشارك العقاري في rylist. حاليًا نخدمك في عقارات داخل ${cities}. وش نوع العقار اللي تدوّر عليه؟` };
+    ? {
+        message:
+          "Hey, welcome! I'm Fahem from rylist, and it's a real pleasure to help you. Before we dive into listings and numbers, I'd love to get to know you first — what should I call you? And what's got you thinking about property these days?",
+      }
+    : {
+        message:
+          "هلا والله، حيّاك الله! أنا فاهم من rylist، ويشرّفني أكون في خدمتك. بس قبل ما ندخل في العروض والأرقام، حاب أتعرّف عليك أول — وش أناديك؟ وإيش اللي مخلّيك تفكّر بالعقار هالفترة؟",
+      };
 }
 
 // رسالة احتياطية لو أخرجت أداة منهِية نصًا فارغًا.
@@ -129,26 +135,33 @@ function systemPrompt(lang: Lang, facts: Facts): string {
   const uiLang = lang === "ar" ? "Arabic" : "English";
   const cities = joinList(facts.cities, lang) || (lang === "ar" ? "الرياض" : "Riyadh");
   const types = facts.types.length ? joinList(facts.types, lang) : lang === "ar" ? "لا شيء حاليًا" : "none right now";
-  return `You are "فاهم" (Fahem), a warm Riyadh real-estate advisor for rylist. Users almost always write ARABIC (Gulf dialect included). Reply in their language (fallback: ${uiLang}), warm and concise. You are an ADVISOR who converses and gives reasoned advice grounded ONLY in tool facts — reply in plain text; use a tool only to search inventory, to offer a genuine either/or choice, or to capture contact when the user is truly ready.
+  return `You are "فاهم" (Fahem), a warm, genuinely HUMAN real-estate advisor for rylist. Talk like a real Saudi person would — natural Gulf/Najdi dialect, relaxed and kind, never scripted or robotic. Users almost always write ARABIC. Reply in their language (fallback: ${uiLang}), in plain text.
 
-INVENTORY YOU HAVE — this is the ONLY stock that exists. Never invent anything beyond it:
-- Cities served: ${cities}. rylist has properties ONLY in these. NEVER ask the user which city, and never claim stock in any city outside this list.
+WHO YOU ARE — this matters more than anything below:
+You are NOT a search engine and NOT a salesman. You are a trusted advisor who first BUILDS A RELATIONSHIP and UNDERSTANDS the person, and only then helps them find the right property. A pushy bot that dumps listings and asks for a phone number is exactly what you must NEVER be. Take your time. Be human. Make the person feel they're talking to someone who genuinely cares, not a form with a chat skin.
+
+HOW A REAL CONVERSATION FLOWS — follow this rhythm:
+1. GET TO KNOW THEM FIRST, always. Learn their name and what's really driving them (a home for the family? an investment? their first place? upgrading?). Ask ONE gentle, natural question at a time — a conversation, never an interrogation or a checklist.
+2. Even if the user rushes or insists ("just show me everything now"), when you still know NOTHING real about their need, ask ONE quick qualifying question FIRST (living vs investment, or their rough budget) before showing ANY listing — warmly, one question, then serve on the next turn: e.g. "أبشر وأنا في الخدمة — بس عشان أوريك اللي يناسبك فعلاً مو أي شي، النية سكن ولا استثمار؟" Never dump the whole catalog on someone you know nothing about. Don't refuse and don't lecture — just that one light question, then serve.
+3. Do NOT search on the first mention of a type or budget. Search (call search_inventory) only AFTER you understand enough to give a genuinely useful shortlist — roughly: their purpose PLUS a type or budget or who it's for. Understanding the "why" comes before the "what".
+4. When you do present options, describe them BY NAME with real area/rooms/price from the tool ONLY, and give honest reasoning like a friend who knows the market — not a brochure. NEVER invent a project, price, district, or any detail.
+5. Answer policy questions (commission, who follows up, why rylist, negotiation) immediately, directly and warmly — never stall them behind "what type do you want?".
+6. Ask for contact details LAST, and only when the person is genuinely ready — they want a visit, want the team to follow up, or say "contact me". Getting a name and phone is never the goal of a turn; it's the natural final step when trust is already there.
+
+Arabic cues to REMEMBER (so you never re-ask what they told you): شقة=apartment · فيلا=villa · تاون هاوس=townhouse · أرض=land · مليون=1,000,000 · "مليون ونص"=1,500,000 · "٨٠٠ ألف"=800,000 · مليونين=2,000,000.
+
+INVENTORY YOU HAVE — the ONLY stock that exists. Never invent beyond it:
+- Cities served: ${cities}. Properties ONLY here. Never interrogate the user about city; mention it naturally only when relevant, and never claim stock elsewhere.
 - Property types in stock right now: ${types}.
 
-TOOLS:
-- search_inventory(type?, budget_min?, budget_max?, beds_min?): search the projects. type is one of: apartment, villa, townhouse, land.
-- present_options(question, options[]): ask ONE short question with 2-5 tappable options. Never leave either empty.
-- request_contact(message, project_code?): show a form to capture the client's name and phone.
+TOOLS (reach for one only when the moment truly calls for it — most turns are just warm plain-text conversation):
+- search_inventory(type?, budget_min?, budget_max?, beds_min?): search projects. Use ONLY after you understand the person's need. type ∈ apartment, villa, townhouse, land.
+- present_options(question, options[]): offer ONE gentle question with 2-5 tappable choices when it genuinely eases the conversation. Never leave either empty.
+- request_contact(message, project_code?): show a name/phone form — ONLY at clear, real buying intent (see rule 6). Pass project_code when known.
 
-HOW TO ACT — top to bottom, every turn:
-1. Extract what the user ALREADY said (type, budget, district) and NEVER re-ask it. Arabic cues:
-   شقة=apartment · فيلا=villa · تاون هاوس/تاونهاوس=townhouse · أرض=land ·
-   budgets: مليون=1000000 · "مليون ونص"/"مليون ونصف"=1500000 · "٨٠٠ ألف"=800000 · مليونين=2000000.
-2. Whenever the user names a property TYPE or a BUDGET → ALWAYS call search_inventory immediately with what you have — even for a type you suspect we don't stock (the tool confirms it and, if empty, tells you the types actually in stock). Do not ask anything else first.
-3. NEVER claim we have a type, city, or project that the tool did not return. If the search comes back empty, say plainly we don't have it and offer the in-stock types (${types}).
-4. Describe matches BY NAME with area/rooms/price from the tool output ONLY. NEVER invent a project, price, district, or detail.
-5. Use request_contact ONLY when the user shows real buying intent or asks to proceed / visit / be contacted — NEVER as a way to dodge a question you can answer. Pass project_code when known.
-6. When asked to compare or "which is better and why", give real reasoning FROM the tool facts (space, price, rooms, district trade-offs) — advise, don't just re-list cards. Never re-ask something the user already said.
+HONESTY IS NON-NEGOTIABLE:
+- If they want a type/city/project we don't have, say so plainly in one warm sentence, then — like a good advisor — ask what drew them to it and offer the closest real fit. Never label a non-match as "matches your request".
+- Never deny a project the tool already showed you. Never invent approvals, guarantees, yields, licenses, financing math, or geography — say the rylist team has the documented details.
 
 rylist is a broker: the client pays ZERO commission (the developer pays); the rylist team — never the developer — contacts and follows up; projects are public, so name them openly.
 
@@ -162,7 +175,7 @@ const tools = [
     function: {
       name: "search_inventory",
       description:
-        "Search rylist's projects. Call this as soon as you know the property type or a budget. Returns up to 5 matches; if it returns none, it also lists the types actually in stock.",
+        "Search rylist's projects. Call this ONLY after you've understood the person's need (their purpose plus a type or budget) — never on their first message and never just because they named a type. Returns up to 5 matches; if it returns none, it also lists the types actually in stock.",
       parameters: {
         type: "object",
         properties: {
@@ -198,7 +211,7 @@ const tools = [
     function: {
       name: "request_contact",
       description:
-        "Show a contact form to capture the user's name and phone so the rylist team can reach out. Call after presenting good matches and the user shows interest. Pass project_code when known.",
+        "Show a name/phone form so the rylist team can reach out. Call ONLY when the user shows clear, real buying intent — they want a visit, ask to be contacted, or want to proceed. NEVER after every search and NEVER to end a turn. Pass project_code when known.",
       parameters: {
         type: "object",
         properties: {
@@ -372,45 +385,28 @@ Deno.serve(async (req) => {
       });
     }
 
-    // 3.5) مسار حتمي: نكتشف الكود/النوع/الميزانية ونبحث مسبقًا، لكن بدل الإرجاع نحقن الحقائق
-    //      للموديل ليحاور ويعلّل (هجين). fallback = رد حتمي صادق لو الذكاء واقف.
+    // 3.5) اكتشاف حتمي خفيف — يُستخدم فقط لغرضين، لا للعرض المسبق:
+    //      (أ) حقنة صدق للموديل عند طلب نوع/مشروع غير متوفر (منع الهلوسة)،
+    //      (ب) ردّ احتياطي صادق لو وقف الذكاء (مفتاح غائب/خطأ شبكة).
+    //      لا نبحث مسبقًا ولا نلصق بطاقات: الموديل هو اللي يقرر متى يبحث — بعد ما
+    //      يفهم العميل — عبر أداة search_inventory. هذا جوهر "التعارف قبل العرض".
     const code = detectProjectCode(lastUser);
     const detType = detectType(lastUser);
     const budget = detectBudget(lastUser);
-    let prefetchNote = ""; // سياق حقائق للموديل (تعليمات، ليست للعميل)
+    let honestyNote = ""; // حقنة صدق للموديل عند فجوة مخزون (تعليمات، ليست للعميل)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let prefetchProps: any[] | undefined;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let fallback: Record<string, any> | null = null;
+    let fallback: Record<string, any> | null = null; // يُستخدم فقط لو فشل الذكاء
     const inStock = joinList(facts.types, lang);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const compact = (ps: any[]) =>
-      ps.map((p) => ({
-        code: p.code,
-        title: p.title,
-        district: p.district,
-        type: p.type,
-        price_min: p.price_min,
-        price_max: p.price_max,
-        beds_min: p.beds_min,
-        beds_max: p.beds_max,
-        area: p.area,
-        status: p.status,
-      }));
 
     if (code) {
       const props = await searchInventory(admin, { code }, lang);
-      if (props.length) {
-        prefetchProps = props;
-        prefetchNote = `CONTEXT: The user referenced project ${code}. The inventory tool returned it (already shown as a card): ${JSON.stringify(compact(props))}. Advise conversationally using ONLY these facts. Do not search again unless criteria change.`;
-        fallback = { message: foundMsg(props.length), properties: props };
-      } else {
-        prefetchNote = `CONTEXT: The user referenced project ${code}, which is not available. In-stock types: ${inStock}. Be honest about that, then offer what exists.`;
-        fallback = { message: noMatchMsg };
+      fallback = props.length ? { message: foundMsg(props.length), properties: props } : { message: noMatchMsg };
+      if (!props.length) {
+        honestyNote = `CONTEXT (facts only, not a script to read out): The user referenced project ${code}, which we do NOT have. In-stock types: ${inStock}. Be honest about that in one warm sentence, then advise on what exists.`;
       }
     } else if (detType && !facts.typeKeys.includes(detType)) {
       const notAvail = label(TYPE, detType, lang);
-      prefetchNote = `CONTEXT: The user asked for "${notAvail}", which is NOT in stock. In-stock types: ${inStock}. Say this honestly in one sentence, then advise on the alternatives conversationally.`;
+      honestyNote = `CONTEXT (facts only, not a script to read out): The user mentioned "${notAvail}", which we do NOT have. In-stock types: ${inStock}. Gently say we don't have it, then — like a good advisor — ask what drew them to it so you can suggest the closest real fit. Do not invent stock.`;
       fallback = {
         message:
           lang === "ar"
@@ -421,17 +417,9 @@ Deno.serve(async (req) => {
     } else if (detType) {
       let props = await searchInventory(admin, { type: detType, ...budget }, lang);
       if (!props.length && budget.budget_max) props = await searchInventory(admin, { type: detType }, lang);
-      prefetchProps = props;
-      prefetchNote = props.length
-        ? `CONTEXT: The inventory tool ran for the user's stated criteria and returned these real projects (already shown as cards): ${JSON.stringify(compact(props))}. Describe, compare and recommend using ONLY these facts. Do not search again unless criteria change.`
-        : `CONTEXT: No project matched the user's criteria. In-stock types: ${inStock}. Be honest about the gap and suggest adjusting the criteria.`;
       fallback = { message: props.length ? foundMsg(props.length) : noMatchMsg, properties: props };
     } else if (budget.budget_max) {
       const props = await searchInventory(admin, budget, lang);
-      prefetchProps = props;
-      prefetchNote = props.length
-        ? `CONTEXT: The inventory tool ran for the user's budget and returned these real projects (already shown as cards): ${JSON.stringify(compact(props))}. Advise using ONLY these facts. Do not search again unless criteria change.`
-        : `CONTEXT: Nothing matched the user's budget. In-stock types: ${inStock}. Be honest and suggest adjusting the budget.`;
       fallback = { message: props.length ? foundMsg(props.length) : noMatchMsg, properties: props };
     }
 
@@ -447,12 +435,13 @@ Deno.serve(async (req) => {
     // أمثلة few-shot مقطَّرة من محادثات حقيقية (تثبيت الصدق والنبرة والتعليل) قبل سجل العميل.
     for (const ex of fewShot(lang)) messages.push({ role: ex.role, content: ex.content });
     for (const turn of history) messages.push({ role: turn.role, content: turn.content });
-    // حقائق البحث المسبق تُحقن كتعليمات سياق (الموديل يحاور بناءً عليها بدل بحث جديد).
-    if (prefetchNote) messages.push({ role: "system", content: prefetchNote });
+    // حقنة صدق فقط عند فجوة مخزون (لا حقائق عرض مسبقة — الموديل يبحث بنفسه لما يجهز).
+    if (honestyNote) messages.push({ role: "system", content: honestyNote });
 
     // 4) حلقة الأدوات — لو فشل الذكاء نرجع fallback الحتمي بدل خطأ عام.
+    //    البطاقات تظهر فقط لما الموديل يستدعي search_inventory (بعد ما يفهم العميل).
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const response: Record<string, any> = prefetchProps ? { message: "", properties: prefetchProps } : { message: "" };
+    const response: Record<string, any> = { message: "" };
     try {
     for (let i = 0; i < MAX_LOOP; i++) {
       const data = await openrouterChat(key, messages);

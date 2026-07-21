@@ -38,10 +38,6 @@ const T = {
   },
   leadError: { ar: "تعذّر الإرسال، حاول مرة ثانية.", en: "Couldn’t send, please try again." },
   error: { ar: "عذراً، صار خطأ. جرّب مرة ثانية.", en: "Sorry, something went wrong. Please try again." },
-  afterSearch: {
-    ar: "عجبك مشروع؟ اترك اسمك وجوالك ويتواصل معك فريق rylist ويرتّب لك كل شيء — مجانًا.",
-    en: "Like a project? Leave your name and phone and the rylist team will reach out and arrange everything — free.",
-  },
 };
 const tr = (k) => T[k][isAr() ? "ar" : "en"];
 
@@ -165,18 +161,14 @@ async function send(text) {
 
 function pushAssistant(data) {
   if (data && data.projectCode) interestCode = data.projectCode;
-  const hasProps = !!(data && data.properties && data.properties.length);
   msgs.push({
     role: "assistant",
     content: (data && data.message) || "",
     quickReplies: (data && data.quickReplies) || null,
     properties: (data && data.properties) || null,
+    // الفورم يظهر فقط لما الموديل يقرّره (نية شراء واضحة) — لا بعد كل بحث.
     showContactForm: !!(data && data.showContactForm),
   });
-  // بعد عرض نتائج بحث، ادعُ العميل للتواصل (ما لم يطلبها المسار أصلاً).
-  if (hasProps && !(data && data.showContactForm)) {
-    msgs.push({ role: "assistant", content: tr("afterSearch"), showContactForm: true });
-  }
   render();
   void persistConversation();
 }
