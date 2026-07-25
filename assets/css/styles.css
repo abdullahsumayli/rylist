@@ -1093,3 +1093,23 @@ html, body { background: var(--surf); color: var(--fg); transition: background .
     box-shadow: 5px 5px 13px #0f0c06, -4px -4px 11px #423b2c;
   }
 }
+
+/* ----- الهيرو: نص + صورة داخل إطار ناعم (استعادة الصورة) ---------------- */
+.hero__inner { max-width: var(--container); display: grid;
+  grid-template-columns: 1.02fr 0.98fr; gap: clamp(1.5rem, 4vw, 3.25rem); align-items: center; }
+.hero__content { min-width: 0; }
+.hero__content > .lead, .hero__content > p { max-width: 48ch; }
+/* العنوان العربي كان سطرًا واحدًا ممتدًا — نسمح له باللف داخل العمود الأضيق */
+html[lang="ar"] .hero .display { white-space: normal; width: auto; max-width: none;
+  font-size: clamp(2rem, 4.4vw, 3.3rem); }
+.hero__media {
+  position: relative; align-self: stretch; min-height: clamp(300px, 40vw, 480px);
+  border-radius: 26px; background-size: cover; background-position: center;
+  box-shadow: var(--raise);
+}
+.hero__media::after { content: ""; position: absolute; inset: 0; border-radius: inherit;
+  box-shadow: var(--inset); pointer-events: none; }
+@media (max-width: 860px) {
+  .hero__inner { grid-template-columns: 1fr; }
+  .hero__media { min-height: 220px; }
+}
