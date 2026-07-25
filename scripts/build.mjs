@@ -13,7 +13,8 @@ async function main(){
   const c = await fetchContent();
   fs.rmSync(OUT, { recursive:true, force:true }); fs.mkdirSync(OUT, { recursive:true });
   // انسخ الأصول الثابتة
-  for(const p of ["assets","admin","favicon.svg","robots.txt",".nojekyll"]) if(fs.existsSync(p)) fs.cpSync(p, path.join(OUT,p), { recursive:true });
+  // article.html = صفحة معاينة المسودة (noindex) — تُنسخ كما هي؛ المقالات المنشورة لها صفحات ثابتة عبر renderNewsPages
+  for(const p of ["assets","admin","favicon.svg","robots.txt",".nojekyll","article.html"]) if(fs.existsSync(p)) fs.cpSync(p, path.join(OUT,p), { recursive:true });
   writeDataJs(OUT, c);
   renderPages(OUT, c, SITE);
   renderProjectPages(OUT, c, SITE);

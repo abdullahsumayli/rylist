@@ -444,6 +444,10 @@ html[lang="ar"] .article-card__cat { font-family: var(--font-ar-body); letter-sp
 .article-card__date { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-mid); }
 html[lang="ar"] .article-card__date { font-family: var(--font-ar-body); }
 
+/* ----- 16b. شارة معاينة المسودة (article.html?preview=1) ---------------- */
+.preview-flag { position: sticky; top: 0; z-index: 5; text-align: center; background: var(--gold-deep); color: #fff; font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.06em; padding: 0.5rem 1rem; }
+html[lang="ar"] .preview-flag { font-family: var(--font-ar-body); letter-spacing: 0; }
+
 /* ----- 17. شريط CTA ----------------------------------------------------- */
 .cta-band { text-align: center; }
 .cta-band .h1 { color: var(--bone); max-width: 20ch; margin-inline: auto; }

@@ -1,5 +1,6 @@
 import { sb } from "./db.js";
 import { LOCALES } from "./config.js";
+import { makeSlug } from "./slug.js";
 
 // taxonomy cache (cities / property types) for select fields
 let TAX = null;
@@ -151,20 +152,91 @@ export async function renderForm(root, ent, row, onDone) {
     fbody.appendChild(field);
   }
 
-  const savebar = document.createElement("div"); savebar.className = "savebar";
-  const save = document.createElement("button"); save.className = "btn btn-primary"; save.type = "button"; save.textContent = "حفظ";
-  const back = document.createElement("button"); back.className = "btn"; back.type = "button"; back.textContent = "رجوع";
-  savebar.append(save, back); fbody.appendChild(savebar);
-
   const done = () => { if (typeof onDone === "function") onDone(); };
-  back.onclick = done;
-  save.onclick = async () => {
-    save.disabled = true;
-    const res = draft[pk]
-      ? await sb.from(ent.table).update(draft).eq(pk, draft[pk])
-      : await sb.from(ent.table).insert(draft);
-    save.disabled = false;
-    if (res.error) { alert(res.error.message); return; }
-    done();
+
+  // enforce req:true fields (declared in entities.js) before hitting the DB —
+  // otherwise an empty NOT NULL column surfaces as a raw Postgres error.
+  const requireFields = () => {
+    const missing = ent.fields.filter((f) => f.req && !String(draft[f.n] ?? "").trim());
+    if (!missing.length) return true;
+    alert("الحقول التالية مطلوبة: " + missing.map((f) => f.l || f.n).join("، "));
+    return false;
   };
+
+  // slug مخفيّ يُشتق من العنوان تلقائيًا (للكيانات التي تخفي حقل slug)
+  const ensureSlug = () => {
+    if (!ent.slugFrom || String(draft.slug || "").trim()) return;
+    const key = ent.slugFrom.startsWith("i18n.") ? ent.slugFrom.split(".")[1] : null;
+    const title = key ? (draft.i18n?.[key]?.en || draft.i18n?.[key]?.ar || "") : draft[ent.slugFrom];
+    draft.slug = makeSlug(title);
+  };
+
+  const persist = () => draft[pk]
+    ? sb.from(ent.table).update(draft).eq(pk, draft[pk])
+    : sb.from(ent.table).insert(draft);
+
+  const savebar = document.createElement("div"); savebar.className = "savebar";
+  const back = document.createElement("button"); back.className = "btn"; back.type = "button"; back.textContent = "رجوع";
+  back.onclick = done;
+
+  if (ent.workflow === "draft") {
+    // مسودة / معاينة / نشر — للمدونة: راجِع ثم انشر
+    const publishBtn = document.createElement("button"); publishBtn.className = "btn btn-primary"; publishBtn.type = "button"; publishBtn.textContent = "نشر";
+    const draftBtn = document.createElement("button"); draftBtn.className = "btn"; draftBtn.type = "button"; draftBtn.textContent = "حفظ كمسودة";
+    const previewBtn = document.createElement("button"); previewBtn.className = "btn"; previewBtn.type = "button"; previewBtn.textContent = "معاينة";
+
+    draftBtn.onclick = async () => {
+      if (!requireFields()) return;
+      ensureSlug(); draft.status = "draft";
+      draftBtn.disabled = true;
+      const res = await persist();
+      draftBtn.disabled = false;
+      if (res.error) { alert(res.error.message); return; }
+      done();
+    };
+
+    previewBtn.onclick = () => {
+      // تسليم محلي للمتصفّح — بلا كتابة لقاعدة البيانات ولا نشر
+      try {
+        localStorage.setItem("rylist:news-preview", JSON.stringify({
+          slug: draft.slug || "", image_url: draft.image_url || "",
+          i18n: draft.i18n || {}, published_at: draft.published_at || new Date().toISOString(),
+        }));
+        window.open("../article.html?preview=1", "_blank", "noopener");
+      } catch (e) { alert("تعذّرت المعاينة: " + (e?.message || e)); }
+    };
+
+    publishBtn.onclick = async () => {
+      if (!requireFields()) return;
+      ensureSlug(); draft.status = "published";
+      if (!String(draft.published_at || "").trim()) draft.published_at = new Date().toISOString();
+      publishBtn.disabled = true; publishBtn.textContent = "جارٍ النشر…";
+      const res = await persist();
+      if (res.error) { publishBtn.disabled = false; publishBtn.textContent = "نشر"; alert(res.error.message); return; }
+      // أطلق بناء الموقع ليظهر للزوّار (نفس آلية صفحة «نشر»)
+      try {
+        const { data: { session } } = await sb.auth.getSession();
+        const dep = await sb.functions.invoke("publish", { headers: { Authorization: `Bearer ${session?.access_token}` } });
+        if (dep.error) throw new Error(dep.error.message);
+        alert("تم نشر المقال ✓ سيظهر على الموقع خلال دقيقة تقريبًا.");
+      } catch (e) {
+        alert("حُفظ المقال كمنشور ✓ لكن تعذّر إطلاق النشر تلقائيًا (" + (e?.message || e) + ").\nافتح صفحة «نشر» واضغط الزر لإظهاره على الموقع.");
+      }
+      done();
+    };
+
+    savebar.append(publishBtn, draftBtn, previewBtn, back);
+  } else {
+    const save = document.createElement("button"); save.className = "btn btn-primary"; save.type = "button"; save.textContent = "حفظ";
+    save.onclick = async () => {
+      if (!requireFields()) return;
+      save.disabled = true;
+      const res = await persist();
+      save.disabled = false;
+      if (res.error) { alert(res.error.message); return; }
+      done();
+    };
+    savebar.append(save, back);
+  }
+  fbody.appendChild(savebar);
 }
