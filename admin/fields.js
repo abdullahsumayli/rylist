@@ -24,13 +24,17 @@ export function localeTabs(field, value, onLocale) {
   const pane = document.createElement("div");
   let cur = LOCALES[0].code;
   let ta = null;
+  const rich = field.t === "i18n-rich";
+  // يوسّع صندوق المقال تلقائيًا ليعرض النص كاملًا دون سكرول داخلي
+  const autosize = () => { if (rich && ta) { ta.style.height = "auto"; ta.style.height = (ta.scrollHeight + 2) + "px"; } };
   const draw = () => {
     pane.innerHTML = "";
-    ta = field.t === "i18n-rich" ? document.createElement("textarea") : document.createElement("input");
-    if (field.t === "i18n-rich") ta.rows = 6;
+    ta = rich ? document.createElement("textarea") : document.createElement("input");
+    if (rich) { ta.rows = 16; ta.className = "richbody"; }
     ta.value = (value && value[cur]) || "";
-    ta.oninput = () => onLocale(cur, ta.value);
+    ta.oninput = () => { onLocale(cur, ta.value); autosize(); };
     pane.appendChild(ta);
+    requestAnimationFrame(autosize);
   };
   LOCALES.forEach((L) => {
     const b = document.createElement("button"); b.type = "button"; b.textContent = tabLabel(L.code);
@@ -42,7 +46,7 @@ export function localeTabs(field, value, onLocale) {
   return {
     el: wrap,
     current: () => cur,
-    setText: (loc, text) => { onLocale(loc, text); if (loc === cur && ta) ta.value = text; },
+    setText: (loc, text) => { onLocale(loc, text); if (loc === cur && ta) { ta.value = text; autosize(); } },
   };
 }
 
