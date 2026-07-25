@@ -823,3 +823,269 @@ html.reveal-on .grid[data-reveal].is-in > *:nth-child(6) { transition-delay: .35
     transition: none !important;
   }
 }
+
+/* ==========================================================================
+   طبقة Soft UI / Neumorphism (2026-07)
+   تُلحق في النهاية فتفوز على القواعد أعلاه دون حذف أي محدّد (JS آمن).
+   أسطح بلون واحد دافئ + ظلال ناعمة مزدوجة + وضع فاتح/داكن.
+   ========================================================================== */
+
+/* ----- التوكنز الأساسية + إعادة ربط التوكنز القديمة ---------------------- */
+:root {
+  /* الأوّليّات (تُعاد فقط هذه السبعة في كل ثيم) */
+  --surf: #e9e3d5;
+  --sh-dark: #c6bda6;
+  --sh-light: #fdf9f0;
+  --fg: #2f2a22;
+  --fg-soft: #6a6151;
+  --champ: #9c8149;
+  --champ-soft: #b49a63;
+
+  /* مركّبات مشتقّة (حيّة — تتحدّث تلقائيًا مع الثيم) */
+  --nr: 20px;
+  --div: color-mix(in srgb, var(--sh-dark) 55%, transparent);
+  --raise:    6px 6px 14px var(--sh-dark), -6px -6px 14px var(--sh-light);
+  --raise-sm: 4px 4px 9px  var(--sh-dark), -4px -4px 9px  var(--sh-light);
+  --inset:    inset 5px 5px 10px var(--sh-dark), inset -5px -5px 10px var(--sh-light);
+  --inset-sm: inset 3px 3px 6px  var(--sh-dark), inset -3px -3px 6px  var(--sh-light);
+
+  /* إعادة ربط توكنز الهوية القديمة إلى النظام الجديد */
+  --bone: var(--surf); --white: var(--surf); --bg-soft: var(--surf);
+  --ink: var(--fg); --ink-deep: var(--fg);
+  --text-dark: var(--fg); --text-mid: var(--fg-soft);
+  --champagne: var(--champ); --gold-deep: var(--champ); --gold-bright: var(--champ); --pale: var(--champ-soft);
+  --line: transparent; --line-strong: transparent;
+}
+
+/* الوضع الداكن الافتراضي حسب النظام */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --surf: #242018; --sh-dark: #141109; --sh-light: #332e23;
+    --fg: #ece6d8; --fg-soft: #a99f8c; --champ: #bfa572; --champ-soft: #8f7c52;
+  }
+}
+/* تجاوز يدوي يفوز على تفضيل النظام في الاتجاهين */
+:root[data-theme="light"] {
+  --surf: #e9e3d5; --sh-dark: #c6bda6; --sh-light: #fdf9f0;
+  --fg: #2f2a22; --fg-soft: #6a6151; --champ: #9c8149; --champ-soft: #b49a63;
+}
+:root[data-theme="dark"] {
+  --surf: #242018; --sh-dark: #141109; --sh-light: #332e23;
+  --fg: #ece6d8; --fg-soft: #a99f8c; --champ: #bfa572; --champ-soft: #8f7c52;
+}
+
+html, body { background: var(--surf); color: var(--fg); transition: background .4s ease, color .4s ease; }
+:focus-visible { outline: 2px solid var(--champ); outline-offset: 3px; }
+.gold-rule { background: var(--champ); }
+/* نمط "القمّة" كان لخلفيات حبرية غامقة — يُخفى على الأسطح الفاتحة الناعمة */
+.has-summit::before { display: none; }
+
+/* ----- الأزرار ---------------------------------------------------------- */
+.btn {
+  border: none; border-radius: 999px;
+  background: var(--surf); color: var(--fg);
+  box-shadow: var(--raise);
+  transition: box-shadow .18s ease, transform .18s ease, color .2s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn:active { box-shadow: var(--inset); transform: translateY(0); }
+.btn--ghost, .section--ink .btn--ghost, .hero .btn--ghost {
+  background: var(--surf); color: var(--fg); box-shadow: var(--raise);
+}
+.btn--ghost:hover, .section--ink .btn--ghost:hover, .hero .btn--ghost:hover {
+  background: var(--surf); color: var(--fg);
+}
+.btn--primary, .section--ink .btn--primary {
+  background: linear-gradient(145deg, var(--champ-soft), var(--champ));
+  color: #fff;
+  box-shadow: 6px 6px 14px var(--sh-dark), -4px -4px 10px var(--sh-light);
+}
+.btn--primary:hover, .section--ink .btn--primary:hover { background: linear-gradient(145deg, var(--champ-soft), var(--champ)); }
+.btn--primary:active, .section--ink .btn--primary:active { box-shadow: var(--inset); }
+:root[data-theme="light"] .btn--primary { color: #fff; }
+:root[data-theme="dark"]  .btn--primary { color: #1c180f; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn--primary { color: #1c180f; } }
+
+/* ----- البطاقات والألواح (بارزة، بلا حدود) ------------------------------ */
+.service-card, .project-card, .punit-card, .info-card, .contact-form-panel,
+.contact-rail__list, .statement, .fahem-lead {
+  background: var(--surf); border: none; border-radius: var(--nr); box-shadow: var(--raise);
+}
+.service-card { transition: box-shadow .25s ease, transform .25s ease; }
+.service-card:hover, .project-card:hover, .punit-card:hover {
+  border: none; box-shadow: var(--raise-sm); transform: translateY(-3px);
+}
+.punit { border: none; border-radius: 14px; box-shadow: var(--inset-sm); }
+/* أيقونة الخدمة داخل لوح غائر صغير */
+.service-card .icon {
+  width: 56px; height: 56px; padding: 15px; border-radius: 16px; color: var(--champ);
+  box-shadow: var(--inset-sm); box-sizing: border-box;
+}
+
+/* ----- الصور داخل إطار غائر (well) -------------------------------------- */
+.project-card, .punit-card { padding: 12px; }
+.project-card__media, .punit-card__media {
+  border-radius: 14px; box-shadow: var(--inset); background: var(--surf); padding: 10px;
+}
+.project-card__media img, .punit-card__media img { border-radius: 9px; }
+.article-card__media, .pgallery__cell, .pmap__frame, .map-frame, .pdetail__hero {
+  border: none; border-radius: 16px; box-shadow: var(--inset); background: var(--surf); padding: 8px;
+}
+.article-card__media img, .pgallery__cell img { border-radius: 10px; }
+.pdetail__hero img { border-radius: 12px; }
+
+/* ----- الحقول والفلاتر (غائرة) ------------------------------------------ */
+.search-bar input, .search-bar select, .filters select,
+.field input, .field select, .field textarea,
+.fahem-input, .fahem-lead__in {
+  background: var(--surf); border: none; border-radius: 14px;
+  box-shadow: var(--inset-sm); color: var(--fg);
+}
+.search-bar input::placeholder, .fahem-input::placeholder { color: var(--fg-soft); }
+.field input:focus, .field select:focus, .field textarea:focus,
+.fahem-input:focus, .fahem-lead__in:focus { outline: none; box-shadow: var(--inset); }
+.fahem-input { border-radius: 999px; }
+.fahem-lead__in { border-radius: 14px; }
+
+/* ----- الهيدر / الشريط العلوي / التنقّل --------------------------------- */
+.topbar { background: var(--surf); color: var(--fg-soft); }
+.topbar a { color: var(--fg-soft); }
+.topbar a:hover { color: var(--fg); }
+.site-header {
+  background: var(--surf); backdrop-filter: none; border-bottom: none;
+  box-shadow: 0 8px 20px -16px var(--sh-dark);
+}
+.logo .mark { color: var(--fg); }
+.lang-toggle {
+  background: var(--surf); border: none; box-shadow: var(--raise-sm); color: var(--fg);
+}
+.lang-toggle:hover { background: var(--surf); color: var(--champ); box-shadow: var(--inset-sm); }
+.nav a.is-active::after { display: none; }
+.nav a.is-active { color: var(--champ); }
+
+/* زر تبديل الوضع الفاتح/الداكن */
+.theme-toggle {
+  display: inline-grid; place-items: center; width: 34px; height: 34px;
+  border: none; border-radius: 50%; background: var(--surf); color: var(--fg);
+  box-shadow: var(--raise-sm); cursor: pointer; flex: none;
+  transition: box-shadow .18s ease, color .2s ease;
+}
+.theme-toggle:hover { color: var(--champ); }
+.theme-toggle:active { box-shadow: var(--inset-sm); }
+.theme-toggle svg { width: 16px; height: 16px; }
+
+/* ----- الأقسام الغامقة سابقًا → ألواح ناعمة تتبع الثيم ------------------ */
+.hero { background: var(--surf); color: var(--fg); }
+.hero__bg, .hero::after { display: none; }
+.hero .display { color: var(--fg); }
+.hero .lead { color: var(--fg-soft); }
+.hero__meta { border-top: 1px solid var(--div); }
+.hero__meta .stat__num, .stat__num { color: var(--fg); }
+.hero__meta .stat__label { color: var(--fg-soft); }
+
+.section--soft, .section--bg { background: var(--surf); }
+.section--ink { background: var(--surf); color: var(--fg); }
+.section--ink p, .section--ink .lead { color: var(--fg-soft); }
+.section--ink .eyebrow { color: var(--champ); }
+.section--ink .stat__label { color: var(--fg-soft); }
+.cta-band .h1 { color: var(--fg); }
+
+.page-banner { background: var(--surf); color: var(--fg); }
+.page-banner .display, .page-banner h1 { color: var(--fg); }
+.page-banner .lead { color: var(--fg-soft); }
+.page-banner .eyebrow { color: var(--champ); }
+
+/* ----- الفوتر ----------------------------------------------------------- */
+.site-footer { background: var(--surf); color: var(--fg-soft); box-shadow: 0 -8px 20px -16px var(--sh-dark); }
+.site-footer .logo, .site-footer .logo .mark { color: var(--fg); }
+.site-footer .logo__sub { color: var(--fg-soft); }
+.site-footer__tag { color: var(--fg-soft); }
+.footer-col h4, .footer-social__label { color: var(--champ); }
+.footer-col a { color: var(--fg-soft); }
+.footer-col a:hover { color: var(--fg); }
+.site-footer__bottom { border-top: 1px solid var(--div); color: var(--fg-soft); }
+.footer-social__icons a { border: 1px solid var(--div); color: var(--fg-soft); box-shadow: var(--raise-sm); }
+.footer-social__icons a:hover { background: var(--surf); color: var(--champ); box-shadow: var(--inset-sm); border-color: transparent; }
+
+/* ----- الشارات والحبوب -------------------------------------------------- */
+.badge, .status-pill { border: none; border-radius: 999px; box-shadow: var(--raise-sm); }
+
+/* ----- الفواصل (كانت حدود 1px صريحة) ------------------------------------ */
+.step, .value, .project-card__foot, .channel { border-color: var(--div); }
+.psec > h2 { border-bottom-color: var(--div); }
+.step__n, .value .num, .service-card .num { color: var(--champ); }
+
+/* ----- ودجت فاهم -------------------------------------------------------- */
+.fahem-chat { background: var(--surf); border: none; border-radius: var(--nr); box-shadow: var(--raise); }
+.fahem-chat__head { background: var(--surf); color: var(--fg); border-bottom: 1px solid var(--div); }
+.fahem-chat__sub { color: var(--fg-soft); }
+.fahem-scroll { background: var(--surf); }
+.fahem-bubble--assistant { background: var(--surf); border: none; box-shadow: var(--raise-sm); color: var(--fg); }
+.fahem-bubble--user { background: linear-gradient(145deg, var(--champ-soft), var(--champ)); color: #fff; }
+:root[data-theme="dark"] .fahem-bubble--user { color: #1c180f; }
+.fahem-chip { background: var(--surf); border: none; box-shadow: var(--raise-sm); color: var(--fg); }
+.fahem-chip:hover { background: var(--surf); color: var(--champ); box-shadow: var(--inset-sm); border-color: transparent; }
+.fahem-card { background: var(--surf); border: none; box-shadow: var(--raise-sm); }
+.fahem-card:hover { border: none; box-shadow: var(--inset-sm); transform: translateY(-1px); }
+.fahem-card__media { background: var(--surf); }
+.fahem-typing { background: var(--surf); border: none; box-shadow: var(--raise-sm); }
+.fahem-composer { background: var(--surf); border-block-start: 1px solid var(--div); }
+.fahem-sendbtn { background: linear-gradient(145deg, var(--champ-soft), var(--champ)); color: #fff; box-shadow: var(--raise-sm); }
+:root[data-theme="dark"] .fahem-sendbtn { color: #1c180f; }
+.fahem-sendbtn:active { box-shadow: var(--inset-sm); }
+.fahem-page { background: var(--surf); }
+
+/* ----- العناصر الطافية -------------------------------------------------- */
+.fahem-fab { background: var(--surf); color: var(--fg); border: none; box-shadow: var(--raise); }
+.fahem-fab:hover { background: var(--surf); box-shadow: var(--raise-sm); }
+.fahem-fab__ava, .fahem-chat__ava { background: var(--surf); border: none; box-shadow: var(--inset-sm); }
+.wa-float { box-shadow: var(--raise); }
+.wa-cta { box-shadow: var(--raise); }
+.wa-cta:hover { box-shadow: var(--raise-sm); }
+.map-tag { background: var(--surf); color: var(--fg); box-shadow: var(--raise); }
+.map-tag svg { color: var(--champ); }
+
+/* ----- أيقونات بطاقة التواصل ------------------------------------------- */
+.info-card .icon, .channel__icon { color: var(--champ); }
+
+/* ----- إتاحة الوصول: احتياط للتباين العالي ------------------------------ */
+@media (prefers-contrast: more) {
+  .service-card, .project-card, .punit-card, .info-card, .contact-form-panel,
+  .btn, .fahem-chat, .theme-toggle, .lang-toggle {
+    border: 1px solid var(--fg-soft);
+  }
+}
+/* ----- تباين أعلى للأزرار في الوضع الداكن (طلب العميل) ------------------- */
+/* الأزرار كانت بنفس لون السطح فتذوب في الخلفية الداكنة — نرفعها بلون أفتح + ظل أقوى */
+:root[data-theme="dark"] .btn {
+  background: #35301f;
+  color: var(--fg);
+  box-shadow: 5px 5px 13px #0f0c06, -5px -5px 13px #423b2c;
+}
+:root[data-theme="dark"] .btn:hover { background: #3b3524; }
+:root[data-theme="dark"] .btn:active { box-shadow: inset 4px 4px 9px #0f0c06, inset -4px -4px 9px #423b2c; }
+:root[data-theme="dark"] .btn--ghost,
+:root[data-theme="dark"] .section--ink .btn--ghost,
+:root[data-theme="dark"] .hero .btn--ghost { background: #35301f; color: var(--champ); }
+:root[data-theme="dark"] .btn--primary,
+:root[data-theme="dark"] .section--ink .btn--primary {
+  background: linear-gradient(145deg, #d8bc7c, #b3945a);
+  color: #171307;
+  box-shadow: 5px 5px 13px #0f0c06, -4px -4px 11px #423b2c;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .btn {
+    background: #35301f; color: var(--fg);
+    box-shadow: 5px 5px 13px #0f0c06, -5px -5px 13px #423b2c;
+  }
+  :root:not([data-theme="light"]) .btn:hover { background: #3b3524; }
+  :root:not([data-theme="light"]) .btn:active { box-shadow: inset 4px 4px 9px #0f0c06, inset -4px -4px 9px #423b2c; }
+  :root:not([data-theme="light"]) .btn--ghost,
+  :root:not([data-theme="light"]) .section--ink .btn--ghost,
+  :root:not([data-theme="light"]) .hero .btn--ghost { background: #35301f; color: var(--champ); }
+  :root:not([data-theme="light"]) .btn--primary,
+  :root:not([data-theme="light"]) .section--ink .btn--primary {
+    background: linear-gradient(145deg, #d8bc7c, #b3945a); color: #171307;
+    box-shadow: 5px 5px 13px #0f0c06, -4px -4px 11px #423b2c;
+  }
+}

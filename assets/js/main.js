@@ -110,7 +110,7 @@
     return '' +
       '<article class="article-card">' +
         media +
-        '<div class="article-card__cat">' + esc(cat) + '</div>' +
+        (cat ? '<div class="article-card__cat">' + esc(cat) + '</div>' : '') +
         '<h3 class="article-card__title">' + esc(title) + '</h3>' +
         '<p class="article-card__excerpt">' + esc(excerpt) + '</p>' +
         '<div style="display:flex;justify-content:space-between;align-items:center;gap:1rem">' +
@@ -160,6 +160,50 @@
     var limit = parseInt(el.getAttribute("data-limit") || "0", 10);
     var list = limit ? NEWS.slice(0, limit) : NEWS;
     el.innerHTML = list.map(articleCard).join("");
+  }
+
+  /* ----- معاينة المقال (article.html?preview=1) -----
+     صفحة معاينة للمسوّدة قبل النشر فقط — تعرض المسوّدة (من ذاكرة المتصفّح) بنفس
+     شكل صفحة المقال المنشورة (adetail). المقالات المنشورة لها صفحات ثابتة
+     news/<slug>.html يبنيها scripts/lib/newsPages.mjs. */
+  // يطابق formatBody في scripts/lib/renderArticle.mjs: نص عادي → فقرات؛ HTML يُترك كما هو.
+  function formatBody(raw, title) {
+    var s = String(raw || "").trim();
+    if (!s) return "";
+    if (/<(p|h[1-6]|ul|ol|div|br)\b/i.test(s)) return s;              // HTML جاهز — اتركه
+    var lines = s.split("\n");
+    if (title && lines[0].trim() === String(title).trim()) lines.shift();  // أسقط سطر العنوان المكرّر
+    s = lines.join("\n").trim();
+    return s.split(/\n\s*\n/).map(function (p) {
+      return "<p>" + esc(p.trim()).replace(/\n/g, "<br>") + "</p>";
+    }).join("");
+  }
+
+  function renderArticlePreview() {
+    var view = document.getElementById("articleView");
+    if (!view) return;
+    if (new URLSearchParams(location.search).get("preview") !== "1") return;
+    var p = null;
+    try { var raw = localStorage.getItem("rylist:news-preview"); if (raw) p = JSON.parse(raw); } catch (e) { p = null; }
+    var loc = isAr() ? "ar" : "en";
+    var i18n = (p && p.i18n) || {};
+    var title = (i18n.title && (i18n.title[loc] || i18n.title.ar)) || "";
+    var body = (i18n.body && (i18n.body[loc] || i18n.body.ar)) || "";
+    var img = (p && p.image_url) || "";
+    var date = localeDate(((p && p.published_at) || "").slice(0, 10));
+    var back = isAr() ? "عودة إلى المدونة" : "Back to blog";
+    if (title) document.title = title + " — " + (isAr() ? "معاينة" : "Preview");
+    view.innerHTML = '' +
+      '<a class="pdetail__back" href="news.html">← RYLIST</a>' +
+      (img ? '<figure class="pdetail__hero"><img src="' + esc(img) + '" alt="' + esc(title) + '"></figure>' : '') +
+      '<header class="pdetail__head adetail__head">' +
+        '<div class="adetail__meta">' + (date ? '<span class="article-card__date">' + date + '</span>' : '') + '</div>' +
+        '<h1>' + esc(title) + '</h1>' +
+      '</header>' +
+      '<div class="pdetail__desc adetail__body">' + formatBody(body, title) + '</div>' +
+      '<div class="btn-row"><a class="btn btn--primary" href="news.html">' + back + '</a></div>';
+    var flag = document.getElementById("previewFlag");
+    if (flag) { flag.textContent = isAr() ? "معاينة — مسودة (لم تُنشر بعد)" : "Preview — draft (not published)"; flag.hidden = false; }
   }
 
   function renderPartners() {
@@ -237,6 +281,47 @@
     statEls.forEach(function (n) { io.observe(n); });
   }
 
+  /* ----- زر تبديل الوضع الفاتح/الداكن ----- */
+  function initTheme() {
+    var root = document.documentElement;
+    var mq = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+    function current() {
+      return root.getAttribute("data-theme") || (mq && mq.matches ? "dark" : "light");
+    }
+    var SUN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>';
+    var MOON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.5 6.5 0 0 0 9.8 9.8z"/></svg>';
+
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "theme-toggle";
+
+    function label() {
+      var toDark = current() !== "dark";
+      return isAr()
+        ? (toDark ? "الوضع الداكن" : "الوضع الفاتح")
+        : (toDark ? "Dark mode" : "Light mode");
+    }
+    function render() {
+      btn.innerHTML = current() === "dark" ? SUN : MOON;
+      btn.setAttribute("aria-label", label());
+      btn.title = label();
+    }
+    btn.addEventListener("click", function () {
+      var next = current() === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("rylist-theme", next); } catch (e) {}
+      render();
+    });
+
+    var host = document.querySelector(".topbar__group:last-child") ||
+               document.querySelector(".topbar__inner") ||
+               document.querySelector(".site-header__inner");
+    if (!host) return;
+    host.insertBefore(btn, host.firstChild);
+    render();
+    document.addEventListener("langchange", render);
+  }
+
   /* ----- قائمة الجوال ----- */
   function initMenu() {
     var toggle = document.querySelector(".nav-toggle");
@@ -306,6 +391,7 @@
     renderFeatured();
     renderProjectsPage();
     renderNews();
+    renderArticlePreview();
     renderPartners();
     relabelStats();
   }
@@ -333,8 +419,10 @@
     renderFeatured();
     renderProjectsPage();
     renderNews();
+    renderArticlePreview();
     renderPartners();
     renderStats();
+    initTheme();
     initMenu();
     initActiveNav();
     initHomeSearch();
