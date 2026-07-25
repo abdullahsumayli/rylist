@@ -10,6 +10,8 @@ import fs from "node:fs";
 const pick = (o, loc) => (o && o[loc]) || "";
 // اسم مترجَم مع سقوط للعربية ثم لأي قيمة متاحة
 const name = (o, loc) => pick(o, loc) || pick(o, "ar") || "";
+// قيمة صينية مع سقوط للإنجليزية ثم العربية (أقرب للقارئ الصيني من العربية)
+const zpick = (o) => pick(o, "zh") || pick(o, "en") || pick(o, "ar") || "";
 
 // يشتق مقتطفًا قصيرًا من نص المقال: يزيل وسوم HTML ويأخذ أوّل ~160 حرفًا.
 // يخلّي الفريق يكتب المقال فقط دون كتابة مقتطف منفصل.
@@ -33,10 +35,10 @@ function flatProjects(projects, tax) {
     const title = p.i18n?.title || {}, district = p.i18n?.district || {};
     return {
       id: p.id, code: p.code || "", featured: !!p.featured,
-      titleAr: name(title, "ar"), titleEn: name(title, "en"),
-      cityKey: p.city_key || "", cityAr: name(city[p.city_key], "ar"), cityEn: name(city[p.city_key], "en"),
-      districtAr: name(district, "ar"), districtEn: name(district, "en"),
-      type: p.type_key || "", typeAr: name(type[p.type_key], "ar"), typeEn: name(type[p.type_key], "en"),
+      titleAr: name(title, "ar"), titleEn: name(title, "en"), titleZh: zpick(title),
+      cityKey: p.city_key || "", cityAr: name(city[p.city_key], "ar"), cityEn: name(city[p.city_key], "en"), cityZh: zpick(city[p.city_key]),
+      districtAr: name(district, "ar"), districtEn: name(district, "en"), districtZh: zpick(district),
+      type: p.type_key || "", typeAr: name(type[p.type_key], "ar"), typeEn: name(type[p.type_key], "en"), typeZh: zpick(type[p.type_key]),
       status: p.status || "available", sold: p.sold ?? 0,
       priceMin: p.price_min ?? 0, priceMax: p.price_max ?? p.price_min ?? 0,
       area: p.area ?? "", bedsMin: p.beds_min ?? 0, bedsMax: p.beds_max ?? 0,
@@ -50,11 +52,12 @@ function flatNews(news) {
     const title = n.i18n?.title || {}, excerpt = n.i18n?.excerpt || {}, cat = n.i18n?.category || {}, body = n.i18n?.body || {};
     return {
       slug: n.slug || "",
-      titleAr: name(title, "ar"), titleEn: name(title, "en"),
-      catAr: pick(cat, "ar"), catEn: pick(cat, "en"),
+      titleAr: name(title, "ar"), titleEn: name(title, "en"), titleZh: zpick(title),
+      catAr: pick(cat, "ar"), catEn: pick(cat, "en"), catZh: pick(cat, "zh"),
       // المقتطف: يُشتق من المقال تلقائيًا (أو يُستخدم المقتطف الصريح إن وُجد)
       excerptAr: name(excerpt, "ar") || excerptFrom(name(body, "ar")),
       excerptEn: name(excerpt, "en") || excerptFrom(name(body, "en")),
+      excerptZh: pick(excerpt, "zh") || excerptFrom(pick(body, "zh")),
       img: n.image_url || "", date: (n.published_at || "").slice(0, 10),
     };
   });
@@ -62,7 +65,7 @@ function flatNews(news) {
 
 function flatPartners(partners) {
   return (partners || []).map((p) => ({
-    ar: name(p.i18n?.name, "ar"), en: name(p.i18n?.name, "en"),
+    ar: name(p.i18n?.name, "ar"), en: name(p.i18n?.name, "en"), zh: zpick(p.i18n?.name),
     logo: p.logo_url || "",
   }));
 }
@@ -74,7 +77,7 @@ function flatStats(stats) {
       value: num,
       decimals: Number.isInteger(num) ? 0 : 1,
       sym: s.suffix || "",
-      labelAr: name(s.i18n?.label, "ar"), labelEn: name(s.i18n?.label, "en"),
+      labelAr: name(s.i18n?.label, "ar"), labelEn: name(s.i18n?.label, "en"), labelZh: zpick(s.i18n?.label),
     };
   });
 }
@@ -83,8 +86,8 @@ function flatContact(contact) {
   const c = contact || {};
   return {
     whatsapp: c.whatsapp || "", email: c.email || "", phone: c.phone || "", map: c.map_url || "",
-    addressAr: pick(c.i18n?.address, "ar"), addressEn: pick(c.i18n?.address, "en"),
-    hoursAr: pick(c.i18n?.hours, "ar"), hoursEn: pick(c.i18n?.hours, "en"),
+    addressAr: pick(c.i18n?.address, "ar"), addressEn: pick(c.i18n?.address, "en"), addressZh: zpick(c.i18n?.address),
+    hoursAr: pick(c.i18n?.hours, "ar"), hoursEn: pick(c.i18n?.hours, "en"), hoursZh: zpick(c.i18n?.hours),
   };
 }
 

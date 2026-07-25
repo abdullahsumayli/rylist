@@ -8,23 +8,26 @@
   var lang = function () { return (window.RYLIST && window.RYLIST.getLang()) || document.documentElement.lang || "ar"; };
   var isAr = function () { return lang() === "ar"; };
 
-  /* ----- نصوص واجهة البطاقات (ثنائية) ----- */
+  // اختيار القيمة حسب اللغة الحالية (عربي/إنجليزي/صيني) مع سقوط آمن
+  var L = function (ar, en, zh) { var l = lang(); return l === "en" ? (en || ar) : l === "zh" ? (zh || en || ar) : ar; };
+
+  /* ----- نصوص واجهة البطاقات (ثلاثية اللغة) ----- */
   var T = {
-    available: { ar: "متاح", en: "Available" },
-    reserved: { ar: "محجوز", en: "Reserved" },
-    sold: { ar: "مباع", en: "Sold" },
-    soon: { ar: "قريبًا", en: "Soon" },
-    priceOnRequest: { ar: "السعر عند الطلب", en: "Price on request" },
-    soldPct: { ar: "مباع", en: "Sold" },
-    view: { ar: "شاهد التفاصيل", en: "View details" },
-    beds: { ar: "غرف", en: "beds" },
-    area: { ar: "م²", en: "m²" },
-    code: { ar: "كود", en: "Code" },
-    readMore: { ar: "اقرأ المزيد", en: "Read more" },
-    none: { ar: "لا توجد مشاريع مطابقة للفلاتر الحالية.", en: "No projects match the current filters." },
-    count: { ar: "مشروع", en: "projects" }
+    available: { ar: "متاح", en: "Available", zh: "可售" },
+    reserved: { ar: "محجوز", en: "Reserved", zh: "已预订" },
+    sold: { ar: "مباع", en: "Sold", zh: "已售" },
+    soon: { ar: "قريبًا", en: "Soon", zh: "即将推出" },
+    priceOnRequest: { ar: "السعر عند الطلب", en: "Price on request", zh: "价格面议" },
+    soldPct: { ar: "مباع", en: "Sold", zh: "已售" },
+    view: { ar: "شاهد التفاصيل", en: "View details", zh: "查看详情" },
+    beds: { ar: "غرف", en: "beds", zh: "卧室" },
+    area: { ar: "م²", en: "m²", zh: "㎡" },
+    code: { ar: "كود", en: "Code", zh: "编号" },
+    readMore: { ar: "اقرأ المزيد", en: "Read more", zh: "阅读更多" },
+    none: { ar: "لا توجد مشاريع مطابقة للفلاتر الحالية.", en: "No projects match the current filters.", zh: "没有符合当前筛选条件的项目。" },
+    count: { ar: "مشروع", en: "projects", zh: "个项目" }
   };
-  function t(k) { return T[k][isAr() ? "ar" : "en"]; }
+  function t(k) { return L(T[k].ar, T[k].en, T[k].zh); }
 
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
 
@@ -37,13 +40,13 @@
     var lo = min || max, hi = max || min;
     function f(x) { return Number(x).toLocaleString("en-US"); }
     var range = lo === hi ? f(lo) : f(lo) + " – " + f(hi);
-    return isAr() ? range + " ريال" : "SAR " + range;
+    return L(range + " ريال", "SAR " + range, range + " 里亚尔");
   }
 
   function fmtMeta(p) {
     var parts = [];
-    if (p.area) parts.push(p.area + " " + (isAr() ? T.area.ar : T.area.en));
-    if (p.bedsMax > 0) parts.push((p.bedsMin === p.bedsMax ? String(p.bedsMin) : p.bedsMin + "–" + p.bedsMax) + " " + (isAr() ? T.beds.ar : T.beds.en));
+    if (p.area) parts.push(p.area + " " + t("area"));
+    if (p.bedsMax > 0) parts.push((p.bedsMin === p.bedsMax ? String(p.bedsMin) : p.bedsMin + "–" + p.bedsMax) + " " + t("beds"));
     return parts.join(" · ");
   }
 
@@ -51,16 +54,16 @@
     if (!iso) return "";
     var d = new Date(iso + "T00:00:00");
     if (isNaN(d.getTime())) return "";               // guard against "Invalid Date"
-    try { return d.toLocaleDateString(isAr() ? "ar-SA" : "en-GB", { year: "numeric", month: "short", day: "numeric" }); }
+    try { return d.toLocaleDateString(L("ar-SA", "en-GB", "zh-CN"), { year: "numeric", month: "short", day: "numeric" }); }
     catch (e) { return iso; }
   }
 
   /* ----- بطاقة مشروع ----- */
   function projectCard(p) {
-    var title = isAr() ? p.titleAr : p.titleEn;
-    var city = isAr() ? p.cityAr : p.cityEn;
-    var district = isAr() ? p.districtAr : p.districtEn;
-    var type = isAr() ? p.typeAr : p.typeEn;
+    var title = L(p.titleAr, p.titleEn, p.titleZh);
+    var city = L(p.cityAr, p.cityEn, p.cityZh);
+    var district = L(p.districtAr, p.districtEn, p.districtZh);
+    var type = L(p.typeAr, p.typeEn, p.typeZh);
     var stKey = (p.status === "sold" || p.status === "reserved" || p.status === "soon") ? p.status : "available";
     var statusTxt = t(stKey);
     var statusCls = { sold: "badge--sold", reserved: "badge--reserved", soon: "badge--soon" }[p.status] || "";
@@ -79,7 +82,7 @@
         '<div class="project-card__body">' +
           '<div class="project-card__loc">' +
             '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>' +
-            '<span>' + esc(district) + (isAr() ? "، " : ", ") + esc(city) + '</span>' +
+            '<span>' + esc(district) + L("، ", ", ", "，") + esc(city) + '</span>' +
           '</div>' +
           '<h3 class="project-card__title">' + esc(title) + '</h3>' +
           '<div class="project-card__type">' + esc(type) + '</div>' +
@@ -89,7 +92,7 @@
             '<div class="project-card__price"><b>' + fmtPrice(p.priceMin, p.priceMax) + '</b>' +
               '<span class="project-card__code">' + t("code") + " " + p.code + '</span></div>' +
             '<a class="link-arrow" href="projects/' + p.code + '.html">' + t("view") +
-              '<span aria-hidden="true">' + (isAr() ? "←" : "→") + '</span></a>' +
+              '<span aria-hidden="true">' + L("←", "→", "→") + '</span></a>' +
           '</div>' +
         '</div>' +
       '</article>';
@@ -97,9 +100,9 @@
 
   /* ----- بطاقة خبر ----- */
   function articleCard(a) {
-    var title = isAr() ? a.titleAr : a.titleEn;
-    var cat = isAr() ? a.catAr : a.catEn;
-    var excerpt = isAr() ? a.excerptAr : a.excerptEn;
+    var title = L(a.titleAr, a.titleEn, a.titleZh);
+    var cat = L(a.catAr, a.catEn, a.catZh);
+    var excerpt = L(a.excerptAr, a.excerptEn, a.excerptZh);
     var href = a.slug ? "news/" + a.slug + ".html" : "";
     var media = href
       ? '<a class="article-card__media" href="' + href + '"><img loading="lazy" src="' + a.img + '" alt="' + esc(title) + '"></a>'
@@ -185,14 +188,14 @@
     if (new URLSearchParams(location.search).get("preview") !== "1") return;
     var p = null;
     try { var raw = localStorage.getItem("rylist:news-preview"); if (raw) p = JSON.parse(raw); } catch (e) { p = null; }
-    var loc = isAr() ? "ar" : "en";
+    var loc = lang();
     var i18n = (p && p.i18n) || {};
     var title = (i18n.title && (i18n.title[loc] || i18n.title.ar)) || "";
     var body = (i18n.body && (i18n.body[loc] || i18n.body.ar)) || "";
     var img = (p && p.image_url) || "";
     var date = localeDate(((p && p.published_at) || "").slice(0, 10));
-    var back = isAr() ? "عودة إلى المدونة" : "Back to blog";
-    if (title) document.title = title + " — " + (isAr() ? "معاينة" : "Preview");
+    var back = L("عودة إلى المدونة", "Back to blog", "返回博客");
+    if (title) document.title = title + " — " + L("معاينة", "Preview", "预览");
     view.innerHTML = '' +
       '<a class="pdetail__back" href="news.html">← RYLIST</a>' +
       (img ? '<figure class="pdetail__hero"><img src="' + esc(img) + '" alt="' + esc(title) + '"></figure>' : '') +
@@ -203,7 +206,7 @@
       '<div class="pdetail__desc adetail__body">' + formatBody(body, title) + '</div>' +
       '<div class="btn-row"><a class="btn btn--primary" href="news.html">' + back + '</a></div>';
     var flag = document.getElementById("previewFlag");
-    if (flag) { flag.textContent = isAr() ? "معاينة — مسودة (لم تُنشر بعد)" : "Preview — draft (not published)"; flag.hidden = false; }
+    if (flag) { flag.textContent = L("معاينة — مسودة (لم تُنشر بعد)", "Preview — draft (not published)", "预览 — 草稿（尚未发布）"); flag.hidden = false; }
   }
 
   function renderPartners() {
@@ -214,7 +217,7 @@
     if (!withLogo.length) { if (sec) sec.hidden = true; return; }
     if (sec) sec.hidden = false;
     el.innerHTML = withLogo.map(function (p) {
-      var label = esc(isAr() ? p.ar : p.en);
+      var label = esc(L(p.ar, p.en, p.zh));
       return '<span class="partner-logo"><img src="' + esc(p.logo) + '" alt="' + label + '" title="' + label + '" loading="lazy"></span>';
     }).join("");
   }
@@ -237,7 +240,7 @@
   function relabelStats() {
     statEls.forEach(function (node, i) {
       var lbl = node.querySelector(".stat__label");
-      if (lbl) lbl.textContent = isAr() ? STATS[i].labelAr : STATS[i].labelEn;
+      if (lbl) lbl.textContent = L(STATS[i].labelAr, STATS[i].labelEn, STATS[i].labelZh);
     });
   }
 
@@ -297,9 +300,11 @@
 
     function label() {
       var toDark = current() !== "dark";
-      return isAr()
-        ? (toDark ? "الوضع الداكن" : "الوضع الفاتح")
-        : (toDark ? "Dark mode" : "Light mode");
+      return L(
+        toDark ? "الوضع الداكن" : "الوضع الفاتح",
+        toDark ? "Dark mode" : "Light mode",
+        toDark ? "深色模式" : "浅色模式"
+      );
     }
     function render() {
       btn.innerHTML = current() === "dark" ? SUN : MOON;
@@ -360,7 +365,7 @@
   /* ----- روابط التواصل العامة (واتساب/بريد في الهيدر/الفوتر) ----- */
   function wireContactLinks() {
     document.querySelectorAll("[data-wa]").forEach(function (a) {
-      var msg = isAr() ? "مرحبًا RYLIST، لديّ استفسار." : "Hello RYLIST, I have an inquiry.";
+      var msg = L("مرحبًا RYLIST، لديّ استفسار.", "Hello RYLIST, I have an inquiry.", "你好 RYLIST，我有一个咨询。");
       a.setAttribute("href", waLink(msg));
     });
     document.querySelectorAll("[data-email]").forEach(function (a) {

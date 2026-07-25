@@ -28,10 +28,14 @@
     html.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
 
     document.querySelectorAll("[data-en]").forEach(function (el) {
-      el.textContent = lang === "ar" ? (origText.get(el) || el.textContent) : el.getAttribute("data-en");
+      el.textContent = lang === "ar" ? (origText.get(el) || el.textContent)
+        : lang === "zh" ? (el.getAttribute("data-zh") || el.getAttribute("data-en"))
+        : el.getAttribute("data-en");
     });
     document.querySelectorAll("[data-en-ph]").forEach(function (el) {
-      el.setAttribute("placeholder", lang === "ar" ? (origPh.get(el) || "") : el.getAttribute("data-en-ph"));
+      el.setAttribute("placeholder", lang === "ar" ? (origPh.get(el) || "")
+        : lang === "zh" ? (el.getAttribute("data-zh-ph") || el.getAttribute("data-en-ph"))
+        : el.getAttribute("data-en-ph"));
     });
 
     // زر التبديل يعرض اللغة الأخرى
