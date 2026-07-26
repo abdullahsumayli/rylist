@@ -19,5 +19,12 @@ export function applyContent(root, maps, locale) {
     root.querySelectorAll("[data-cms-img]").forEach((el) => {
       el.setAttribute("style", `background-image:url('${safeCssUrl(img)}')`);
     });
+    // الـ <link rel=preload> لازم يطابق الصورة المعروضة فعليًا؛ وإلا حمّل المتصفح
+    // صورة HTML الافتراضية بلا استخدام (تنزيل مهدور يضرّ الـ LCP).
+    // نحذف type لأن رابط الأدمن قد يكون jpg/png وليس webp.
+    root.querySelectorAll("[data-cms-preload]").forEach((el) => {
+      el.setAttribute("href", String(img));
+      el.removeAttribute("type");
+    });
   }
 }
