@@ -14,15 +14,22 @@ const SUPABASE_ANON_KEY =
 
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const lang = () => (document.documentElement.getAttribute("lang") === "en" ? "en" : "ar");
+const lang = () => {
+  const l = document.documentElement.getAttribute("lang");
+  return l === "en" ? "en" : l === "zh" ? "zh" : "ar";
+};
 const isAr = () => lang() === "ar";
 
 /* ----- النصوص (عربي/إنجليزي) ----- */
 const T = {
-  priceOnRequest: { ar: "السعر عند الطلب", en: "Price on request" },
-  error: { ar: "عذراً، صار خطأ. جرّب مرة ثانية.", en: "Sorry, something went wrong. Please try again." },
+  priceOnRequest: { ar: "السعر عند الطلب", en: "Price on request", zh: "价格面议" },
+  error: {
+    ar: "عذراً، صار خطأ. جرّب مرة ثانية.",
+    en: "Sorry, something went wrong. Please try again.",
+    zh: "抱歉，出了点问题，请再试一次。",
+  },
 };
-const tr = (k) => T[k][isAr() ? "ar" : "en"];
+const tr = (k) => T[k][lang()] || T[k].en;
 
 function esc(s) {
   return String(s == null ? "" : s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));

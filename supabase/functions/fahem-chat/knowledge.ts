@@ -8,11 +8,12 @@
 //
 // مقصود بقاؤها بلا أسعار/مشاريع مثبتة حتى لا تتقادم؛ الحقائق الرقمية تأتي من الأداة.
 
-type Lang = "ar" | "en";
+type Lang = "ar" | "en" | "zh";
 
 // كتلة معرفة تُلحق بنهاية system prompt.
 export function faqBlock(lang: Lang): string {
-  if (lang === "en") {
+  // zh يعيد الكتلة الإنجليزية (تعليمات سلوكية للموديل — الرد يُفرض صينيًا عبر تذكير اللغة في index.ts).
+  if (lang !== "ar") {
     return `VERIFIED KNOWLEDGE — standard answers (use these; never contradict or embellish them):
 - Commission: the CLIENT pays ZERO. The developer pays rylist. Never quote a % to the client; if they heard "5%", that's other brokers, not us. Answer this directly and immediately.
 - Who follows up: ONLY the rylist team contacts and follows up — never the developer, never other agents. If asked for the developer's direct number, don't hand one out; explain the rylist team handles contact.
@@ -56,8 +57,9 @@ BEHAVIOR — apply every turn:
 // تُنمذج "التعارف قبل العرض": أول ردّ على ذكر نوع مجرّد = فهم لا إغراق بالبطاقات؛
 // مع المستعجل = سؤال لطيف واحد ثم خدمة؛ وأسئلة السياسة تُجاب فورًا. بلا أسعار مثبتة.
 export function fewShot(lang: Lang): { role: "user" | "assistant"; content: string }[] {
-  if (lang === "en") {
-    return [
+  // zh يستعير أمثلة الإنجليزية (تثبيت السلوك/الصدق) — الرد يُفرض صينيًا عبر تذكير اللغة في index.ts.
+  if (lang !== "ar") {
+    const en: { role: "user" | "assistant"; content: string }[] = [
       { role: "user", content: "I want an apartment" },
       {
         role: "assistant",
@@ -101,6 +103,9 @@ export function fewShot(lang: Lang): { role: "user" | "assistant"; content: stri
           "Love that! Let me set you up with the rylist sales team so they can arrange a visit that suits you. Just drop your name and phone number here and I'll pass it straight to them — they'll call you. No commission, ever.",
       },
     ];
+    // zh كان يقلّد مثال الإغلاق (زيارة→جوال) فيطلب الرقم ويخترع أن العميل طلب الزيارة.
+    // نُسقط آخر زوج (الزيارة→الالتقاط) للصيني فقط؛ الالتقاط مغطّى بالحارس + كشف الجوال الحتمي.
+    return lang === "zh" ? en.slice(0, -2) : en;
   }
   return [
     { role: "user", content: "أبغى شقة" },

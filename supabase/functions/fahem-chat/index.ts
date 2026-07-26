@@ -16,35 +16,35 @@ const MAX_TURNS = 40; // سقف طول السجل الوارد (حماية إس�
 const MAX_CONTENT = 4000; // سقف طول كل رسالة.
 const MAX_LOOP = 6; // سقف لفّات الأدوات لكل طلب.
 
-type Lang = "ar" | "en";
+type Lang = "ar" | "en" | "zh";
 
-// خرائط تسمية خفيفة (المفاتيح كما في الجدول → عربي/إنجليزي).
-const CITY: Record<string, { ar: string; en: string }> = {
-  riyadh: { ar: "الرياض", en: "Riyadh" },
-  jeddah: { ar: "جدة", en: "Jeddah" },
-  dammam: { ar: "الدمام", en: "Dammam" },
-  makkah: { ar: "مكة", en: "Makkah" },
-  madinah: { ar: "المدينة", en: "Madinah" },
+// خرائط تسمية خفيفة (المفاتيح كما في الجدول → عربي/إنجليزي/صيني).
+const CITY: Record<string, { ar: string; en: string; zh: string }> = {
+  riyadh: { ar: "الرياض", en: "Riyadh", zh: "利雅得" },
+  jeddah: { ar: "جدة", en: "Jeddah", zh: "吉达" },
+  dammam: { ar: "الدمام", en: "Dammam", zh: "达曼" },
+  makkah: { ar: "مكة", en: "Makkah", zh: "麦加" },
+  madinah: { ar: "المدينة", en: "Madinah", zh: "麦地那" },
 };
-const TYPE: Record<string, { ar: string; en: string }> = {
-  villa: { ar: "فيلا", en: "Villa" },
-  apartment: { ar: "شقة", en: "Apartment" },
-  townhouse: { ar: "تاون هاوس", en: "Townhouse" },
-  land: { ar: "أرض", en: "Land" },
-  offplan: { ar: "على الخارطة", en: "Off-plan" },
+const TYPE: Record<string, { ar: string; en: string; zh: string }> = {
+  villa: { ar: "فيلا", en: "Villa", zh: "别墅" },
+  apartment: { ar: "شقة", en: "Apartment", zh: "公寓" },
+  townhouse: { ar: "تاون هاوس", en: "Townhouse", zh: "联排别墅" },
+  land: { ar: "أرض", en: "Land", zh: "土地" },
+  offplan: { ar: "على الخارطة", en: "Off-plan", zh: "期房" },
 };
 // الأنواع الصالحة للبحث (offplan حالة لا نوع سكني — يُستبعد من enum الأداة).
 const SEARCH_TYPES = ["apartment", "villa", "townhouse", "land"];
 
-function label(map: Record<string, { ar: string; en: string }>, key: string, lang: Lang): string {
+function label(map: Record<string, { ar: string; en: string; zh: string }>, key: string, lang: Lang): string {
   return map[key]?.[lang] || key || "";
 }
 
 // صياغة قائمة طبيعية: ["الرياض","جدة"] → "الرياض وجدة".
 function joinList(items: string[], lang: Lang): string {
   if (items.length <= 1) return items[0] || "";
-  const sep = lang === "ar" ? "، " : ", ";
-  const and = lang === "ar" ? " و" : " and ";
+  const sep = lang === "ar" ? "، " : lang === "zh" ? "、" : ", ";
+  const and = lang === "ar" ? " و" : lang === "zh" ? "和" : " and ";
   return items.slice(0, -1).join(sep) + and + items[items.length - 1];
 }
 
@@ -69,11 +69,11 @@ async function inventoryFacts(admin: any, lang: Lang): Promise<Facts> {
 
 // استخراج حتمي لنوع العقار من نص العميل (بلا نموذج) — مضمون، أهم من ذكاء الموديل.
 const TYPE_HINTS: { key: string; re: RegExp }[] = [
-  { key: "townhouse", re: /تاون\s*هاوس|تاونهاوس|town\s*house|townhouse/i },
-  { key: "offplan", re: /على\s*الخارطة|أوف\s*بلان|off.?plan|تحت\s*الإنشاء/i },
-  { key: "apartment", re: /شق[ةق]|apartment|flat/i },
-  { key: "villa", re: /فيلا|فلل|فله|villa/i },
-  { key: "land", re: /أرض|ارض|أراضي|اراضي|قطعة\s*أرض|\bland\b|plot/i },
+  { key: "townhouse", re: /تاون\s*هاوس|تاونهاوس|town\s*house|townhouse|联排/i },
+  { key: "offplan", re: /على\s*الخارطة|أوف\s*بلان|off.?plan|تحت\s*الإنشاء|期房|楼花/i },
+  { key: "apartment", re: /شق[ةق]|apartment|flat|公寓/i },
+  { key: "villa", re: /فيلا|فلل|فله|villa|别墅/i },
+  { key: "land", re: /أرض|ارض|أراضي|اراضي|قطعة\s*أرض|\bland\b|plot|土地/i },
 ];
 function detectType(text: string): string | undefined {
   for (const h of TYPE_HINTS) if (h.re.test(text)) return h.key;
@@ -83,6 +83,9 @@ function detectType(text: string): string | undefined {
 // استخراج ميزانية تقريبية (budget_max) — محافظ: عند الشك لا يُرجع شيئًا.
 function detectBudget(text: string): { budget_max?: number } {
   const t = text.replace(/[٠-٩]/g, (d) => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)));
+  // صيني: "٨٠万"=800,000 · "١٠٠万"=1,000,000 (万 = ١٠٬٠٠٠).
+  const wan = t.match(/(\d+(?:\.\d+)?)\s*万/);
+  if (wan) return { budget_max: Math.round(parseFloat(wan[1]) * 10000) };
   if (/مليونين/.test(t)) return { budget_max: 2000000 };
   if (/مليون\s*و?\s*(نص|نصف)/.test(t)) return { budget_max: 1500000 };
   if (/مليون/.test(t)) return { budget_max: 1000000 };
@@ -130,26 +133,37 @@ function detectContact(text: string): { phone?: string; name?: string } {
 // الافتتاحية الحتمية — ترحيب بشري + تعارف قبل أي عرض. تسأل عن الشخص لا عن العقار.
 // بلا نداء نموذج (سريعة وثابتة النبرة).
 function opening(lang: Lang, _facts: Facts): { message: string } {
-  return lang === "en"
-    ? {
-        message:
-          "Hey, welcome! I'm Fahem from rylist, and it's a real pleasure to help you. Before we dive into listings and numbers, I'd love to get to know you first — what should I call you? And what's got you thinking about property these days?",
-      }
-    : {
-        message:
-          "هلا والله، حيّاك الله! أنا فاهم من rylist، ويشرّفني أكون في خدمتك. بس قبل ما ندخل في العروض والأرقام، حاب أتعرّف عليك أول — وش أناديك؟ وإيش اللي مخلّيك تفكّر بالعقار هالفترة؟",
-      };
+  if (lang === "en")
+    return {
+      message:
+        "Hey, welcome! I'm Fahem from rylist, and it's a real pleasure to help you. Before we dive into listings and numbers, I'd love to get to know you first — what should I call you? And what's got you thinking about property these days?",
+    };
+  if (lang === "zh")
+    return {
+      message:
+        "您好，欢迎！我是 rylist 的置业顾问「Fahem」，很高兴为您服务。在我们聊具体房源和价格之前，我想先认识一下您——请问怎么称呼您？最近是什么让您开始考虑置业呢？",
+    };
+  return {
+    message:
+      "هلا والله، حيّاك الله! أنا فاهم من rylist، ويشرّفني أكون في خدمتك. بس قبل ما ندخل في العروض والأرقام، حاب أتعرّف عليك أول — وش أناديك؟ وإيش اللي مخلّيك تفكّر بالعقار هالفترة؟",
+  };
 }
 
 // رسالة احتياطية لو أخرجت أداة منهِية نصًا فارغًا.
 function fallbackMsg(lang: Lang): string {
-  return lang === "en" ? "How can I help you further?" : "كيف أقدر أساعدك أكثر؟";
+  return lang === "en" ? "How can I help you further?" : lang === "zh" ? "我还能帮您做些什么呢？" : "كيف أقدر أساعدك أكثر؟";
 }
 
 function systemPrompt(lang: Lang, facts: Facts): string {
-  const uiLang = lang === "ar" ? "Arabic" : "English";
-  const cities = joinList(facts.cities, lang) || (lang === "ar" ? "الرياض" : "Riyadh");
-  const types = facts.types.length ? joinList(facts.types, lang) : lang === "ar" ? "لا شيء حاليًا" : "none right now";
+  const uiLang = lang === "ar" ? "Arabic" : lang === "zh" ? "Simplified Chinese (简体中文)" : "English";
+  const cities = joinList(facts.cities, lang) || (lang === "ar" ? "الرياض" : lang === "zh" ? "利雅得" : "Riyadh");
+  const types = facts.types.length
+    ? joinList(facts.types, lang)
+    : lang === "ar"
+      ? "لا شيء حاليًا"
+      : lang === "zh"
+        ? "暂时没有"
+        : "none right now";
   return `You are "فاهم" (Fahem), a warm, genuinely HUMAN real-estate advisor for rylist. Talk like a real Saudi person would — natural Gulf/Najdi dialect, relaxed and kind, never scripted or robotic. Users almost always write ARABIC. Reply in their language (fallback: ${uiLang}), in plain text.
 
 WHO YOU ARE — this matters more than anything below:
@@ -314,11 +328,13 @@ Deno.serve(async (req) => {
   let lang: Lang = "ar";
   try {
     const body = await req.json();
-    lang = body.language === "en" ? "en" : "ar";
+    lang = body.language === "en" ? "en" : body.language === "zh" ? "zh" : "ar";
     const genericError =
       lang === "ar"
         ? "عذراً، صار خطأ من عندنا. جرّب مرة ثانية بعد شوي."
-        : "Sorry, something went wrong on our side. Please try again.";
+        : lang === "zh"
+          ? "抱歉，我们这边出了点问题，请稍后再试。"
+          : "Sorry, something went wrong on our side. Please try again.";
 
     const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
 
@@ -345,17 +361,23 @@ Deno.serve(async (req) => {
 
     // 3) حقائق المخزون تُحقن في البرومبت وتغني نتيجة البحث الفارغة (صدق بلا اختراع).
     const facts = await inventoryFacts(admin, lang);
-    const cityStr = joinList(facts.cities, lang) || (lang === "ar" ? "الرياض" : "Riyadh");
+    const cityStr = joinList(facts.cities, lang) || (lang === "ar" ? "الرياض" : lang === "zh" ? "利雅得" : "Riyadh");
     const foundMsg = (n: number) =>
       lang === "ar"
         ? n === 1
           ? `أبشر! لقيت لك مشروعًا يناسب طلبك في ${cityStr}:`
           : `أبشر! هذي ${n} مشاريع تناسب طلبك في ${cityStr}:`
-        : `Here ${n > 1 ? "are" : "is"} ${n} matching project${n > 1 ? "s" : ""} in ${cityStr}:`;
+        : lang === "zh"
+          ? n === 1
+            ? `好的！我在${cityStr}为您找到一个符合需求的项目：`
+            : `好的！这是${cityStr}符合您需求的 ${n} 个项目：`
+          : `Here ${n > 1 ? "are" : "is"} ${n} matching project${n > 1 ? "s" : ""} in ${cityStr}:`;
     const noMatchMsg =
       lang === "ar"
         ? "ما لقيت مطابق تمامًا لطلبك — جرّب نطاق ميزانية أوسع أو نوع ثاني."
-        : "I couldn't find an exact match — try a wider budget or a different type.";
+        : lang === "zh"
+          ? "我没有找到完全匹配的房源——可以试试放宽预算或换一种房型。"
+          : "I couldn't find an exact match — try a wider budget or a different type.";
 
     const lastUser =
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -366,7 +388,7 @@ Deno.serve(async (req) => {
     if (contact.phone) {
       try {
         await admin.from("leads").insert({
-          name: contact.name || (lang === "ar" ? "عميل من المحادثة" : "Chat lead"),
+          name: contact.name || (lang === "ar" ? "عميل من المحادثة" : lang === "zh" ? "对话客户" : "Chat lead"),
           phone: contact.phone,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           message: [...history].filter((m: any) => m.role === "user").map((m: any) => m.content).join(" | ").slice(0, 1000),
@@ -381,7 +403,9 @@ Deno.serve(async (req) => {
         message:
           lang === "ar"
             ? `تم${who}! سجّلنا طلبك وفريق rylist بيتواصل معك قريب على ${contact.phone}. تحب تعطيني تفاصيل أكثر عن العقار اللي يهمك؟`
-            : `Done${contact.name ? `, ${contact.name}` : ""}! We saved your request and the rylist team will reach out soon on ${contact.phone}. Want to tell me more about what you're looking for?`,
+            : lang === "zh"
+              ? `好的${contact.name ? `，${contact.name}` : ""}！我们已记录您的需求，rylist 团队会尽快通过 ${contact.phone} 与您联系。想再多告诉我一些您关注的房产细节吗？`
+              : `Done${contact.name ? `, ${contact.name}` : ""}! We saved your request and the rylist team will reach out soon on ${contact.phone}. Want to tell me more about what you're looking for?`,
       });
     }
 
@@ -411,7 +435,9 @@ Deno.serve(async (req) => {
         message:
           lang === "ar"
             ? `للأسف ما عندنا ${notAvail} حاليًا في ${cityStr}. المتوفر عندنا: ${inStock}. تحب أعرض لك المتوفر؟`
-            : `Sorry, we don't have ${notAvail} right now in ${cityStr}. What we do have: ${inStock}. Want me to show it?`,
+            : lang === "zh"
+              ? `很抱歉，我们目前在${cityStr}没有${notAvail}。现有的房型是：${inStock}。需要我给您看看现有的吗？`
+              : `Sorry, we don't have ${notAvail} right now in ${cityStr}. What we do have: ${inStock}. Want me to show it?`,
         quickReplies: facts.types.slice(0, 5),
       };
     } else if (detType) {
@@ -437,6 +463,13 @@ Deno.serve(async (req) => {
     for (const turn of history) messages.push({ role: turn.role, content: turn.content });
     // حقنة صدق فقط عند فجوة مخزون (لا حقائق عرض مسبقة — الموديل يبحث بنفسه لما يجهز).
     if (honestyNote) messages.push({ role: "system", content: honestyNote });
+    // تذكير لغة صارم للزائر الصيني — الأمثلة قد تكون إنجليزية، لكن الرد يجب أن يكون صينيًا.
+    if (lang === "zh")
+      messages.push({
+        role: "system",
+        content:
+          "The current user is browsing rylist in Chinese. You MUST reply ONLY in natural, warm, polite Simplified Chinese (简体中文) — regardless of the language of any examples above. Keep project names, districts, and prices EXACTLY as the tool returns them. GUARD (applies here too): do NOT ask for the user's name or phone number, and NEVER claim they asked to visit or to be contacted, UNLESS they themselves explicitly asked to move forward in THIS conversation. If they only asked a question or described what they want, end with a warm question — never with a request for contact details.",
+      });
 
     // 4) حلقة الأدوات — لو فشل الذكاء نرجع fallback الحتمي بدل خطأ عام.
     //    البطاقات تظهر فقط لما الموديل يستدعي search_inventory (بعد ما يفهم العميل).
@@ -469,11 +502,13 @@ Deno.serve(async (req) => {
             if (reqType && facts.typeKeys.length && !facts.typeKeys.includes(reqType)) {
               const notAvail = label(TYPE, reqType, lang);
               const have = joinList(facts.types, lang);
-              const cityStr = joinList(facts.cities, lang) || (lang === "ar" ? "الرياض" : "Riyadh");
+              const cityStr = joinList(facts.cities, lang) || (lang === "ar" ? "الرياض" : lang === "zh" ? "利雅得" : "Riyadh");
               response.message =
                 lang === "ar"
                   ? `للأسف ما عندنا ${notAvail} حاليًا في ${cityStr}. المتوفر عندنا: ${have}. تحب أعرض لك المتوفر؟`
-                  : `Sorry, we don't have ${notAvail} right now in ${cityStr}. What we do have: ${have}. Want me to show it?`;
+                  : lang === "zh"
+                    ? `很抱歉，我们目前在${cityStr}没有${notAvail}。现有的房型是：${have}。需要我给您看看现有的吗？`
+                    : `Sorry, we don't have ${notAvail} right now in ${cityStr}. What we do have: ${have}. Want me to show it?`;
               response.quickReplies = facts.types.slice(0, 5);
               return json(response);
             }
@@ -503,7 +538,7 @@ Deno.serve(async (req) => {
             const outLabels = new Set(
               Object.keys(TYPE)
                 .filter((k) => !facts.typeKeys.includes(k))
-                .flatMap((k) => [TYPE[k].ar, TYPE[k].en]),
+                .flatMap((k) => [TYPE[k].ar, TYPE[k].en, TYPE[k].zh]),
             );
             const rawOpts = Array.isArray(args.options) ? (args.options as string[]) : [];
             const kept = rawOpts.filter((o) => !outLabels.has(String(o).trim()));
@@ -529,7 +564,9 @@ Deno.serve(async (req) => {
       response.message = response.properties?.length
         ? lang === "ar"
           ? "هذي أبرز المشاريع المطابقة. تحب تفاصيل أكثر عن مشروع منها؟"
-          : "Here are the top matching projects. Want more details on any of them?"
+          : lang === "zh"
+            ? "以下是最匹配的几个项目。想了解其中哪个的更多详情吗？"
+            : "Here are the top matching projects. Want more details on any of them?"
         : genericError;
     }
     return json(response);
@@ -544,7 +581,9 @@ Deno.serve(async (req) => {
       message:
         lang === "ar"
           ? "عذراً، صار خطأ من عندنا. جرّب مرة ثانية بعد شوي."
-          : "Sorry, something went wrong on our side. Please try again.",
+          : lang === "zh"
+            ? "抱歉，我们这边出了点问题，请稍后再试。"
+            : "Sorry, something went wrong on our side. Please try again.",
     });
   }
 });
