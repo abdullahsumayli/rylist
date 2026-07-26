@@ -41,7 +41,7 @@ function localizeHtml(html, locale, dir, siteUrl, pageName, content, theme){
 export function renderPages(out, c, siteUrl){
   const locales = c.locales; // مفعّلة فقط
   const content = {
-    text: { ...(c.home?.i18n || {}), ...(c.chrome?.i18n || {}) },
+    text: { ...(c.home?.i18n || {}), ...(c.chrome?.i18n || {}), ...(c.about?.i18n || {}) },
     heroImage: c.home?.hero_image_url || "",
   };
   const theme = resolveTheme(c.theme || {});

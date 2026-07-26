@@ -67,3 +67,44 @@ test("renderPages overlays DB text over the data-en default for en", () => {
     assert.doesNotMatch(html, />Old EN</);
   });
 });
+
+function withTempPage(filename, html, run) {
+  const cwd = process.cwd();
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "rylist-rp-"));
+  process.chdir(dir);
+  try {
+    fs.writeFileSync(filename, html);
+    run(dir);
+  } finally {
+    process.chdir(cwd);
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+}
+
+const ABOUT_SRC = `<!doctype html><html lang="ar" dir="rtl"><head>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond&display=swap" rel="stylesheet">
+</head><body>
+<h1 data-cms="about_title" data-en="Old EN">قديم</h1>
+</body></html>`;
+
+test("renderPages overlays about_content onto about.html", () => {
+  withTempPage("about.html", ABOUT_SRC, (dir) => {
+    const out = path.join(dir, "dist");
+    renderPages(out, {
+      locales: [{ code: "ar", dir: "rtl" }],
+      home: {}, chrome: {}, theme: {},
+      about: { i18n: { about_title: { ar: "من نحن الجديد" } } },
+    }, "https://rylist.sa");
+    const html = fs.readFileSync(path.join(out, "about.html"), "utf8");
+    assert.match(html, /من نحن الجديد/);
+  });
+});
+
+test("renderPages keeps about.html default when about_content empty", () => {
+  withTempPage("about.html", ABOUT_SRC, (dir) => {
+    const out = path.join(dir, "dist");
+    renderPages(out, { locales: [{ code: "ar", dir: "rtl" }], home: {}, chrome: {}, theme: {} }, "https://rylist.sa");
+    const html = fs.readFileSync(path.join(out, "about.html"), "utf8");
+    assert.match(html, /قديم/);
+  });
+});

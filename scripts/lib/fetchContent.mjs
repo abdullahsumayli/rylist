@@ -9,10 +9,10 @@ export async function fetchContent(){
     grab("partners","sort_order"), grab("stats","sort_order"), grab("social_links","sort_order"),
   ]);
   const single = async (t) => (await sb.from(t).select("*").eq("id", 1).maybeSingle()).data || {};
-  const [contact, home, chrome, theme] = await Promise.all([
-    single("contact"), single("home_content"), single("site_chrome"), single("site_theme"),
+  const [contact, home, chrome, theme, about] = await Promise.all([
+    single("contact"), single("home_content"), single("site_chrome"), single("site_theme"), single("about_content"),
   ]);
   const pages = Object.fromEntries(((await sb.from("pages").select("*")).data||[]).map(p=>[p.key,p.i18n]));
   return { locales: locales.filter(l=>l.enabled), taxonomies, projects, news, partners, stats,
-           social: social.filter(s=>s.enabled), contact, pages, home, chrome, theme };
+           social: social.filter(s=>s.enabled), contact, pages, home, chrome, theme, about };
 }
