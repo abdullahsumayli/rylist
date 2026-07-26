@@ -47,7 +47,6 @@ function fmtPrice(min, max) {
 /* ----- الحالة ----- */
 let started = false;
 let loading = false;
-let interestCode = null; // مشروع أبدى العميل اهتمامًا به (لربط الـ lead).
 const msgs = []; // [{ role, content, quickReplies?, properties? }]
 
 // جوال سعودي مكتوب داخل الشات (05xxxxxxxx أو +9665…) — الالتقاط يتم في edge بالخدمة،
@@ -117,7 +116,6 @@ function history() {
 }
 
 async function startChat() {
-  interestCode = null;
   setLoading(true);
   try {
     const { data, error } = await sb.functions.invoke("fahem-chat", { body: { language: lang(), start: true } });
@@ -155,7 +153,6 @@ async function send(text) {
 }
 
 function pushAssistant(data) {
-  if (data && data.projectCode) interestCode = data.projectCode;
   msgs.push({
     role: "assistant",
     content: (data && data.message) || "",
@@ -182,7 +179,7 @@ function bubble(role, content) {
 
 function propertyCardHtml(p) {
   const img = p.image_url
-    ? '<div class="fahem-card__media"><img loading="lazy" src="' + esc(p.image_url) + '" alt="' + esc(p.title) + '"></div>'
+    ? '<div class="fahem-card__media"><img loading="lazy" src="' + esc(p.image_url) + '" alt="' + esc(p.title) + '" onerror="this.parentElement.style.display=\'none\'"></div>'
     : "";
   const loc = [p.district, p.city].filter(Boolean).map(esc).join(isAr() ? "، " : ", ");
   return (
