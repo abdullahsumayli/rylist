@@ -217,6 +217,18 @@
   .field textarea{resize:vertical;min-height:104px;line-height:1.9}
   /* صندوق المقال: كبير ويتمدّد تلقائيًا ليعرض المقال كاملًا */
   .field textarea.richbody{min-height:360px;overflow:hidden;resize:none}
+  /* محرّر المقال الغني: شريط أدوات + منطقة تحرير */
+  .rte{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
+  .rte__bar{display:flex;flex-wrap:wrap;gap:4px;padding:6px;border-bottom:1px solid var(--line);background:var(--surface-2,var(--surface))}
+  .rte__tabletools{display:flex;flex-wrap:wrap;gap:4px;padding:6px;border-bottom:1px dashed var(--line);background:var(--surface)}
+  .rte__btn{padding:5px 10px;border-radius:7px;font-size:13px;font-weight:600;color:var(--text);border:1px solid var(--line);background:var(--surface);cursor:pointer}
+  .rte__btn:hover{background:var(--surface-2,var(--line))}
+  .rte__area{min-height:360px;padding:14px 16px;line-height:1.9;color:var(--text);outline:none;overflow:auto}
+  .rte__area:focus{box-shadow:inset 0 0 0 2px var(--line)}
+  .rte__area table{border-collapse:collapse;width:100%;margin:10px 0}
+  .rte__area th,.rte__area td{border:1px solid var(--line);padding:6px 8px;min-width:40px}
+  .rte__area img{max-width:100%;height:auto;border-radius:8px;margin:8px 0}
+  .rte__area:empty::before{content:attr(data-ph);color:var(--text-2)}
   .langtabs{display:flex;gap:4px;margin-bottom:2px}
   .langtabs button{padding:5px 13px;border-radius:7px;font-size:12.5px;font-weight:600;color:var(--text-2);border:1px solid transparent}
   .langtabs button.on{background:var(--text);color:var(--surface)}
