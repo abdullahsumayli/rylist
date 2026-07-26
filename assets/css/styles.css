@@ -352,6 +352,13 @@ html[lang="ar"] .badge { font-family: var(--font-ar-body); letter-spacing: 0; te
 .adetail__body ul, .adetail__body ol { margin: 0 0 var(--sp-4); padding-inline-start: 1.5em; }
 .adetail__body li { margin-bottom: var(--sp-2); }
 .adetail__body a { color: var(--gold-deep); }
+.adetail__body img, .adetail__body .adetail__img { max-width: 100%; height: auto; border-radius: 10px; margin: var(--sp-4) 0; display: block; }
+.adetail__body figure { margin: var(--sp-4) 0; }
+.adetail__body figcaption { font-size: 0.9rem; color: var(--text-mid); margin-top: var(--sp-2); text-align: center; }
+.adetail__body table { border-collapse: collapse; width: 100%; margin: var(--sp-4) 0; font-size: 0.98rem; }
+.adetail__body th, .adetail__body td { border: 1px solid var(--line, #e5e5e5); padding: var(--sp-2) var(--sp-3); text-align: start; }
+.adetail__body thead th { background: var(--bg-soft, #f6f6f6); font-weight: 600; }
+.adetail__body blockquote { margin: var(--sp-4) 0; padding-inline-start: var(--sp-4); border-inline-start: 3px solid var(--gold-deep); color: var(--text-mid); }
 /* project gallery + css-only lightbox */
 .pgallery h2 { font-size: 1.3rem; margin-bottom: var(--sp-4); }
 .pgallery__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--sp-3); }

@@ -1,6 +1,7 @@
 import { sb } from "./db.js";
 import { LOCALES } from "./config.js";
 import { makeSlug } from "./slug.js";
+import { richEditor } from "./richeditor.js";
 
 // taxonomy cache (cities / property types) for select fields
 let TAX = null;
@@ -18,35 +19,48 @@ const tabLabel = (code) => (code === "ar" ? "ع" : code === "en" ? "EN" : "中�
 
 // per-locale editor with language tabs (ع / EN / 中文)
 // returns { el, current(), setText(loc,text) }
+// حقل المقال (i18n-rich) يستخدم محرّرًا غنيًّا (صور/جداول/روابط)؛ بقيّة الحقول input عادي.
 export function localeTabs(field, value, onLocale) {
   const wrap = document.createElement("div");
   const tabs = document.createElement("div"); tabs.className = "langtabs";
   const pane = document.createElement("div");
   let cur = LOCALES[0].code;
-  let ta = null;
   const rich = field.t === "i18n-rich";
-  // يوسّع صندوق المقال تلقائيًا ليعرض النص كاملًا دون سكرول داخلي
-  const autosize = () => { if (rich && ta) { ta.style.height = "auto"; ta.style.height = (ta.scrollHeight + 2) + "px"; } };
+  let ctl = null;   // current control: { get, set }
+
   const draw = () => {
     pane.innerHTML = "";
-    ta = rich ? document.createElement("textarea") : document.createElement("input");
-    if (rich) { ta.rows = 16; ta.className = "richbody"; }
-    ta.value = (value && value[cur]) || "";
-    ta.oninput = () => { onLocale(cur, ta.value); autosize(); };
-    pane.appendChild(ta);
-    requestAnimationFrame(autosize);
+    const loc = cur;   // اربط هذا المحرّر بلغته وقت الإنشاء — لا بـ cur المتغيّر
+    if (rich) {        // (يمنع أن يكتب رفعُ صورة مؤجّل نتيجتَه في اللغة الخطأ بعد تبديل التبويب)
+      const ed = richEditor({ table: "news" });
+      ed.setHTML((value && value[loc]) || "");
+      // contenteditable يُطلق "input" ويصعد للعنصر الحاوي — نلتقطه لمزامنة المسودة
+      ed.el.addEventListener("input", () => onLocale(loc, ed.getHTML()));
+      pane.appendChild(ed.el);
+      ctl = { get: () => ed.getHTML(), set: (v) => ed.setHTML(v) };
+    } else {
+      const inp = document.createElement("input");
+      inp.value = (value && value[loc]) || "";
+      inp.oninput = () => onLocale(loc, inp.value);
+      pane.appendChild(inp);
+      ctl = { get: () => inp.value, set: (v) => { inp.value = v; } };
+    }
   };
+
   LOCALES.forEach((L) => {
     const b = document.createElement("button"); b.type = "button"; b.textContent = tabLabel(L.code);
     if (L.code === cur) b.classList.add("on");
-    b.onclick = () => { cur = L.code; [...tabs.children].forEach((c) => c.classList.remove("on")); b.classList.add("on"); draw(); };
+    b.onclick = () => {
+      if (ctl) onLocale(cur, ctl.get());              // احفظ اللغة الحالية قبل التبديل
+      cur = L.code; [...tabs.children].forEach((c) => c.classList.remove("on")); b.classList.add("on"); draw();
+    };
     tabs.appendChild(b);
   });
   wrap.append(tabs, pane); draw();
   return {
     el: wrap,
     current: () => cur,
-    setText: (loc, text) => { onLocale(loc, text); if (loc === cur && ta) { ta.value = text; autosize(); } },
+    setText: (loc, text) => { onLocale(loc, text); if (loc === cur && ctl) ctl.set(text); },
   };
 }
 

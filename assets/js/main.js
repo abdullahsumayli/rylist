@@ -169,11 +169,40 @@
      صفحة معاينة للمسوّدة قبل النشر فقط — تعرض المسوّدة (من ذاكرة المتصفّح) بنفس
      شكل صفحة المقال المنشورة (adetail). المقالات المنشورة لها صفحات ثابتة
      news/<slug>.html يبنيها scripts/lib/newsPages.mjs. */
-  // يطابق formatBody في scripts/lib/renderArticle.mjs: نص عادي → فقرات؛ HTML يُترك كما هو.
+  /* ===== منقّي HTML (نفس قائمة السماح في scripts/lib/sanitizeHtml.mjs) ===== */
+  var SAN_ALLOWED = { p:1,h2:1,h3:1,h4:1,ul:1,ol:1,li:1,a:1,img:1,table:1,thead:1,tbody:1,tr:1,td:1,th:1,strong:1,em:1,b:1,i:1,br:1,figure:1,figcaption:1,blockquote:1 };
+  var SAN_DROP = { script:1, style:1 };
+  var SAN_VOID = { img:1, br:1 };
+  function sanUrl(v, re) { v = String(v || "").trim(); return re.test(v) ? v : ""; }
+  function sanClass(v) { return String(v || "").split(/\s+/).filter(function (c) { return c.indexOf("adetail__") === 0; }).join(" "); }
+  function sanWalk(node) {
+    if (node.nodeType === 3) return esc(node.nodeValue);
+    if (node.nodeType !== 1) return "";
+    var tag = node.tagName.toLowerCase();
+    if (SAN_DROP[tag]) return "";
+    var inner = ""; for (var i = 0; i < node.childNodes.length; i++) inner += sanWalk(node.childNodes[i]);
+    if (!SAN_ALLOWED[tag]) return inner;                              // unwrap unknown tags
+    var attrs = "";
+    var cls = sanClass(node.getAttribute("class")); if (cls) attrs += ' class="' + esc(cls) + '"';
+    if (tag === "a") { var h = sanUrl(node.getAttribute("href"), /^(https?:|mailto:)/i); if (h) attrs += ' href="' + esc(h) + '"'; attrs += ' target="_blank" rel="noopener nofollow"'; }
+    if (tag === "img") { var s2 = sanUrl(node.getAttribute("src"), /^(https?:|data:image\/)/i); if (s2) attrs += ' src="' + esc(s2) + '"'; attrs += ' alt="' + esc(node.getAttribute("alt") || "") + '"'; }
+    if (tag === "td" || tag === "th") { ["colspan", "rowspan"].forEach(function (k) { var v = node.getAttribute(k); if (v && /^\d+$/.test(v)) attrs += ' ' + k + '="' + esc(v) + '"'; }); }
+    if (SAN_VOID[tag]) return "<" + tag + attrs + ">";
+    return "<" + tag + attrs + ">" + inner + "</" + tag + ">";
+  }
+  function sanitizeHtml(html) {
+    var s = String(html || "").trim(); if (!s) return "";
+    var doc = new DOMParser().parseFromString(s, "text/html");
+    var out = ""; var kids = doc.body.childNodes;
+    for (var i = 0; i < kids.length; i++) out += sanWalk(kids[i]);
+    return out;
+  }
+
+  // يطابق formatBody في scripts/lib/renderArticle.mjs: نص عادي → فقرات؛ HTML يُنقّى.
   function formatBody(raw, title) {
     var s = String(raw || "").trim();
     if (!s) return "";
-    if (/<(p|h[1-6]|ul|ol|div|br)\b/i.test(s)) return s;              // HTML جاهز — اتركه
+    if (/<\/?[a-z][a-z0-9]*[\s/>]/i.test(s)) return sanitizeHtml(s);  // أي وسم HTML (بلوك أو سطري) — نقّه
     var lines = s.split("\n");
     if (title && lines[0].trim() === String(title).trim()) lines.shift();  // أسقط سطر العنوان المكرّر
     s = lines.join("\n").trim();
