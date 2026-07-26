@@ -33,6 +33,16 @@ test("formatBody passes through existing HTML and escapes stray < & in plain tex
   assert.equal(formatBody("", "t"), "");
 });
 
+test("formatBody sanitizes HTML bodies (drops script, adds link rel)", () => {
+  const out = formatBody('<p>hi</p><script>alert(1)</script><a href="https://x.com">L</a>', "t");
+  assert.doesNotMatch(out, /<script>/);
+  assert.match(out, /<a href="https:\/\/x\.com" target="_blank" rel="noopener nofollow">L<\/a>/);
+});
+
+test("formatBody still wraps legacy plain text in paragraphs", () => {
+  assert.equal(formatBody("one\n\ntwo", "t"), "<p>one</p><p>two</p>");
+});
+
 test("heroHtml renders a figure only when an image is present", () => {
   assert.match(heroHtml("https://x/h.jpg", "alt"), /<figure class="pdetail__hero"><img src="https:\/\/x\/h\.jpg" alt="alt">/);
   assert.equal(heroHtml("", "alt"), "");

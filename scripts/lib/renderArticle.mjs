@@ -4,6 +4,7 @@
 
 import { tr, fill, FAHEM, fahemHref } from "./renderProject.mjs";
 import { excerptFrom } from "./dataJs.mjs";
+import { sanitizeHtml } from "./sanitizeHtml.mjs";
 
 const BACK = { ar: "عودة إلى المدونة", en: "Back to blog", zh: "返回博客" };
 
@@ -27,7 +28,7 @@ export function heroHtml(image, alt) {
 export function formatBody(raw, title) {
   let s = String(raw || "").trim();
   if (!s) return "";
-  if (/<(p|h[1-6]|ul|ol|div|br)\b/i.test(s)) return s;              // already HTML — leave it
+  if (/<(p|h[1-6]|ul|ol|div|br|table|img|a|blockquote|figure)\b/i.test(s)) return sanitizeHtml(s);  // HTML — sanitize
   const lines = s.split("\n");
   if (title && lines[0].trim() === String(title).trim()) lines.shift();   // drop duplicated title
   s = lines.join("\n").trim();
