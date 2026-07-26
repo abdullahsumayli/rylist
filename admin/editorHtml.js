@@ -40,7 +40,10 @@ export function tsvToTableHtml(tsv) {
 export function plainTextToHtml(text) {
   const s = String(text || "").trim();
   if (!s) return "";
-  if (/<(p|h[1-6]|ul|ol|div|br|table|img|a|blockquote|figure)\b/i.test(s)) return s;
+  // Any HTML tag (block OR inline like <b>/<em>) means it's already editor HTML —
+  // leave it. A lone "<" in legacy plain text (e.g. "price < 5M") is followed by a
+  // space, not a letter, so it correctly stays plain text.
+  if (/<\/?[a-z][a-z0-9]*[\s/>]/i.test(s)) return s;
   return s.split(/\n\s*\n/)
     .map((p) => `<p>${escapeHtml(p.trim()).replace(/\n/g, "<br>")}</p>`)
     .join("");

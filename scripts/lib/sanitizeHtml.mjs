@@ -48,8 +48,9 @@ function attrsFor(tag, attrs) {
 }
 
 function walk(node) {
-  // text node
-  if (node.nodeType === 3) return escText(node.rawText);
+  // text node — use decoded text (node.text), NOT node.rawText: rawText keeps
+  // existing entities encoded ("Q&amp;A"), so re-escaping would double-encode.
+  if (node.nodeType === 3) return escText(node.text);
   // element node
   if (node.nodeType === 1) {
     const tag = String(node.rawTagName || "").toLowerCase();

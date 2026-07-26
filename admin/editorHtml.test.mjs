@@ -39,3 +39,13 @@ test("plainTextToHtml wraps blocks in <p>, single newline -> <br>", () => {
 test("plainTextToHtml leaves existing block HTML untouched", () => {
   assert.equal(plainTextToHtml("<p>hi</p>"), "<p>hi</p>");
 });
+
+test("plainTextToHtml leaves inline-only editor HTML untouched (no re-escaping)", () => {
+  assert.equal(plainTextToHtml("hello <b>world</b>"), "hello <b>world</b>");
+  assert.equal(plainTextToHtml("<em>x</em> and <a href=\"https://a.com\">y</a>"),
+    "<em>x</em> and <a href=\"https://a.com\">y</a>");
+});
+
+test("plainTextToHtml still treats a lone '<' in plain text as text", () => {
+  assert.equal(plainTextToHtml("price < 5 million"), "<p>price &lt; 5 million</p>");
+});

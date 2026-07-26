@@ -28,7 +28,7 @@ export function heroHtml(image, alt) {
 export function formatBody(raw, title) {
   let s = String(raw || "").trim();
   if (!s) return "";
-  if (/<(p|h[1-6]|ul|ol|div|br|table|img|a|blockquote|figure)\b/i.test(s)) return sanitizeHtml(s);  // HTML — sanitize
+  if (/<\/?[a-z][a-z0-9]*[\s/>]/i.test(s)) return sanitizeHtml(s);  // any HTML tag (block or inline) — sanitize
   const lines = s.split("\n");
   if (title && lines[0].trim() === String(title).trim()) lines.shift();   // drop duplicated title
   s = lines.join("\n").trim();

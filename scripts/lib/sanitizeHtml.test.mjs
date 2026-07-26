@@ -47,6 +47,10 @@ test("escapes stray angle brackets and ampersands in text", () => {
   assert.equal(sanitizeHtml("a < b & c"), "a &lt; b &amp; c");
 });
 
+test("does not double-encode existing entities (editor stores innerHTML)", () => {
+  assert.equal(sanitizeHtml("<p>Q&amp;A &lt;x&gt;</p>"), "<p>Q&amp;A &lt;x&gt;</p>");
+});
+
 test("empty / nullish input returns empty string", () => {
   assert.equal(sanitizeHtml(""), "");
   assert.equal(sanitizeHtml(null), "");

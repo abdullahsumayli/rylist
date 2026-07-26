@@ -202,7 +202,7 @@
   function formatBody(raw, title) {
     var s = String(raw || "").trim();
     if (!s) return "";
-    if (/<(p|h[1-6]|ul|ol|div|br|table|img|a|blockquote|figure)\b/i.test(s)) return sanitizeHtml(s);  // HTML — نقّه
+    if (/<\/?[a-z][a-z0-9]*[\s/>]/i.test(s)) return sanitizeHtml(s);  // أي وسم HTML (بلوك أو سطري) — نقّه
     var lines = s.split("\n");
     if (title && lines[0].trim() === String(title).trim()) lines.shift();  // أسقط سطر العنوان المكرّر
     s = lines.join("\n").trim();

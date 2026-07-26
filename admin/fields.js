@@ -30,17 +30,18 @@ export function localeTabs(field, value, onLocale) {
 
   const draw = () => {
     pane.innerHTML = "";
-    if (rich) {
+    const loc = cur;   // اربط هذا المحرّر بلغته وقت الإنشاء — لا بـ cur المتغيّر
+    if (rich) {        // (يمنع أن يكتب رفعُ صورة مؤجّل نتيجتَه في اللغة الخطأ بعد تبديل التبويب)
       const ed = richEditor({ table: "news" });
-      ed.setHTML((value && value[cur]) || "");
+      ed.setHTML((value && value[loc]) || "");
       // contenteditable يُطلق "input" ويصعد للعنصر الحاوي — نلتقطه لمزامنة المسودة
-      ed.el.addEventListener("input", () => onLocale(cur, ed.getHTML()));
+      ed.el.addEventListener("input", () => onLocale(loc, ed.getHTML()));
       pane.appendChild(ed.el);
       ctl = { get: () => ed.getHTML(), set: (v) => ed.setHTML(v) };
     } else {
       const inp = document.createElement("input");
-      inp.value = (value && value[cur]) || "";
-      inp.oninput = () => onLocale(cur, inp.value);
+      inp.value = (value && value[loc]) || "";
+      inp.oninput = () => onLocale(loc, inp.value);
       pane.appendChild(inp);
       ctl = { get: () => inp.value, set: (v) => { inp.value = v; } };
     }
