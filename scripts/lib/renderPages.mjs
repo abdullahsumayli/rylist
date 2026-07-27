@@ -14,8 +14,13 @@ function localizeHtml(html, locale, dir, siteUrl, pageName, content, theme){
       else { el.set_content(el.getAttribute(`data-${locale}`)); }
     });
     root.querySelectorAll(`[data-${locale}-ph]`).forEach(el=>{ el.setAttribute("placeholder", el.getAttribute(`data-${locale}-ph`)); });
+  }
+  // overlay DB content (after locale swap so DB overrides the per-language default)
+  applyContent(root, content, locale);
+  if(locale !== "ar"){
     // localized pages live under /<locale>/, so root-relative assets must be made absolute
-    // (page-to-page links like "projects.html" stay relative and resolve within /<locale>/)
+    // (page-to-page links like "projects.html" stay relative and resolve within /<locale>/).
+    // Runs AFTER applyContent so a relative path typed into the admin is normalized too.
     root.querySelectorAll("[href],[src]").forEach(el=>{
       ["href","src"].forEach(attr=>{
         const v = el.getAttribute(attr);
@@ -31,8 +36,6 @@ function localizeHtml(html, locale, dir, siteUrl, pageName, content, theme){
       if(abs !== v) el.setAttribute("style", abs);
     });
   }
-  // overlay DB content (after locale swap so DB overrides the per-language default)
-  applyContent(root, content, locale);
   // hreflang + canonical
   const head = root.querySelector("head");
   // theme: swap the Google Fonts link + override CSS variables

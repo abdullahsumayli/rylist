@@ -2,6 +2,7 @@ import { sb } from "./db.js";
 import { LOCALES } from "./config.js";
 import { makeSlug } from "./slug.js";
 import { richEditor } from "./richeditor.js";
+import { checkImageSpec } from "./imageSpec.js";
 
 // taxonomy cache (cities / property types) for select fields
 let TAX = null;
@@ -72,8 +73,7 @@ export async function uploadImage(prefix, file) {
   return sb.storage.from("media").getPublicUrl(path).data.publicUrl;
 }
 
-// حجم مقروء (KB/MB) + قياس أبعاد الصورة — للتحقّق من مواصفات الشعار قبل الرفع
-function fmtBytes(n) { return n >= 1048576 ? (n / 1048576).toFixed(1) + " MB" : Math.round(n / 1024) + " KB"; }
+// قياس أبعاد الصورة — للتحقّق من مواصفات الحقل قبل الرفع (الحجم المقروء في imageSpec.js)
 function imageDims(file) {
   return new Promise((res) => {
     const url = URL.createObjectURL(file); const img = new Image();
@@ -142,16 +142,13 @@ export async function renderForm(root, ent, row, onDone) {
       };
       up.onchange = async () => {
         const file = up.files[0]; if (!file) return;
-        // تحقّق من مواصفات الحقل (شعار الشركاء مثلًا) قبل الرفع، ونبّه المستخدم إن تجاوزها
+        // تحقّق من مواصفات الحقل (شعار الشركاء، صورة الهيرو…) قبل الرفع، ونبّه المستخدم إن تجاوزها
         if (f.spec) {
           const dims = f.t === "image" ? await imageDims(file) : { w: 0, h: 0 };
-          const overSize = f.spec.maxKB && file.size > f.spec.maxKB * 1024;
-          const overDim = f.spec.maxW && dims.w && (dims.w > f.spec.maxW || dims.h > f.spec.maxH);
-          if (overSize || overDim) {
-            const has = ["حجمه " + fmtBytes(file.size)]; if (dims.w) has.push("أبعاده " + dims.w + "×" + dims.h + "px");
-            const need = []; if (f.spec.maxKB) need.push("≤ " + f.spec.maxKB + "KB"); if (f.spec.recW) need.push("~" + f.spec.recW + "×" + f.spec.recH + "px");
+          const bad = checkImageSpec(f.spec, file.size, dims);
+          if (bad) {
             status.hidden = false; status.className = "uploadstatus is-warn";
-            status.textContent = "⚠ هذا الشعار " + has.join(" و") + ". المطلوب " + need.join(" و") + " — صغّره أو صدّره SVG قبل الرفع. ";
+            status.textContent = "⚠ " + (f.l || "الملف") + ": " + bad.has + ". المطلوب " + bad.need + " — عدّله قبل الرفع. ";
             const go = document.createElement("button"); go.type = "button"; go.className = "warngo"; go.textContent = "ارفعه على أي حال";
             go.onclick = () => doUpload(file); status.appendChild(go);
             return;

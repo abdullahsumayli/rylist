@@ -35,7 +35,9 @@ export const ENTITIES = [
   { key:"pages", label:"الصفحات", table:"pages", order:"key", pk:"key", title:"key", fields:[
     {n:"i18n.title",t:"i18n-text",l:"العنوان"},{n:"i18n.body",t:"i18n-rich",l:"النص"} ]},
   { key:"home_content", label:"الرئيسية", table:"home_content", order:"id", single:true, title:"id", fields:[
-    {n:"hero_image_url",t:"image",l:"صورة خلفية الهيرو"},
+    {n:"hero_image_url",t:"image",l:"صورة خلفية الهيرو",
+      hint:"صورة عريضة JPG أو WebP · ~1600×900px (العرض 1200px فأكثر) · أقصى حجم 600KB · اتركه فارغًا لاستخدام صورة الموقع الافتراضية",
+      spec:{maxKB:600,minW:1200,recW:1600,recH:900}},
     {n:"i18n.hero_title",t:"i18n-text",l:"الهيرو — العنوان"},
     {n:"i18n.hero_lead",t:"i18n-rich",l:"الهيرو — الوصف"},
     {n:"i18n.hero_cta1",t:"i18n-text",l:"الهيرو — زر رئيسي"},

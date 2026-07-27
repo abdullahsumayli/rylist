@@ -115,6 +115,48 @@ test("renderPages: admin hero image wins over the relative-url rewrite", () => {
   });
 });
 
+// حقل الصورة في لوحة التحكم مربّع نصّي حر، فقد يُكتب فيه مسار نسبي بدل رابط
+// مطلق. لازم يمرّ على نفس تصحيح المسارات، وإلا انكسر الهيرو في /en/ و/zh/.
+test("renderPages root-relativizes a RELATIVE admin hero url for non-ar", () => {
+  withTempIndex(HERO_SRC, (dir) => {
+    const out = path.join(dir, "dist");
+    renderPages(out, {
+      locales: [{ code: "en", dir: "ltr" }],
+      home: { hero_image_url: "assets/img/custom-hero.jpg" }, chrome: {}, theme: {},
+    }, "https://rylist.sa");
+    const html = fs.readFileSync(path.join(out, "en", "index.html"), "utf8");
+    assert.match(html, /background-image:url\('\/assets\/img\/custom-hero\.jpg'\)/);
+    assert.match(html, /href="\/assets\/img\/custom-hero\.jpg"/);
+    assert.doesNotMatch(html, /url\('assets\//);
+  });
+});
+
+test("renderPages leaves a relative admin hero url alone for ar", () => {
+  withTempIndex(HERO_SRC, (dir) => {
+    const out = path.join(dir, "dist");
+    renderPages(out, {
+      locales: [{ code: "ar", dir: "rtl" }],
+      home: { hero_image_url: "assets/img/custom-hero.jpg" }, chrome: {}, theme: {},
+    }, "https://rylist.sa");
+    const html = fs.readFileSync(path.join(out, "index.html"), "utf8");
+    assert.match(html, /background-image:url\('assets\/img\/custom-hero\.jpg'\)/);
+    assert.match(html, /href="assets\/img\/custom-hero\.jpg"/);
+  });
+});
+
+test("renderPages never rewrites an absolute admin hero url", () => {
+  withTempIndex(HERO_SRC, (dir) => {
+    const out = path.join(dir, "dist");
+    renderPages(out, {
+      locales: [{ code: "en", dir: "ltr" }],
+      home: { hero_image_url: "https://cdn.supabase.co/media/home/1-hero.jpg" }, chrome: {}, theme: {},
+    }, "https://rylist.sa");
+    const html = fs.readFileSync(path.join(out, "en", "index.html"), "utf8");
+    assert.match(html, /url\('https:\/\/cdn\.supabase\.co\/media\/home\/1-hero\.jpg'\)/);
+    assert.match(html, /href="https:\/\/cdn\.supabase\.co\/media\/home\/1-hero\.jpg"/);
+  });
+});
+
 function withTempPage(filename, html, run) {
   const cwd = process.cwd();
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "rylist-rp-"));
