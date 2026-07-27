@@ -22,6 +22,14 @@ function localizeHtml(html, locale, dir, siteUrl, pageName, content, theme){
         if(v && /^(assets\/|favicon\.svg)/.test(v)) el.setAttribute(attr, "/"+v);
       });
     });
+    // CSS resolves url() inside a `style` attribute against the PAGE url, so a
+    // relative asset there would 404 under /<locale>/ — the [href],[src] pass
+    // above never reaches it. Keeps the preload and the background in sync.
+    root.querySelectorAll("[style]").forEach(el=>{
+      const v = el.getAttribute("style");
+      const abs = v.replace(/url\((['"]?)(assets\/[^'")]+)\1\)/g, (_,q,p)=> `url(${q}/${p}${q})`);
+      if(abs !== v) el.setAttribute("style", abs);
+    });
   }
   // overlay DB content (after locale swap so DB overrides the per-language default)
   applyContent(root, content, locale);

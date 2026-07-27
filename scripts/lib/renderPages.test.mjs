@@ -68,6 +68,53 @@ test("renderPages overlays DB text over the data-en default for en", () => {
   });
 });
 
+const HERO_SRC = `<!doctype html><html lang="ar" dir="rtl"><head>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/img/hero-najdi.webp" type="image/webp" data-cms-preload="hero">
+</head><body>
+<div data-cms-img="hero" style="background-image:url('assets/img/hero-najdi.jpg');background-image:image-set(url('assets/img/hero-najdi.webp') type('image/webp'), url('assets/img/hero-najdi.jpg') type('image/jpeg'))"></div>
+</body></html>`;
+
+// localized pages live under /<locale>/, so a relative url() inside `style` would
+// resolve to /en/assets/... — the CSS background must be made root-relative too,
+// exactly like the [href],[src] pass, or the hero 404s on every non-ar page.
+test("renderPages makes style url() root-relative for non-ar locales", () => {
+  withTempIndex(HERO_SRC, (dir) => {
+    const out = path.join(dir, "dist");
+    renderPages(out, { locales: [{ code: "en", dir: "ltr" }], home: {}, chrome: {}, theme: {} }, "https://rylist.sa");
+    const html = fs.readFileSync(path.join(out, "en", "index.html"), "utf8");
+    assert.match(html, /url\('\/assets\/img\/hero-najdi\.jpg'\)/);
+    assert.match(html, /image-set\(url\('\/assets\/img\/hero-najdi\.webp'\) type\('image\/webp'\)/);
+    assert.doesNotMatch(html, /url\('assets\//); // ما بقي أي مسار نسبي
+    // الـ preload لازم يطابق ما تحمّله CSS فعلًا
+    assert.match(html, /href="\/assets\/img\/hero-najdi\.webp"/);
+  });
+});
+
+test("renderPages leaves style url() relative for ar (page sits at the root)", () => {
+  withTempIndex(HERO_SRC, (dir) => {
+    const out = path.join(dir, "dist");
+    renderPages(out, { locales: [{ code: "ar", dir: "rtl" }], home: {}, chrome: {}, theme: {} }, "https://rylist.sa");
+    const html = fs.readFileSync(path.join(out, "index.html"), "utf8");
+    assert.match(html, /url\('assets\/img\/hero-najdi\.jpg'\)/);
+    assert.match(html, /href="assets\/img\/hero-najdi\.webp"/);
+  });
+});
+
+test("renderPages: admin hero image wins over the relative-url rewrite", () => {
+  withTempIndex(HERO_SRC, (dir) => {
+    const out = path.join(dir, "dist");
+    renderPages(out, {
+      locales: [{ code: "en", dir: "ltr" }],
+      home: { hero_image_url: "https://cdn/admin-hero.png" }, chrome: {}, theme: {},
+    }, "https://rylist.sa");
+    const html = fs.readFileSync(path.join(out, "en", "index.html"), "utf8");
+    assert.match(html, /background-image:url\('https:\/\/cdn\/admin-hero\.png'\)/);
+    assert.match(html, /href="https:\/\/cdn\/admin-hero\.png"/);
+    assert.doesNotMatch(html, /hero-najdi/); // ما فيه تنزيل مهدور
+  });
+});
+
 function withTempPage(filename, html, run) {
   const cwd = process.cwd();
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "rylist-rp-"));
