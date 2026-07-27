@@ -436,9 +436,15 @@ html[lang="ar"] .stat__num { font-family: var(--font-ar-display); }
 
 /* ----- 15. شركاء النجاح ------------------------------------------------- */
 /* شريط الشركاء: شعارات حقيقية فقط، مركزية، ملوّنة وظاهرة دائمًا */
-.partners-logos { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 2.5rem 3rem; margin-top: var(--sp-5); }
-.partner-logo { display: inline-flex; align-items: center; }
-.partner-logo img { max-height: 52px; max-width: 220px; width: auto; height: auto; object-fit: contain; }
+.partners-logos { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 1.5rem 1.75rem; margin-top: var(--sp-5); }
+/* صندوق واحد بمقاس ثابت لكل شعار: بلا هذا يصطدم الشعار العريض (ريبورتاج 420×81)
+   بحدّ العرض بينما يصطدم الباقي بحدّ الارتفاع، فيطلع بضعف حجمهم. box-sizing
+   يُدخل حشوة اللوحة الليلية داخل الصندوق فيبقى الصفّ بنفس العرض في الوضعين. */
+.partner-logo {
+  display: inline-flex; align-items: center; justify-content: center;
+  box-sizing: border-box; width: clamp(84px, 9vw, 124px); height: 48px;
+}
+.partner-logo img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
 
 /* ----- 16. الأخبار / الرؤى ---------------------------------------------- */
 .article-card { display: flex; flex-direction: column; gap: var(--sp-3); }
@@ -1159,11 +1165,11 @@ html[lang="ar"] .faq__q { font-family: var(--font-ar-display); }
 /* شعارات الشركاء وصلت بألوان داكنة على خلفية شفافة، فتذوب في السطح الليلي.
    نضع لوحة فاتحة خلفها في الوضع الداكن فقط — الوضع الفاتح لا يحتاجها. */
 :root[data-theme="dark"] .partner-logo {
-  background: #f3efe6; border-radius: 12px; padding: 0.5rem 0.85rem;
+  background: #f3efe6; border-radius: 12px; padding: 5px 9px;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) .partner-logo {
-    background: #f3efe6; border-radius: 12px; padding: 0.5rem 0.85rem;
+    background: #f3efe6; border-radius: 12px; padding: 5px 9px;
   }
 }
 
