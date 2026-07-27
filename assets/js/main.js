@@ -25,6 +25,9 @@
     code: { ar: "كود", en: "Code", zh: "编号" },
     readMore: { ar: "اقرأ المزيد", en: "Read more", zh: "阅读更多" },
     none: { ar: "لا توجد مشاريع مطابقة للفلاتر الحالية.", en: "No projects match the current filters.", zh: "没有符合当前筛选条件的项目。" },
+    // مدينة مختارة بلا مشاريع بعد — رسالة «قريبًا» بدل «لا توجد نتائج»
+    soonCity: { ar: "مشاريعنا في هذه المدينة قريبًا. تواصل معنا ونرشّح لك الأنسب.", en: "Our projects in this city are coming soon. Get in touch and we’ll suggest the best fit.", zh: "我们在该城市的项目即将推出。请联系我们，我们会为您推荐最合适的选择。" },
+    contactUs: { ar: "تواصل معنا", en: "Contact us", zh: "联系我们" },
     count: { ar: "مشروع", en: "projects", zh: "个项目" }
   };
   function t(k) { return L(T[k].ar, T[k].en, T[k].zh); }
@@ -144,11 +147,30 @@
     var grid = document.getElementById("projectsGrid");
     if (!grid) return;
     var list = filteredProjects();
-    grid.innerHTML = list.length
-      ? list.map(projectCard).join("")
-      : '<div class="empty-state">' + t("none") + '</div>';
+    // مدينة محدّدة بلا مشاريع: «قريبًا» + دعوة للتواصل، لا «لا توجد نتائج» الجافّة
+    var f = currentFilters();
+    var cityOnly = f.city !== "all" && f.type === "all" && f.status === "all";
+    var emptyHtml = cityOnly
+      ? '<div class="empty-state">' + esc(t("soonCity")) +
+          '<div class="btn-row" style="justify-content:center"><a class="btn btn--primary" href="contact.html">' + esc(t("contactUs")) + '</a></div>' +
+        '</div>'
+      : '<div class="empty-state">' + esc(t("none")) + '</div>';
+    grid.innerHTML = list.length ? list.map(projectCard).join("") : emptyHtml;
     var count = document.getElementById("projCount");
     if (count) count.textContent = list.length + " " + t("count");
+  }
+
+  /* ----- تمرير الفلاتر عبر الرابط (شرائح المدن في الرئيسية → صفحة المشاريع) ----- */
+  function initFiltersFromUrl() {
+    if (!document.getElementById("projectsGrid")) return;
+    var q = new URLSearchParams(location.search);
+    [["city", "filterCity"], ["type", "filterType"], ["status", "filterStatus"]].forEach(function (pair) {
+      var val = q.get(pair[0]);
+      if (!val) return;
+      var el = document.getElementById(pair[1]);
+      // لا نضبط إلا قيمة موجودة فعلًا في القائمة (يمنع فلترًا فارغًا من رابط خاطئ)
+      if (el && Array.prototype.some.call(el.options, function (o) { return o.value === val; })) el.value = val;
+    });
   }
 
   function renderFeatured() {
@@ -243,7 +265,15 @@
     if (!el) return;
     var withLogo = PARTNERS.filter(function (p) { return p.logo; });
     var sec = el.closest ? el.closest("section") : null;
-    if (!withLogo.length) { if (sec) sec.hidden = true; return; }
+    // بلا شعارات: يبقى شريط الثقة ظاهرًا بنص بديل بدل أن يختفي القسم كلّه
+    var fallback = document.getElementById("partnersFallback");
+    if (!withLogo.length) {
+      el.innerHTML = "";
+      if (fallback) { fallback.hidden = false; if (sec) sec.hidden = false; return; }
+      if (sec) sec.hidden = true;
+      return;
+    }
+    if (fallback) fallback.hidden = true;
     if (sec) sec.hidden = false;
     el.innerHTML = withLogo.map(function (p) {
       var label = esc(L(p.ar, p.en, p.zh));
@@ -256,6 +286,9 @@
   function renderStats() {
     var el = document.getElementById("statsGrid");
     if (!el) return;
+    // بلا أرقام: أخفِ الشريط كليًا وإلا بقي خطّ فاصل معلّق بلا محتوى
+    el.hidden = !STATS.length;
+    if (!STATS.length) { el.innerHTML = ""; statEls = []; return; }
     el.innerHTML = STATS.map(function (s, i) {
       return '<div class="stat">' +
         '<div class="stat__num" data-i="' + i + '">0</div>' +
@@ -417,7 +450,16 @@
   function initHomeSearch() {
     var f = document.getElementById("homeSearch");
     if (!f) return;
-    f.addEventListener("submit", function (e) { e.preventDefault(); location.href = "projects.html"; });
+    f.addEventListener("submit", function (e) {
+      e.preventDefault();
+      // مرّر الاختيار لصفحة المشاريع بدل تجاهله (يلتقطه initFiltersFromUrl هناك)
+      var sels = f.querySelectorAll("select");
+      var q = [];
+      ["city", "type"].forEach(function (k, i) {
+        if (sels[i] && sels[i].value && sels[i].value !== "all") q.push(k + "=" + encodeURIComponent(sels[i].value));
+      });
+      location.href = "projects.html" + (q.length ? "?" + q.join("&") : "");
+    });
   }
 
   /* ----- إعادة الرسم عند تبديل اللغة ----- */
@@ -432,7 +474,7 @@
 
   /* ----- ظهور تدريجي عند التمرير ----- */
   function initReveal() {
-    var targets = document.querySelectorAll(".section-head, .grid-3, .grid-2");
+    var targets = document.querySelectorAll(".section-head, .grid-3, .grid-2, .grid-4, .steps, .faq");
     if (!targets.length) return;
     document.documentElement.classList.add("reveal-on");
     targets.forEach(function (t) { t.setAttribute("data-reveal", ""); });
@@ -450,6 +492,7 @@
   }
 
   function boot() {
+    initFiltersFromUrl();   // قبل أول رسم حتى تُطبَّق الفلاتر القادمة من الرابط
     renderFeatured();
     renderProjectsPage();
     renderNews();

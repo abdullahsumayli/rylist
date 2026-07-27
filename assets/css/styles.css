@@ -421,7 +421,8 @@ html[lang="ar"] .project-card__price b { font-family: var(--font-ar-display); }
 }
 .filters__count { margin-inline-start: auto; font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-mid); }
 html[lang="ar"] .filters__count { font-family: var(--font-ar-body); }
-.empty-state { padding: var(--sp-16) 0; text-align: center; color: var(--text-mid); }
+/* تُحقن داخل شبكة (grid-3) فلولا امتدادها لكل الأعمدة لانحشرت في عمود واحد */
+.empty-state { grid-column: 1 / -1; padding: var(--sp-16) 0; text-align: center; color: var(--text-mid); }
 
 /* ----- 14. الإحصائيات --------------------------------------------------- */
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(1.25rem, 3vw, 2.5rem); }
@@ -1120,3 +1121,53 @@ html[lang="ar"] .hero .display { white-space: normal; width: auto; max-width: no
   .hero__inner { grid-template-columns: 1fr; }
   .hero__media { min-height: 220px; }
 }
+
+/* ==========================================================================
+   شرائح المدن (فلاتر سريعة) + الأسئلة الشائعة
+   مكوّنان جديدان بنفس لغة الأسطح الناعمة أعلاه — لا ألوان ولا خطوط جديدة.
+   ========================================================================== */
+.chips { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-bottom: clamp(1.5rem, 3vw, 2.5rem); }
+.chip {
+  display: inline-flex; align-items: center; padding: 0.6em 1.35em;
+  border-radius: 999px; background: var(--surf); color: var(--fg);
+  box-shadow: var(--raise-sm); font-size: 0.9rem; white-space: nowrap;
+  transition: box-shadow .18s ease, color .2s ease;
+}
+.chip:hover { color: var(--champ); box-shadow: var(--inset-sm); }
+.chip:active { box-shadow: var(--inset); }
+
+.faq { display: grid; gap: var(--sp-4); max-width: 78ch; }
+.faq__item {
+  background: var(--surf); border-radius: var(--nr); box-shadow: var(--raise);
+  padding: clamp(1rem, 2vw, 1.35rem) clamp(1.1rem, 2.5vw, 1.75rem);
+}
+.faq__q {
+  display: flex; align-items: center; gap: var(--sp-4); cursor: pointer; list-style: none;
+  font-family: var(--font-en-display); font-size: 1.05rem; line-height: 1.5; color: var(--fg);
+}
+html[lang="ar"] .faq__q { font-family: var(--font-ar-display); }
+.faq__q::-webkit-details-marker { display: none; }
+/* السهم فيزيائي (يمين/أسفل) ليشير للأسفل في RTL وLTR على السواء */
+.faq__q::after {
+  content: ""; flex: none; margin-inline-start: auto; width: 9px; height: 9px;
+  border-right: 2px solid var(--champ); border-bottom: 2px solid var(--champ);
+  transform: rotate(45deg) translate(-2px, -2px); transition: transform .25s ease;
+}
+.faq__item[open] .faq__q::after { transform: rotate(-135deg); }
+.faq__a { margin-top: var(--sp-3); color: var(--fg-soft); font-size: 0.95rem; line-height: 1.8; }
+
+/* شعارات الشركاء وصلت بألوان داكنة على خلفية شفافة، فتذوب في السطح الليلي.
+   نضع لوحة فاتحة خلفها في الوضع الداكن فقط — الوضع الفاتح لا يحتاجها. */
+:root[data-theme="dark"] .partner-logo {
+  background: #f3efe6; border-radius: 12px; padding: 0.5rem 0.85rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .partner-logo {
+    background: #f3efe6; border-radius: 12px; padding: 0.5rem 0.85rem;
+  }
+}
+
+/* خاصية hidden لا تكفي وحدها: أي قاعدة مؤلِّف فيها display (مثل .hero__meta{display:flex})
+   تتغلّب على [hidden]{display:none} في متصفّح المستخدم. القاعدة العامة تغني عن ترقيع
+   كل عنصر على حدة (كما حصل سابقًا مع .footer-social[hidden]). */
+[hidden] { display: none !important; }

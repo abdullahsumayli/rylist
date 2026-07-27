@@ -58,15 +58,24 @@
   <section class="hero">
     <div class="container hero__inner">
       <div class="hero__content">
-        <h1 class="display" data-cms="hero_title" data-en="Find your ideal property." data-zh="找到您理想的房产。">دور على عقارك المناسب</h1>
-        <p class="lead" data-cms="hero_lead" data-en="We bring you curated residential projects from trusted developers, with all the information you need to buy with confidence." data-zh="我们为您带来来自可信开发商的精选住宅项目，以及您自信购置所需的全部信息。">نجيب لك مشاريع سكنية مختارة من مطورين موثوقين، مع كل المعلومات التي تحتاجها لاتخاذ قرار الشراء بثقة</p>
+        <h1 class="display" data-cms="hero_title" data-en="Curated residential and investment projects from Saudi Arabia’s leading developers" data-zh="发现来自沙特领先开发商的精选住宅与投资项目">اكتشف مشاريع سكنية واستثمارية مختارة من أفضل المطورين في السعودية</h1>
+        <p class="lead" data-cms="hero_lead" data-en="RYLIST connects you with trusted real-estate projects from leading developers — clear information, smart comparisons, and an advisor beside you until you decide to buy." data-zh="RYLIST 助您接触来自领先开发商的可信房地产项目：信息清晰、对比智能，并有房产顾问陪伴至购买决策。">RYLIST تساعدك في الوصول إلى مشاريع عقارية موثوقة من كبار المطورين، مع معلومات واضحة، ومقارنات ذكية، ودعم من مستشار عقاري حتى اتخاذ قرار الشراء.</p>
         <div class="btn-row">
-          <a class="btn btn--primary" href="projects.html" data-cms="hero_cta1" data-en="Our projects" data-zh="我们的项目">مشاريعنا</a>
-          <a class="btn btn--ghost" href="contact.html" data-en="Contact us" data-zh="联系我们">تواصل معنا</a>
+          <a class="btn btn--primary" href="projects.html" data-cms="hero_cta1" data-en="Explore projects" data-zh="探索项目">استكشف المشاريع</a>
+          <a class="btn btn--ghost" href="contact.html" data-cms="hero_cta2" data-en="Talk to an advisor" data-zh="咨询顾问">تحدث مع مستشار</a>
         </div>
         <div class="hero__meta" id="statsGrid"></div>
       </div>
       <div class="hero__media" data-cms-img="hero" role="img" aria-label="عمارة نجدية معاصرة عند الغروب — مشاريع RYLIST السكنية" style="background-image:url('assets/img/hero-najdi.jpg');background-image:image-set(url('assets/img/hero-najdi.webp') type('image/webp'), url('assets/img/hero-najdi.jpg') type('image/jpeg'))"></div>
+    </div>
+  </section>
+
+  <!-- شريط الثقة — الشركاء -->
+  <section class="section section--tight">
+    <div class="container center">
+      <span class="eyebrow" data-cms="partners_eyebrow" data-en="Our partners" data-zh="我们的合作伙伴">شركاؤنا</span>
+      <div id="partnersGrid" class="partners-logos"></div>
+      <p class="muted" id="partnersFallback" data-cms="partners_fallback" data-en="We work with a select group of licensed real-estate developers in Saudi Arabia." data-zh="我们与沙特阿拉伯一批持牌房地产开发商合作。" hidden>نعمل مع نخبة من المطورين العقاريين المرخصين في المملكة العربية السعودية.</p>
     </div>
   </section>
 
@@ -78,6 +87,10 @@
         <select aria-label="City" data-en-label="City">
           <option value="all" data-en="All cities" data-zh="所有城市">كل المدن</option>
           <option value="riyadh" data-en="Riyadh" data-zh="利雅得">الرياض</option>
+          <option value="jeddah" data-en="Jeddah" data-zh="吉达">جدة</option>
+          <option value="eastern" data-en="Eastern Province" data-zh="东部省">الخبر</option>
+          <option value="makkah" data-en="Makkah" data-zh="麦加">مكة</option>
+          <option value="madinah" data-en="Madinah" data-zh="麦地那">المدينة</option>
         </select>
         <select aria-label="Type">
           <option value="all" data-en="All types" data-zh="所有类型">كل الأنواع</option>
@@ -92,71 +105,160 @@
     </div>
   </section>
 
-  <!-- الخدمات -->
+  <!-- لماذا RYLIST -->
   <section class="section">
     <div class="container">
       <div class="section-head">
-        <span class="eyebrow" data-cms="svc_eyebrow" data-en="What we do" data-zh="我们做什么">خدماتنا</span>
-        <h2 data-cms="svc_head" data-en="Everything you need to choose your property." data-zh="选择房产所需的一切。">كل الي تحتاجه عشان تختار عقارك</h2>
+        <span class="eyebrow" data-cms="why_eyebrow" data-en="What sets us apart" data-zh="我们的不同之处">ما يميّزنا</span>
+        <h2 data-cms="why_head" data-en="Why RYLIST?" data-zh="为什么选择 RYLIST？">لماذا RYLIST؟</h2>
+      </div>
+      <div class="grid grid-4">
+        <div class="service-card">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 5h16M7 12h10M10 19h4"/></svg>
+          <span class="num">01</span>
+          <h3 data-cms="why1_title" data-en="Curated projects" data-zh="精选项目">مشاريع مختارة</h3>
+          <p data-cms="why1_desc" data-en="We don’t list thousands of ads. We select only the projects that meet our quality and trust standards." data-zh="我们不罗列成千上万条广告，只甄选符合质量与信任标准的项目。">لا نعرض آلاف الإعلانات. نختار فقط المشاريع التي تحقق معايير الجودة والثقة.</p>
+        </div>
+        <div class="service-card">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>
+          <span class="num">02</span>
+          <h3 data-cms="why2_title" data-en="Trusted developers" data-zh="可信开发商">مطورون موثوقون</h3>
+          <p data-cms="why2_desc" data-en="Every project comes from an established, licensed developer." data-zh="所有项目均来自知名持牌开发商。">جميع المشاريع من مطورين معروفين ومرخصين.</p>
+        </div>
+        <div class="service-card">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 4v16M4 8h16"/><path d="M4 8l-2 5a3 3 0 0 0 6 0zM20 8l-2 5a3 3 0 0 0 6 0z"/></svg>
+          <span class="num">03</span>
+          <h3 data-cms="why3_title" data-en="Smart comparison" data-zh="智能对比">مقارنة ذكية</h3>
+          <p data-cms="why3_desc" data-en="Compare prices, floor plans, and features easily before you decide." data-zh="决策前轻松比较价格、户型图与配套。">قارن الأسعار والمخططات والمزايا بسهولة قبل اتخاذ قرارك.</p>
+        </div>
+        <div class="service-card">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M21 12a8 8 0 1 1-3.2-6.4"/><path d="M8 20l-4 1 1-4"/><path d="M9 11h6M9 8h6"/></svg>
+          <span class="num">04</span>
+          <h3 data-cms="why4_title" data-en="An advisor until purchase" data-zh="顾问全程陪伴">مستشار حتى الشراء</h3>
+          <p data-cms="why4_desc" data-en="Our team stays with you from your first question until the booking is complete." data-zh="我们的团队从首次咨询直至完成预订始终陪伴。">يبقى فريقنا معك من أول استفسار حتى إتمام الحجز.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- مشاريع مختارة لك -->
+  <section class="section section--bg">
+    <div class="container">
+      <div class="section-head" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;max-width:none">
+        <div>
+          <span class="eyebrow" data-cms="feat_eyebrow" data-en="Projects" data-zh="项目">المشاريع</span>
+          <h2 data-cms="feat_head" data-en="A selection chosen for you." data-zh="为您精选的项目。">مشاريع مختارة لك.</h2>
+        </div>
+        <a class="link-arrow" href="projects.html" data-cms="feat_link" data-en="All projects" data-zh="所有项目">كل المشاريع</a>
+      </div>
+      <nav class="chips" aria-label="المدن">
+        <a class="chip" href="projects.html?city=riyadh" data-cms="city_riyadh" data-en="Riyadh" data-zh="利雅得">الرياض</a>
+        <a class="chip" href="projects.html?city=jeddah" data-cms="city_jeddah" data-en="Jeddah" data-zh="吉达">جدة</a>
+        <a class="chip" href="projects.html?city=eastern" data-cms="city_eastern" data-en="Eastern Province" data-zh="东部省">الخبر</a>
+        <a class="chip" href="projects.html?city=makkah" data-cms="city_makkah" data-en="Makkah" data-zh="麦加">مكة</a>
+        <a class="chip" href="projects.html?city=madinah" data-cms="city_madinah" data-en="Madinah" data-zh="麦地那">المدينة</a>
+      </nav>
+      <div id="featuredProjects" class="grid grid-3"></div>
+    </div>
+  </section>
+
+  <!-- ماذا تبحث عنه؟ -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow" data-cms="intent_eyebrow" data-en="Start with your goal" data-zh="从您的目标开始">ابدأ من هدفك</span>
+        <h2 data-cms="intent_head" data-en="What are you looking for?" data-zh="您在寻找什么？">ماذا تبحث عنه؟</h2>
+      </div>
+      <div class="grid grid-2">
+        <a class="service-card" href="projects.html">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>
+          <h3 data-cms="intent1_title" data-en="A home to live in" data-zh="自住的家">منزل للسكن</h3>
+          <p data-cms="intent1_desc" data-en="Find the project that suits your family." data-zh="找到适合您家庭的项目。">اعثر على المشروع المناسب لعائلتك.</p>
+        </a>
+        <a class="service-card" href="contact.html">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 18l6-6 3 3 7-7"/><path d="M15 8h5v5"/></svg>
+          <h3 data-cms="intent2_title" data-en="An investment opportunity" data-zh="投资机会">فرصة استثمارية</h3>
+          <p data-cms="intent2_desc" data-en="Discover projects with promising investment returns." data-zh="发现具有可观投资回报的项目。">اكتشف المشاريع ذات العائد الاستثماري الواعد.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ما نوفّره -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow" data-cms="svc_eyebrow" data-en="What we offer" data-zh="我们提供什么">ما نوفّره</span>
+        <h2 data-cms="svc_head" data-en="The kinds of projects we choose for you." data-zh="我们为您甄选的项目类型。">أنواع المشاريع التي نختارها لك</h2>
       </div>
       <div class="grid grid-3">
         <div class="service-card">
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 21h18M6 21V8l6-4 6 4v13M10 21v-5h4v5"/></svg>
           <span class="num">01</span>
           <h3 data-cms="svc1_title" data-en="Curated residential projects" data-zh="精选住宅项目">مشاريع سكنية مختارة</h3>
-          <p data-cms="svc1_desc" data-en="Browse trusted projects with clear details that help you compare and choose the best fit." data-zh="浏览值得信赖的项目，凭借清晰的细节帮助您比较并选择最合适的。">استعرض مشاريع موثوقة مع تفاصيل واضحة تساعدك تقارن وتختار الأنسب لك</p>
+          <p data-cms="svc1_desc" data-en="Projects we’ve reviewed ourselves, with clear details that help you compare and choose." data-zh="经我们亲自审核的项目，细节清晰，助您比较与选择。">مشاريع راجعناها بأنفسنا، مع تفاصيل واضحة تساعدك تقارن وتختار.</p>
         </div>
         <div class="service-card">
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M9 20l-5.5 2V6L9 4l6 2 5.5-2v16L15 22z"/><path d="M9 4v16M15 6v16"/></svg>
           <span class="num">02</span>
           <h3 data-cms="svc2_title" data-en="Off-plan projects" data-zh="期房项目">مشاريع البيع على الخارطة</h3>
-          <p data-cms="svc2_desc" data-en="Explore licensed off-plan projects, with clear information on construction stages and ownership options." data-zh="探索持牌期房项目，提供关于建设阶段和产权选择的清晰信息。">استكشف مشاريع البيع على الخارطة المرخصة، مع معلومات واضحة عن مراحل التنفيذ وخيارات التملك</p>
+          <p data-cms="svc2_desc" data-en="Licensed off-plan projects, with clear information on construction stages and ownership." data-zh="持牌期房项目，建设阶段与产权信息清晰。">مشاريع مرخصة على الخارطة، مع معلومات واضحة عن مراحل التنفيذ والتملك.</p>
         </div>
         <div class="service-card">
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 12l9 4 9-4M3 17l9 4 9-4"/></svg>
           <span class="num">03</span>
           <h3 data-cms="svc3_title" data-en="Residential & investment land" data-zh="自住与投资地块">أراضٍ سكنية واستثمارية</h3>
-          <p data-cms="svc3_desc" data-en="A range of land options in prime locations, suited to living or investment." data-zh="位于黄金地段的多种地块选择，适合自住或投资。">خيارات متنوعة من الأراضي في مواقع مميزة تناسب السكن أو الاستثمار</p>
+          <p data-cms="svc3_desc" data-en="Selected land in prime locations, suited to living or investment." data-zh="位于黄金地段的甄选地块，适合自住或投资。">أراضٍ مختارة في مواقع مميزة تناسب السكن أو الاستثمار.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- مشاريع مميزة -->
-  <section class="section section--bg">
+  <!-- كيف تشتغل RYLIST -->
+  <section class="section section--soft">
     <div class="container">
-      <div class="section-head" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;max-width:none">
-        <div>
-          <span class="eyebrow" data-cms="feat_eyebrow" data-en="Featured projects" data-zh="精选项目">مشاريع مميزة</span>
-          <h2 data-cms="feat_head" data-en="A selection available now." data-zh="现有精选房源。">مشاريع مختارة معروضة الآن.</h2>
-        </div>
-        <a class="link-arrow" href="projects.html" data-cms="feat_link" data-en="All projects" data-zh="所有项目">كل المشاريع</a>
+      <div class="section-head">
+        <span class="eyebrow" data-cms="how_eyebrow" data-en="How it works" data-zh="运作方式">كيف تعمل</span>
+        <h2 data-cms="how_head" data-en="Five steps to booking your unit." data-zh="五步预订您的单元。">خمس خطوات حتى تحجز وحدتك.</h2>
       </div>
-      <div id="featuredProjects" class="grid grid-3"></div>
+      <div class="steps">
+        <div class="step"><span class="step__n">01</span><div><h3 data-cms="how1_title" data-en="Choose your city" data-zh="选择城市">اختر المدينة</h3><p data-cms="how1_desc" data-en="Start from the city that suits you." data-zh="从适合您的城市开始。">ابدأ من المدينة التي تناسبك.</p></div></div>
+        <div class="step"><span class="step__n">02</span><div><h3 data-cms="how2_title" data-en="Explore the projects" data-zh="探索项目">استكشف المشاريع</h3><p data-cms="how2_desc" data-en="Browse curated projects with clear information." data-zh="浏览信息清晰的精选项目。">تصفّح مشاريع مختارة بمعلومات واضحة.</p></div></div>
+        <div class="step"><span class="step__n">03</span><div><h3 data-cms="how3_title" data-en="Compare your options" data-zh="比较选择">قارن الخيارات</h3><p data-cms="how3_desc" data-en="Compare prices, floor plans, and features." data-zh="比较价格、户型图与配套。">قارن الأسعار والمخططات والمزايا.</p></div></div>
+        <div class="step"><span class="step__n">04</span><div><h3 data-cms="how4_title" data-en="Talk to an advisor" data-zh="咨询顾问">تحدث مع مستشار</h3><p data-cms="how4_desc" data-en="Ask about any detail before you decide." data-zh="决策前咨询任何细节。">اسأل عن أي تفصيل قبل قرارك.</p></div></div>
+        <div class="step"><span class="step__n">05</span><div><h3 data-cms="how5_title" data-en="Book your unit" data-zh="预订单元">احجز وحدتك</h3><p data-cms="how5_desc" data-en="We stay with you until the booking is complete." data-zh="我们陪伴您直至完成预订。">نرافقك حتى إتمام الحجز.</p></div></div>
+      </div>
     </div>
   </section>
 
-  <!-- بالشراكة مع -->
-  <section class="section section--tight">
-    <div class="container center">
-      <span class="eyebrow" data-cms="partners_eyebrow" data-en="In partnership with" data-zh="合作伙伴">بالشراكة مع</span>
-      <div id="partnersGrid" class="partners-logos"></div>
-    </div>
-  </section>
-
-  <!-- لماذا rylist -->
+  <!-- الأسئلة الشائعة -->
   <section class="section">
-    <div class="container two-col">
-      <div>
-        <span class="eyebrow" data-cms="why_eyebrow" data-en="Why RYLIST" data-zh="为什么选择 RYLIST">لماذا rylist</span>
-        <h2 data-cms="why_head" data-en="We help you choose with peace of mind." data-zh="我们助您安心选择。">نساعدك تختار وانت مرتاح</h2>
-        <p class="lead" style="margin-top:1.5rem" data-cms="why_lead" data-en="We choose projects carefully and give you clear information, so you can make a considered decision." data-zh="我们精心甄选项目并为您提供清晰的信息，助您做出深思熟虑的决定。">نختار المشاريع بعناية ونقدم لك معلومات واضحة تساعدك تاخذ قرار شراء مدروس</p>
-        <div class="btn-row"><a class="btn btn--ghost" href="about.html" data-cms="why_cta" data-en="Our approach" data-zh="我们的方式">منهجية عملنا</a></div>
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow" data-cms="faq_eyebrow" data-en="FAQ" data-zh="常见问题">أسئلة شائعة</span>
+        <h2 data-cms="faq_head" data-en="Questions buyers ask us most." data-zh="买家最常问的问题。">أكثر ما يسألنا عنه المشترون.</h2>
       </div>
-      <div class="values" style="grid-template-columns:1fr">
-        <div class="value"><span class="num">01</span><div><h3 data-cms="why1_title" data-en="Projects from trusted developers" data-zh="来自可信开发商的项目">مشاريع من مطورين موثوقين</h3><p data-cms="why1_desc" data-en="We show you selected projects for living and investment." data-zh="我们为您呈现适合自住与投资的精选项目。">نعرض لك مشاريع مختارة تلبي احتياجات السكن والاستثمار</p></div></div>
-        <div class="value"><span class="num">02</span><div><h3 data-cms="why2_title" data-en="Real-estate market expertise" data-zh="房地产市场专业知识">خبرة بالسوق العقاري</h3><p data-cms="why2_desc" data-en="We help you compare options and understand prices before you buy." data-zh="我们帮您在购置前比较选择、了解价格。">نساعدك على مقارنة الخيارات وفهم الأسعار قبل ما تشتري</p></div></div>
-        <div class="value"><span class="num">03</span><div><h3 data-cms="why3_title" data-en="Information before you own" data-zh="拥有之前，先有信息">معلومات تساعدك قبل التملك</h3><p data-cms="why3_desc" data-en="We provide clear information on every project we trust." data-zh="对于我们信赖的每个项目，我们都提供清晰的信息。">نوفر لك معلومات واضحة عن كل مشروع نثق فيه</p></div></div>
+      <div class="faq">
+        <details class="faq__item">
+          <summary class="faq__q" data-cms="faq1_q" data-en="Is using RYLIST free?" data-zh="使用 RYLIST 免费吗？">هل استخدام RYLIST مجاني؟</summary>
+          <p class="faq__a" data-cms="faq1_a" data-en="Browsing projects and consulting with us is always free. On some projects the developer covers the commission, so the buyer pays nothing; on others a buyer commission applies — and we tell you clearly before any step." data-zh="浏览项目与咨询我们始终免费。部分项目由开发商承担佣金，买方无需支付；部分项目则需买方支付佣金——我们会在任何步骤之前向您明确说明。">تصفّح المشاريع والاستشارة معنا مجانيان دائمًا. بعض المشاريع بدون أي عمولة على المشتري لأن المطور يتحمّلها، وبعضها فيه عمولة على المشتري نوضّحها لك بصراحة قبل أي خطوة.</p>
+        </details>
+        <details class="faq__item">
+          <summary class="faq__q" data-cms="faq2_q" data-en="Are the prices the same as the developer’s?" data-zh="价格与开发商的一致吗？">هل الأسعار هي نفس أسعار المطور؟</summary>
+          <p class="faq__a" data-cms="faq2_a" data-en="Yes. The price you buy at is the developer’s official price, with no markup from us." data-zh="是的。您的购买价格即开发商的官方价格，我们不加价。">نعم. السعر الذي تشتري به هو السعر الرسمي المعتمد من المطور، بدون أي زيادة من طرفنا.</p>
+        </details>
+        <details class="faq__item">
+          <summary class="faq__q" data-cms="faq3_q" data-en="Can I buy from outside Saudi Arabia?" data-zh="我可以从沙特境外购买吗？">هل أستطيع الشراء من خارج السعودية؟</summary>
+          <p class="faq__a" data-cms="faq3_a" data-en="Yes, we serve buyers outside the Kingdom and follow up with you remotely. Regulatory requirements differ by nationality and property type, and we explain them before any commitment." data-zh="可以，我们服务境外买家并远程跟进。监管要求因国籍与房产类型而异，我们会在您做出任何承诺之前说明清楚。">نعم، نخدم المشترين من خارج المملكة ونتابع معك عن بُعد. المتطلبات النظامية تختلف حسب جنسيتك ونوع العقار، ونوضّحها لك قبل أي التزام.</p>
+        </details>
+        <details class="faq__item">
+          <summary class="faq__q" data-cms="faq4_q" data-en="Do you help with mortgage financing?" data-zh="你们协助房贷融资吗？">هل تساعدون في التمويل العقاري؟</summary>
+          <p class="faq__a" data-cms="faq4_a" data-en="We guide you through the available financing options and connect you with suitable lenders. Approval and financing terms remain the lender’s decision." data-zh="我们为您梳理可选的融资方案，并对接合适的贷款机构。审批与融资条件由贷款机构决定。">نوجّهك لخيارات التمويل المتاحة ونربطك بجهات التمويل المناسبة. الموافقة وشروط التمويل تبقى قرار الجهة الممولة.</p>
+        </details>
+        <details class="faq__item">
+          <summary class="faq__q" data-cms="faq5_q" data-en="Will an advisor stay with me until I buy?" data-zh="会有顾问陪我到购买完成吗？">هل يوجد مستشار يرافقني حتى الشراء؟</summary>
+          <p class="faq__a" data-cms="faq5_a" data-en="Yes. One advisor follows up with you from your first question until the booking is complete, and answers your questions at every stage." data-zh="是的。一位顾问从您首次咨询直至完成预订全程跟进，并在每个阶段解答您的疑问。">نعم. مستشار واحد يتابع معك من أول استفسار حتى إتمام الحجز، ويجاوب على أسئلتك في كل مرحلة.</p>
+        </details>
       </div>
     </div>
   </section>
@@ -165,9 +267,9 @@
   <section class="section section--ink has-summit cta-band">
     <div class="container">
       <div class="gold-rule gold-rule--center"></div>
-      <h2 class="h1" data-cms="cta_head" data-en="Looking for your property?" data-zh="在寻找您的房产？">تدور عن عقارك ؟</h2>
-      <p class="lead" data-cms="cta_lead" data-en="Get in touch and we’ll help you find the project that fits your needs and budget." data-zh="联系我们，我们将帮您找到符合需求与预算的项目。">تواصل معنا وبنساعدك تحصل على المشروع الي يناسب احتياجك وميزانيتك</p>
-      <div class="btn-row" style="justify-content:center"><a class="btn btn--primary" href="contact.html" data-en="Contact us" data-zh="联系我们">تواصل معنا</a><a class="btn btn--ghost" data-wa data-cms="cta_wa" target="_blank" rel="noopener" data-en="WhatsApp" data-zh="WhatsApp">واتساب</a></div>
+      <h2 class="h1" data-cms="cta_head" data-en="Looking for your property?" data-zh="在寻找您的房产？">تبحث عن عقارك؟</h2>
+      <p class="lead" data-cms="cta_lead" data-en="Get in touch and an advisor will help you choose the project that fits your needs and budget." data-zh="联系我们，顾问将帮您选择符合需求与预算的项目。">تواصل معنا ويساعدك مستشار على اختيار المشروع الذي يناسب احتياجك وميزانيتك.</p>
+      <div class="btn-row" style="justify-content:center"><a class="btn btn--primary" href="contact.html" data-cms="cta_primary" data-en="Talk to an advisor" data-zh="咨询顾问">تحدث مع مستشار</a><a class="btn btn--ghost" data-wa data-cms="cta_wa" target="_blank" rel="noopener" data-en="WhatsApp" data-zh="WhatsApp">واتساب</a></div>
     </div>
   </section>
 
@@ -182,7 +284,7 @@
           <svg class="mark" viewBox="0 0 200 200" aria-hidden="true"><path d="M40 150 H160" stroke="currentColor" stroke-width="5"/><path d="M55 150 L100 55 L145 150" stroke="currentColor" stroke-width="9" fill="none" stroke-linecap="square"/><circle cx="100" cy="55" r="13" fill="#A38A58"/></svg>
           <span class="logo__text"><span class="logo__name">RYLIST</span><span class="logo__sub" data-en="REAL ESTATE" data-zh="房地产">العقارية</span></span>
         </a>
-        <p class="site-footer__tag" data-cms="footer_tag" data-en="Curated residential projects from trusted developers. Clear information to help you choose your home with confidence." data-zh="来自可信开发商的精选住宅项目。清晰的信息助您自信地选择家园。">مشاريع سكنية مختارة من مطوّرين موثوقين، مع معلومات واضحة تساعدك تختار عقارك بثقة.</p>
+        <p class="site-footer__tag" data-cms="footer_tag" data-en="RYLIST connects buyers with the best real-estate projects from trusted developers in Saudi Arabia, making the search and purchase journey clearer and more confident." data-zh="RYLIST 将买家与沙特可信开发商的优质房地产项目相连接，让寻找与购买之旅更清晰、更放心。">RYLIST منصة تربط المشترين بأفضل المشاريع العقارية من المطورين الموثوقين في المملكة العربية السعودية، لتجعل رحلة البحث والشراء أكثر وضوحًا وثقة.</p>
       </div>
       <div class="footer-col">
         <h4 data-cms="footer_explore_head" data-en="Explore" data-zh="探索">تصفّح</h4>
