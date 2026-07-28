@@ -1322,9 +1322,14 @@ a.project-card { display: block; text-decoration: none; color: inherit; }
 .pcard__chip--reserved  { color: #E0B278; }
 .pcard__chip--sold      { color: rgb(246 243 235 / .62); }
 .pcard__chip--soon      { color: #A9C0D4; }
+/* الكود يجلس أعلى البطاقة حيث شفافية التدرّج صفر، فيذوب في الصور الفاتحة
+   (سماء، جدار أبيض). يأخذ نفس اللوح الزجاجي للشرائح ليبقى مقروءًا فوق أي صورة. */
 .pcard__code {
   font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.06em;
-  color: rgb(246 243 235 / .55); padding-block-start: 0.4em; white-space: nowrap;
+  color: rgb(246 243 235 / .82); white-space: nowrap;
+  padding: 0.3em 0.6em; border-radius: 999px;
+  background: rgb(var(--card-scrim) / .45);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
 }
 
 /* --- الجزء السفلي --- */
@@ -1376,3 +1381,11 @@ button.chip { border: 0; font: inherit; cursor: pointer; }
   background: transparent; box-shadow: none; color: var(--fg-soft);
 }
 .chip--sm.chip--on { background: var(--surf); box-shadow: var(--inset-sm); color: var(--champ); }
+
+/* البطاقة صارت بورتريه ٤:٥، فالعمود الواحد على التابلت ينتج بطاقة بعرض ~٧٠٠px
+   وارتفاع ~٨٧٥px تبتلع الشاشة. القاعدة العامة .grid-3 تقفز من ثلاثة أعمدة إلى
+   واحد عند 860px بلا مرحلة وسطى، فنضيف مرحلة عمودين لشبكتَي المشاريع وحدهما
+   — بقية الشبكات (الأخبار، الخدمات) بطاقاتها قصيرة ولا تحتاجها. */
+@media (min-width: 561px) and (max-width: 860px) {
+  #projectsGrid, #featuredProjects { grid-template-columns: repeat(2, 1fr); }
+}
