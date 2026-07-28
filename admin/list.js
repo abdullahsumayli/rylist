@@ -1,5 +1,6 @@
 import { sb } from "./db.js";
 import { renderForm } from "./fields.js";
+import { statusBadge } from "./statusBadge.js";
 
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const get = (row, path) => path.split(".").reduce((o, k) => o?.[k], row);
@@ -20,13 +21,26 @@ export async function renderList(root, ent) {
   const rows = data || [];
   if (!rows.length) { root.insertAdjacentHTML("beforeend", `<p class="muted">لا توجد عناصر بعد.</p>`); return; }
 
+  // Entities with a draft/published workflow get a status column ahead of the title.
+  const hasWorkflow = ent.workflow === "draft" && rows.some((r) => statusBadge(r.status));
   const tbl = document.createElement("table"); tbl.className = "admin-tbl";
-  tbl.innerHTML = `<tr><th>العنوان / المعرّف</th><th></th></tr>`;
+  tbl.innerHTML = `<tr>${hasWorkflow ? "<th>الحالة</th>" : ""}<th>العنوان / المعرّف</th><th></th></tr>`;
   rows.forEach((row) => {
     const title = ent.title.startsWith("i18n.")
       ? (get(row, ent.title)?.ar || "—")
       : (row[ent.title.replace("i18n.", "")] ?? row[pk]);
     const tr = document.createElement("tr");
+    if (hasWorkflow) {
+      const tdSt = document.createElement("td"); tdSt.className = "st-cell";
+      const b = statusBadge(row.status);
+      if (b) {
+        const span = document.createElement("span"); span.className = `st-badge ${b.cls}`;
+        const dot = document.createElement("span"); dot.className = "d";
+        span.append(dot, document.createTextNode(b.label));
+        tdSt.appendChild(span);
+      }
+      tr.appendChild(tdSt);
+    }
     const td1 = document.createElement("td"); td1.textContent = title; tr.appendChild(td1);
     const td2 = document.createElement("td");
     const edit = document.createElement("button"); edit.className = "btn"; edit.textContent = "تعديل";

@@ -11,6 +11,8 @@ const ALLOWED = new Set([
 const DROP = new Set(["script", "style"]);          // remove tag AND its text
 const VOID = new Set(["img", "br"]);
 const SAFE_HREF = /^(https?:|mailto:)/i;
+// Root-relative links only ("/x", never "//host" — that is protocol-relative and external).
+const INTERNAL_HREF = /^\/(?!\/)/;
 const SAFE_SRC = /^(https?:|data:image\/)/i;
 
 const escText = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -28,9 +30,14 @@ function attrsFor(tag, attrs) {
   const cls = get("class");
   if (cls) { const kc = keepClass(cls); if (kc) out.push(`class="${escAttr(kc)}"`); }
   if (tag === "a") {
-    const href = get("href");
-    if (href && SAFE_HREF.test(href.trim())) out.push(`href="${escAttr(href.trim())}"`);
-    out.push('target="_blank"', 'rel="noopener nofollow"');
+    const href = String(get("href") || "").trim();
+    // Internal links keep their link equity: same tab, followable, no rel.
+    if (INTERNAL_HREF.test(href)) {
+      out.push(`href="${escAttr(href)}"`);
+    } else {
+      if (href && SAFE_HREF.test(href)) out.push(`href="${escAttr(href)}"`);
+      out.push('target="_blank"', 'rel="noopener nofollow"');
+    }
   }
   if (tag === "img") {
     const src = get("src");

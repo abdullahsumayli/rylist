@@ -26,6 +26,20 @@ test("keeps safe href and adds target/rel to links", () => {
     '<a href="https://a.com" target="_blank" rel="noopener nofollow">go</a>');
 });
 
+// Internal links carry SEO weight, so they must keep their href and must NOT be
+// nofollowed or forced into a new tab — unlike outbound links.
+test("keeps root-relative internal links followable and in the same tab", () => {
+  assert.equal(sanitizeHtml('<a href="/projects.html">المشاريع</a>'),
+    '<a href="/projects.html">المشاريع</a>');
+  assert.equal(sanitizeHtml('<a href="/news/off-plan-buying-guide-saudi.html">دليل</a>'),
+    '<a href="/news/off-plan-buying-guide-saudi.html">دليل</a>');
+});
+
+test("treats protocol-relative urls as external, not internal", () => {
+  assert.equal(sanitizeHtml('<a href="//evil.com">x</a>'),
+    '<a target="_blank" rel="noopener nofollow">x</a>');
+});
+
 test("keeps img with http/https/data-image src, drops other src", () => {
   assert.equal(sanitizeHtml('<img src="https://x/i.png" alt="a">'), '<img src="https://x/i.png" alt="a">');
   assert.equal(sanitizeHtml('<img src="javascript:x" alt="a">'), '<img alt="a">');
