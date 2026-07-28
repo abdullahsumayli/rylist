@@ -33,7 +33,12 @@ export function formatBody(raw, title) {
   if (title && lines[0].trim() === String(title).trim()) lines.shift();   // drop duplicated title
   s = lines.join("\n").trim();
   const escP = (x) => x.replace(/&/g, "&amp;").replace(/</g, "&lt;");
-  return s.split(/\n\s*\n/).map((p) => `<p>${escP(p.trim()).replace(/\n/g, "<br>")}</p>`).join("");
+  // Legacy bodies were pasted with a single newline between paragraphs. With no
+  // blank line anywhere, the blank-line rule would emit one <p> of <br>s, so treat
+  // every newline as a paragraph break instead.
+  const sep = /\n\s*\n/.test(s) ? /\n\s*\n/ : /\n/;
+  return s.split(sep).map((p) => p.trim()).filter(Boolean)
+    .map((p) => `<p>${escP(p).replace(/\n/g, "<br>")}</p>`).join("");
 }
 
 // Assemble one full article page. `ctx` = { loc, dir, base, theme, footer }.

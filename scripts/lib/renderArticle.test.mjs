@@ -27,6 +27,30 @@ test("formatBody turns plain-text blocks into paragraphs and drops a duplicated 
   assert.equal(html, "<p>First paragraph line one.<br>line two.</p><p>Second paragraph.</p>");
 });
 
+// Legacy bodies were pasted with single newlines between paragraphs and no blank
+// lines, so the blank-line rule collapsed the whole article into one <p> full of
+// <br>. When a body has no blank line anywhere, every newline is a paragraph break.
+test("formatBody splits on single newlines when the body has no blank lines at all", () => {
+  const raw = "الفقرة الأولى.\nالفقرة الثانية.\nالفقرة الثالثة.";
+  assert.equal(formatBody(raw, "عنوان"),
+    "<p>الفقرة الأولى.</p><p>الفقرة الثانية.</p><p>الفقرة الثالثة.</p>");
+});
+
+test("formatBody keeps single newlines as <br> once the body uses blank lines", () => {
+  const raw = "سطر أول\nسطر ثانٍ\n\nفقرة ثانية";
+  assert.equal(formatBody(raw, "عنوان"),
+    "<p>سطر أول<br>سطر ثانٍ</p><p>فقرة ثانية</p>");
+});
+
+test("formatBody drops a duplicated title in a body with no blank lines", () => {
+  assert.equal(formatBody("عنوان\nالفقرة الأولى.\nالفقرة الثانية.", "عنوان"),
+    "<p>الفقرة الأولى.</p><p>الفقرة الثانية.</p>");
+});
+
+test("formatBody ignores blank-ish lines made of whitespace only", () => {
+  assert.equal(formatBody("أولى.\n   \nثانية.", "ع"), "<p>أولى.</p><p>ثانية.</p>");
+});
+
 test("formatBody passes through existing HTML and escapes stray < & in plain text", () => {
   assert.equal(formatBody("<p>hi</p>", "t"), "<p>hi</p>");
   assert.match(formatBody("a < b & c", "t"), /a &lt; b &amp; c/);
