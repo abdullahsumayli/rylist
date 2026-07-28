@@ -463,12 +463,19 @@ Deno.serve(async (req) => {
     for (const turn of history) messages.push({ role: turn.role, content: turn.content });
     // حقنة صدق فقط عند فجوة مخزون (لا حقائق عرض مسبقة — الموديل يبحث بنفسه لما يجهز).
     if (honestyNote) messages.push({ role: "system", content: honestyNote });
-    // تذكير لغة صارم للزائر الصيني — الأمثلة قد تكون إنجليزية، لكن الرد يجب أن يكون صينيًا.
+    // تذكير لغة صارم لغير العربية — البرومبت مُشبَع بالعربية فيميل الموديل للعربية؛
+    // هذا يفرض لغة الزائر ويعيد تأكيد الحارس (الأمثلة قد تكون إنجليزية).
     if (lang === "zh")
       messages.push({
         role: "system",
         content:
           "The current user is browsing rylist in Chinese. You MUST reply ONLY in natural, warm, polite Simplified Chinese (简体中文) — regardless of the language of any examples above. Keep project names, districts, and prices EXACTLY as the tool returns them. GUARD (applies here too): do NOT ask for the user's name or phone number, and NEVER claim they asked to visit or to be contacted, UNLESS they themselves explicitly asked to move forward in THIS conversation. If they only asked a question or described what they want, end with a warm question — never with a request for contact details.",
+      });
+    else if (lang === "en")
+      messages.push({
+        role: "system",
+        content:
+          "The current user is writing in ENGLISH. You MUST reply ONLY in natural, warm, fluent English — NEVER in Arabic. Never transliterate Arabic words: do NOT write 'Absher', 'ya hala', 'inshallah', 'habibi', etc. — use natural English ('Of course!', 'Welcome!', 'Great choice!'). Keep the person's NAME exactly as they wrote it — never translate or Arabize it (e.g. 'Moayad' stays 'Moayad'). Keep project names, districts, and prices EXACTLY as the tool returns them. GUARD (applies here too): do NOT ask for the user's name or phone number, and NEVER claim they asked to visit or to be contacted, UNLESS they themselves explicitly asked to move forward in THIS conversation. If they only asked a question or described what they want, end with a warm question — never with a request for contact details.",
       });
 
     // 4) حلقة الأدوات — لو فشل الذكاء نرجع fallback الحتمي بدل خطأ عام.

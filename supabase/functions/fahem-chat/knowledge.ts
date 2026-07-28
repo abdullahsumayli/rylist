@@ -103,9 +103,10 @@ export function fewShot(lang: Lang): { role: "user" | "assistant"; content: stri
           "Love that! Let me set you up with the rylist sales team so they can arrange a visit that suits you. Just drop your name and phone number here and I'll pass it straight to them — they'll call you. No commission, ever.",
       },
     ];
-    // zh كان يقلّد مثال الإغلاق (زيارة→جوال) فيطلب الرقم ويخترع أن العميل طلب الزيارة.
-    // نُسقط آخر زوج (الزيارة→الالتقاط) للصيني فقط؛ الالتقاط مغطّى بالحارس + كشف الجوال الحتمي.
-    return lang === "zh" ? en.slice(0, -2) : en;
+    // مثال الإغلاق (زيارة→جوال) كان يُقلَّد فيطلب الرقم ويخترع أن العميل طلب الزيارة —
+    // يتسرّب في الإنجليزي والصيني (العربي محميّ بنبرته الأصلية). نُسقطه لغير العربية؛
+    // الالتقاط مغطّى بالحارس + كشف الجوال الحتمي.
+    return en.slice(0, -2);
   }
   return [
     { role: "user", content: "أبغى شقة" },
