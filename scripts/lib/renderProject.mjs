@@ -159,7 +159,9 @@ export function renderProjectHtml(tmpl, p, ctx) {
     ? `${p.price_min.toLocaleString("en-US")} – ${(p.price_max || p.price_min).toLocaleString("en-US")} ${loc === "en" ? "SAR" : "ريال"}`
     : ({ ar: "السعر عند الطلب", en: "Price on request", zh: "价格待询" }[loc] || "السعر عند الطلب");
   const D = p.details || {};
-  const brochure = p.brochure_url
+  // الزر يظهر متى ما وُجد بروشور — سواء كان مرفوعًا (brochure_url) أو محفوظًا عند
+  // الفريق ولا يُنشر (details.brochure_on_request). في الحالتين الزر يفتح واتساب.
+  const brochure = (p.brochure_url || D.brochure_on_request)
     ? `<a class="btn btn--ghost" href="${waLink((DL_MSG[loc] || DL_MSG.ar)(t, p.code))}" target="_blank" rel="noopener">${DL[loc] || DL.ar}</a>`
     : "";
   return fill(tmpl, {

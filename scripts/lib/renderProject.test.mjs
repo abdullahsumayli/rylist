@@ -204,6 +204,20 @@ test("brochure button is localised and omitted when there is no brochure", () =>
   assert.match(html, /استفسر عبر واتساب/);   // primary CTA still there
 });
 
+test("a brochure kept off the public site still shows the request button", () => {
+  // نجد ٧: البروشور موجود عند الفريق لكنه لا يُنشر، فلا يوجد brochure_url.
+  const onRequest = {
+    ...sampleProject,
+    brochure_url: null,
+    details: { ...sampleProject.details, brochure_on_request: true },
+  };
+  const html = renderProjectHtml(TMPL, onRequest, {
+    loc: "ar", dir: "rtl", base: "https://rylist.sa", tax: stubTax, contact: { whatsapp: "966500000000" },
+  });
+  assert.match(html, /اطلب بروشور المشروع/);
+  assert.doesNotMatch(html, /\.pdf/);   // ولا رابط ملف في الصفحة
+});
+
 test("the Fahem launcher never mixes Arabic script into a non-Arabic page", () => {
   const base = { base: "https://rylist.sa", tax: stubTax, contact: { whatsapp: "966500000000" } };
   const arabic = /[؀-ۿ]/;
