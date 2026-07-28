@@ -13,7 +13,16 @@ export const ENTITIES = [
     {n:"map_lat",t:"number",l:"إحداثي العرض (Lat)",hint:"اختياري — كليك يمين على الموقع في Google Maps ثم انسخ الرقم الأول"},
     {n:"map_lng",t:"number",l:"إحداثي الطول (Lng)",hint:"اختياري — الرقم الثاني من الإحداثيات"},
     {n:"i18n.title",t:"i18n-text",l:"العنوان"},{n:"i18n.district",t:"i18n-text",l:"الحي"},
-    {n:"i18n.description",t:"i18n-rich",l:"الوصف"} ]},
+    {n:"i18n.description",t:"i18n-rich",l:"الوصف"},
+    // بيانات الإعلان الإلزامية (لائحة التسويق والإعلانات العقارية). أي حقل يُترك
+    // فارغًا يختفي سطره من صندوق الترخيص في صفحة المشروع — لا يُطبع بديل.
+    {n:"ad_license",t:"text",l:"رقم ترخيص الإعلان",hint:"يصدر من منصة الهيئة العامة للعقار لكل إعلان — اتركه فارغًا لين يصلك الرقم"},
+    {n:"sale_type",t:"select",l:"تصنيف البيع",options:["","ready","offplan"],hint:"«على الخارطة» يعني البيع قبل إتمام البناء، وله مسار تسجيل وترخيص مختلف"},
+    {n:"wafi_number",t:"text",l:"رقم تسجيل المشروع (وافي)",hint:"لمشاريع البيع على الخارطة فقط"},
+    {n:"plan_number",t:"text",l:"رقم المخطط"},
+    {n:"property_status",t:"select",l:"حالة العقار",options:["","clear","mortgaged","disputed"]},
+    {n:"i18n.developer",t:"i18n-text",l:"المطوّر"},
+    {n:"developer_license",t:"text",l:"رقم ترخيص المطوّر"} ]},
   { key:"news", label:"المدونة", table:"news", order:"published_at", title:"i18n.title",
     workflow:"draft", slugFrom:"i18n.title", fields:[
     {n:"i18n.title",t:"i18n-text",l:"العنوان"},
@@ -132,7 +141,19 @@ export const ENTITIES = [
     {n:"i18n.footer_explore_head",t:"i18n-text",l:"الفوتر — عنوان تصفّح"},
     {n:"i18n.footer_contact_head",t:"i18n-text",l:"الفوتر — عنوان تواصل"},
     {n:"i18n.footer_bottom",t:"i18n-text",l:"الفوتر — الشريط السفلي"},
-    {n:"i18n.footer_rights",t:"i18n-text",l:"الفوتر — الحقوق"} ]},
+    {n:"i18n.footer_rights",t:"i18n-text",l:"الفوتر — الحقوق"},
+    {n:"i18n.footer_licenses_head",t:"i18n-text",l:"الفوتر — عنوان التراخيص"},
+    {n:"i18n.fal_activity",t:"i18n-text",l:"فال — نشاط الرخصة"},
+    {n:"i18n.fal_number",t:"i18n-text",l:"فال — رقم الرخصة"},
+    {n:"i18n.fal_meta",t:"i18n-text",l:"فال — المنشأة وتاريخ السريان"},
+    {n:"i18n.tourism_issuer",t:"i18n-text",l:"السياحة — الجهة"},
+    {n:"i18n.tourism_activity",t:"i18n-text",l:"السياحة — نشاط الترخيص"},
+    {n:"i18n.tourism_number",t:"i18n-text",l:"السياحة — رقم الترخيص"},
+    {n:"i18n.footer_disclaimer",t:"i18n-text",l:"الفوتر — التحفّظ على الصور والأسعار"},
+    // بيانات المنشأة: سطرها في الفوتر مخفي ويظهر تلقائيًا أول ما يُعبّأ أحد هذه الثلاثة
+    {n:"i18n.cr_number",t:"i18n-text",l:"السجل التجاري",hint:"يظهر في الفوتر تلقائيًا بمجرد تعبئته"},
+    {n:"i18n.vat_number",t:"i18n-text",l:"الرقم الضريبي"},
+    {n:"i18n.national_address",t:"i18n-text",l:"العنوان الوطني"} ]},
   { key:"site_theme", label:"المظهر", table:"site_theme", order:"id", single:true, title:"id", fields:[
     {n:"font_preset",t:"select",l:"الخط",options:["classic","modern","elegant","simple"],
       hint:"classic=كلاسيكي · modern=عصري · elegant=أنيق · simple=بسيط"},

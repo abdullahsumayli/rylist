@@ -1,6 +1,8 @@
 // Pure, testable HTML builders for the project detail page.
 // No filesystem / no Supabase — takes plain objects, returns HTML strings.
 
+import { complianceHtml, saleTypeBadge } from "./renderCompliance.mjs";
+
 export const tr = (o, loc) => (o && (o[loc] || o.ar)) || "";
 export const fill = (s, map) => s.replace(/\{\{(\w+)\}\}/g, (_, k) => map[k] ?? "");
 
@@ -182,5 +184,10 @@ export function renderProjectHtml(tmpl, p, ctx) {
     map: mapHtml({ lat: p.map_lat, lng: p.map_lng, district: p.i18n?.district?.[loc] || "", cityLabel: tax("city", p.city_key, loc), location: D.location, loc }),
     statusLabel: (STATUS[p.status] || {})[loc] || "",
     statusClass: STATUS_CLASS[p.status] || "",
+    // بيانات الإعلان الإلزامية — البيانات مرتبطة بالإعلان نفسه لا بالموقع ككل،
+    // فتنزل في صفحة المشروع ومعها الفوتر الذي كان غائبًا عن هذا القالب كليًا.
+    saleBadge: saleTypeBadge(p, loc),
+    compliance: complianceHtml(p, loc),
+    footer: ctx.footer || "",
   });
 }

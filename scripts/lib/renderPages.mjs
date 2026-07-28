@@ -1,26 +1,22 @@
 import fs from "node:fs"; import { parse } from "node-html-parser";
 import { applyContent } from "./applyContent.mjs";
 import { resolveTheme } from "./theme.mjs";
+import { localizeNode, fillContact, revealFilled } from "./localize.mjs";
+import { pageContent } from "./pageContent.mjs";
 const PAGES = ["index.html","projects.html","services.html","about.html","news.html","contact.html","fahem.html",
                "privacy.html","terms.html","usage.html"];
 
-function localizeHtml(html, locale, dir, siteUrl, pageName, content, theme){
+function localizeHtml(html, locale, dir, siteUrl, pageName, content, theme, contact){
   const root = parse(html, { comment:true });
   const htmlEl = root.querySelector("html"); htmlEl.setAttribute("lang", locale); htmlEl.setAttribute("dir", dir);
-  if(locale !== "ar"){
-    root.querySelectorAll(`[data-${locale}]`).forEach(el=>{
-      const tag = (el.rawTagName || "").toLowerCase();
-      // <meta> carries its text in the `content` attribute, not as children
-      if(tag === "meta"){ el.setAttribute("content", el.getAttribute(`data-${locale}`)); }
-      else { el.set_content(el.getAttribute(`data-${locale}`)); }
-    });
-    root.querySelectorAll(`[data-${locale}-ph]`).forEach(el=>{ el.setAttribute("placeholder", el.getAttribute(`data-${locale}-ph`)); });
-    // aria-label ليس زينة: زر فاهم يُخفى نصّه الظاهر على الجوال (CSS سطر ~813)
-    // فيبقى aria-label اسمَه الوحيد — بلا ترجمة يسمع الزائر الصيني اسمًا عربيًا.
-    root.querySelectorAll(`[data-${locale}-aria]`).forEach(el=>{ el.setAttribute("aria-label", el.getAttribute(`data-${locale}-aria`)); });
-  }
+  // تبديل نصوص data-<locale> — مشترك مع فوتر صفحات المشاريع والمقالات
+  localizeNode(root, locale);
   // overlay DB content (after locale swap so DB overrides the per-language default)
   applyContent(root, content, locale);
+  // بيانات التواصل تُملأ هنا لا في المتصفح: main.js يستبدل الرقم النائب بعد تحميل
+  // جافاسكربت، فيبقى في مصدر الصفحة رقمٌ غير حقيقي يقرؤه الزاحف وقارئ المصدر.
+  fillContact(root, contact, locale);
+  revealFilled(root, content, locale);
   if(locale !== "ar"){
     // localized pages live under /<locale>/, so root-relative assets must be made absolute
     // (page-to-page links like "projects.html" stay relative and resolve within /<locale>/).
@@ -55,10 +51,7 @@ function localizeHtml(html, locale, dir, siteUrl, pageName, content, theme){
 
 export function renderPages(out, c, siteUrl){
   const locales = c.locales; // مفعّلة فقط
-  const content = {
-    text: { ...(c.home?.i18n || {}), ...(c.chrome?.i18n || {}), ...(c.about?.i18n || {}) },
-    heroImage: c.home?.hero_image_url || "",
-  };
+  const content = pageContent(c);
   const theme = resolveTheme(c.theme || {});
   for(const page of PAGES){
     if(!fs.existsSync(page)) continue;
@@ -66,7 +59,7 @@ export function renderPages(out, c, siteUrl){
     for(const L of locales){
       const dir = L.code==="ar" ? "" : `/${L.code}`;
       const outDir = out + dir; fs.mkdirSync(outDir, { recursive:true });
-      fs.writeFileSync(`${outDir}/${page}`, localizeHtml(src, L.code, L.dir, siteUrl, page, content, theme));
+      fs.writeFileSync(`${outDir}/${page}`, localizeHtml(src, L.code, L.dir, siteUrl, page, content, theme, c.contact));
     }
   }
 }

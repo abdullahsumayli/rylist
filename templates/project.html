@@ -12,7 +12,7 @@
   <figure class="pdetail__hero"><img src="{{image}}" alt="{{title}}"></figure>
   <header class="pdetail__head">
     <h1>{{title}}</h1>
-    <p><span class="status-pill {{statusClass}}">{{statusLabel}}</span></p>
+    <p><span class="status-pill {{statusClass}}">{{statusLabel}}</span>{{saleBadge}}</p>
     <p class="pdetail__loc">{{district}} · {{typeLabel}} · {{cityLabel}}</p>
     <p class="pdetail__price">{{price}}</p>
   </header>
@@ -23,7 +23,9 @@
   {{features}}
   {{map}}
   <div class="btn-row"><a class="btn btn--primary" href="{{whatsapp}}" target="_blank" rel="noopener">{{cta}}</a>{{brochure}}</div>
+  {{compliance}}
 </main>
+{{footer}}
 <a class="fahem-fab" href="{{fahemHref}}" aria-label="{{fahemLabel}}">
   <span class="fahem-fab__ava"><img src="{{assets}}/assets/img/fahem-avatar.png" alt="{{fahemLabel}}" width="40" height="40" onerror="this.style.display='none'"></span>
   <span class="fahem-fab__label">{{fahemLabel}}</span>

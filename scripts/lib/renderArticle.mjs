@@ -36,7 +36,7 @@ export function formatBody(raw, title) {
   return s.split(/\n\s*\n/).map((p) => `<p>${escP(p.trim()).replace(/\n/g, "<br>")}</p>`).join("");
 }
 
-// Assemble one full article page. `ctx` = { loc, dir, base, theme }.
+// Assemble one full article page. `ctx` = { loc, dir, base, theme, footer }.
 export function renderArticleHtml(tmpl, n, ctx) {
   const { loc, dir, base, theme } = ctx;
   const t = tr(n.i18n?.title, loc) || n.slug;
@@ -61,5 +61,6 @@ export function renderArticleHtml(tmpl, n, ctx) {
     hero: heroHtml(n.image_url || "", t),
     cat, date, lead, body: formatBody(rawBody, t),
     backCta: BACK[loc] || BACK.ar,
+    footer: ctx.footer || "",
   });
 }
