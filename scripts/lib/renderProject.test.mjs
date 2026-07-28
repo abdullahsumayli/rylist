@@ -174,7 +174,7 @@ test("renderProjectHtml assembles sections in the correct order", () => {
 
 test("renderProjectHtml fills header fields and title", () => {
   const html = renderProjectHtml(TMPL, sampleProject, { loc: "ar", dir: "rtl", base: "https://rylist.sa", tax: stubTax, contact: {} });
-  assert.match(html, /<title>نجد ٢ — RYLIST<\/title>/);
+  assert.match(html, /<title>نجد ٢ · RYLIST<\/title>/);
   assert.match(html, /dir="rtl"/);
   assert.match(html, /2,200,000 – 2,250,000 ريال/);
   assert.match(html, /الرمال · تاون هاوس · الرياض/);

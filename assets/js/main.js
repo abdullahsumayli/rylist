@@ -355,7 +355,7 @@
     var img = (p && p.image_url) || "";
     var date = localeDate(((p && p.published_at) || "").slice(0, 10));
     var back = L("عودة إلى المدونة", "Back to blog", "返回博客");
-    if (title) document.title = title + " — " + L("معاينة", "Preview", "预览");
+    if (title) document.title = title + " · " + L("معاينة", "Preview", "预览");
     view.innerHTML = '' +
       '<a class="pdetail__back" href="news.html">← RYLIST</a>' +
       (img ? '<figure class="pdetail__hero"><img src="' + esc(img) + '" alt="' + esc(title) + '"></figure>' : '') +
@@ -366,7 +366,7 @@
       '<div class="pdetail__desc adetail__body">' + formatBody(body, title) + '</div>' +
       '<div class="btn-row"><a class="btn btn--primary" href="news.html">' + back + '</a></div>';
     var flag = document.getElementById("previewFlag");
-    if (flag) { flag.textContent = L("معاينة — مسودة (لم تُنشر بعد)", "Preview — draft (not published)", "预览 — 草稿（尚未发布）"); flag.hidden = false; }
+    if (flag) { flag.textContent = L("معاينة · مسودة (لم تُنشر بعد)", "Preview · draft (not published)", "预览 · 草稿（尚未发布）"); flag.hidden = false; }
   }
 
   function renderPartners() {

@@ -79,7 +79,7 @@ test("fmtDate returns the iso string as a fallback on bad input, empty for empty
 
 test("renderArticleHtml fills title, category, excerpt and injects body raw", () => {
   const html = renderArticleHtml(TMPL, sampleNews, { loc: "ar", dir: "rtl", base: "https://rylist.sa" });
-  assert.match(html, /<title>قراءة في الأسعار — RYLIST<\/title>/);
+  assert.match(html, /<title>قراءة في الأسعار · RYLIST<\/title>/);
   assert.match(html, /dir="rtl"/);
   assert.match(html, /class="article-card__cat">السوق/);
   assert.match(html, /class="adetail__lead">ثلاثة عوامل/);
