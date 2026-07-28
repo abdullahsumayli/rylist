@@ -1290,3 +1290,48 @@ html[lang="ar"] .faq__q { font-family: var(--font-ar-display); }
    تتغلّب على [hidden]{display:none} في متصفّح المستخدم. القاعدة العامة تغني عن ترقيع
    كل عنصر على حدة (كما حصل سابقًا مع .footer-social[hidden]). */
 [hidden] { display: none !important; }
+
+/* ==========================================================================
+   19. بطاقة المشروع — صورة كاملة بتراكب (بنية Mada بهوية رايليست)
+   تُبنى فوق طبقة الأسطح الناعمة أعلاه: الحشوة ١٢px والإطار الغائر يبقيان،
+   والجديد يملأ داخلهما بدل الجسم الأبيض القديم.
+   ========================================================================== */
+
+/* حرِج: لا تستعمل var(--ink) هنا. طبقة الثيم تعيد تعريفه إلى var(--fg)، وقيمته
+   في الوضع الداكن #ece6d8 — أي فاتح. التدرّج المبني عليه ينقلب فاتحًا ويُخفي
+   النص الأبيض. هذا التوكن مستقل ولا يُعاد تعريفه في أي ثيم. */
+:root { --card-scrim: 23 20 15; }
+
+/* البطاقة صارت <a> — تُبطَل زخرفة الرابط وتُورَّث الألوان */
+a.project-card { display: block; text-decoration: none; color: inherit; }
+.project-card { --pc-pad: 10px; position: relative; }
+
+.project-card__media { position: relative; aspect-ratio: 4 / 5; overflow: hidden; }
+.project-card__media img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  /* أُزيل grayscale(.2) saturate(.85) — كان يبهت الصور المعمارية، والتدرّج
+     يوفّر التباين المطلوب بلا تشويه الألوان */
+  filter: none;
+  transition: transform .5s ease;
+}
+.project-card:hover .project-card__media img { transform: scale(1.04); }
+
+/* طبقات التراكب محاذاة لحافة الصورة، لا لحافة البطاقة — من هنا --pc-pad */
+.pcard__scrim {
+  position: absolute; inset: var(--pc-pad); border-radius: 9px; pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgb(var(--card-scrim) / .92)  0%,
+    rgb(var(--card-scrim) / .78) 28%,
+    rgb(var(--card-scrim) / 0)   62%
+  );
+}
+.pcard__top, .pcard__bottom {
+  position: absolute; inset-inline: var(--pc-pad);
+  padding-inline: 12px; pointer-events: none;
+}
+.pcard__top {
+  inset-block-start: calc(var(--pc-pad) + 10px);
+  display: flex; align-items: flex-start; justify-content: space-between; gap: var(--sp-2);
+}
+.pcard__bottom { inset-block-end: calc(var(--pc-pad) + 12px); }
