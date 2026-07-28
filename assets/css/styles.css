@@ -514,11 +514,15 @@ html[dir="rtl"] .footer-legal a + a::before { transform: translateX(50%); }
    يحتاج تباينًا أسود-على-أبيض ليُقرأ بالكاميرا في الوضعين الفاتح والداكن. */
 .footer-licenses { display: flex; flex-direction: column; gap: var(--sp-3); }
 .license-card {
-  display: flex; align-items: center; gap: var(--sp-4);
+  display: flex; flex-direction: column; gap: var(--sp-3);
   background: #F6F3EB; border-radius: var(--radius); padding: 0.8rem 0.9rem;
   color: #17140F; text-decoration: none;
   transition: transform .2s, box-shadow .2s;
 }
+/* شعارا فال والهيئة (نفس اللوك-أب المطبوع على وثيقة الرخصة) */
+.license-card__logos { border-bottom: 1px solid rgba(23,20,15,0.1); padding-bottom: var(--sp-3); }
+.license-card__logos img { display: block; margin-inline: auto; height: 34px; width: auto; max-width: 100%; }
+.license-card__row { display: flex; align-items: center; gap: var(--sp-4); }
 a.license-card:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(0,0,0,0.3); }
 .license-card__qr { flex: none; width: 76px; height: 76px; background: #fff; border-radius: var(--radius); padding: 4px; display: grid; place-items: center; }
 .license-card__qr img { width: 100%; height: 100%; display: block; }
