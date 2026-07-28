@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>تقرير معالجة ملاحظات الامتثال الإعلاني — RYLIST</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#17140F; --bone:#F6F3EB; --champ:#A38A58; --gold-deep:#86713F;
+    --mid:#6B6152; --line:#E2DBCC; --soft:#FAF8F3;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{font-size:10.5pt}
+  body{
+    font-family:"IBM Plex Sans Arabic","Segoe UI",Tahoma,Arial,sans-serif;
+    color:var(--ink); line-height:1.85; direction:rtl; text-align:right;
+    -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  }
+
+  /* ---------- الغلاف ---------- */
+  .cover{
+    background:var(--ink); color:var(--bone);
+    padding:26mm 18mm 20mm; margin:0 0 12mm;
+    break-after:page;
+  }
+  .cover__rule{height:3px;background:linear-gradient(to left,var(--champ),var(--gold-deep));margin-bottom:16mm}
+  .cover__brand{font-size:9pt;letter-spacing:.22em;color:var(--champ);margin-bottom:8mm}
+  .cover h1{font-size:26pt;line-height:1.4;font-weight:600;margin-bottom:6mm}
+  .cover__sub{font-size:11pt;color:rgba(246,243,235,.72);line-height:1.9;max-width:44em}
+  .cover__meta{
+    margin-top:18mm;padding-top:7mm;border-top:1px solid rgba(246,243,235,.2);
+    display:grid;grid-template-columns:repeat(4,1fr);gap:6mm;font-size:9pt;
+  }
+  .cover__meta dt{color:var(--champ);margin-bottom:2mm;font-size:8.5pt}
+  .cover__meta dd{color:var(--bone);line-height:1.6}
+  .cover__note{margin-top:10mm;font-size:9pt;color:rgba(246,243,235,.55);line-height:1.9}
+
+  /* ---------- المتن ---------- */
+  main{padding:0 2mm}
+  h2{
+    font-size:15pt;font-weight:600;margin:11mm 0 5mm;padding-bottom:2.5mm;
+    border-bottom:2px solid var(--champ); break-after:avoid;
+  }
+  h2:first-child{margin-top:0}
+  h3{font-size:12pt;font-weight:600;margin:8mm 0 3mm;color:var(--gold-deep);break-after:avoid}
+  p{margin-bottom:3.5mm}
+  ul{margin:0 6mm 4mm 0;padding-right:4mm}
+  li{margin-bottom:2mm}
+  strong{font-weight:600}
+  a{color:var(--gold-deep);text-decoration:none}
+
+  .lede{font-size:11pt;color:var(--mid);line-height:1.95}
+
+  /* بطاقة الخلاصة */
+  .callout{
+    background:var(--soft);border-inline-start:3px solid var(--champ);
+    padding:5mm 6mm;margin:5mm 0 6mm;break-inside:avoid;
+  }
+  .callout p:last-child{margin-bottom:0}
+
+  /* ---------- الجداول ---------- */
+  table{
+    width:100%;border-collapse:collapse;margin:5mm 0 7mm;font-size:9.5pt;
+    break-inside:avoid;
+  }
+  thead th{
+    background:var(--ink);color:var(--bone);font-weight:500;
+    padding:3mm 3.5mm;text-align:right;font-size:9pt;
+  }
+  tbody td{padding:3mm 3.5mm;border-bottom:1px solid var(--line);vertical-align:top}
+  tbody tr:nth-child(even){background:var(--soft)}
+  td.num{text-align:center;color:var(--mid);width:8mm}
+  .fill td{height:9mm}
+
+  .pill{
+    display:inline-block;padding:.9mm 2.5mm;border-radius:3mm;
+    font-size:8.5pt;font-weight:500;white-space:nowrap;
+  }
+  .pill--done{background:#E4EFE4;color:#3C523C}
+  .pill--part{background:#F5EFE0;color:#86713F}
+  .pill--wait{background:#F3EDE8;color:#6B6152}
+  .pill--crit{background:#F7E6E6;color:#8A3B3B}
+  .pill--med{background:#F5EFE0;color:#86713F}
+  .pill--low{background:#EDEFF3;color:#3B4E6B}
+
+  /* بلوك الطلب من الجهات */
+  .ask{
+    border:1px solid var(--line);border-radius:2mm;padding:5mm 6mm;
+    margin-bottom:5mm;break-inside:avoid;
+  }
+  .ask h3{margin-top:0}
+  .ask__prio{
+    float:left;font-size:8.5pt;font-weight:600;padding:.9mm 3mm;border-radius:3mm;
+  }
+  .prio--now{background:#F7E6E6;color:#8A3B3B}
+  .prio--soon{background:#F5EFE0;color:#86713F}
+  .prio--fast{background:#EDEFF3;color:#3B4E6B}
+
+  .sign{margin-top:12mm;padding-top:5mm;border-top:1px solid var(--line)}
+  .sign strong{display:block;margin-top:4mm;font-size:11pt}
+
+  .ltr{direction:ltr;unicode-bidi:isolate;display:inline-block}
+  .muted{color:var(--mid);font-size:9.5pt}
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div class="cover__rule"></div>
+  <div class="cover__brand">R Y L I S T · تقرير داخلي</div>
+  <h1>تقرير معالجة ملاحظات<br>الامتثال الإعلاني</h1>
+  <p class="cover__sub">ما نُفِّذ من ملاحظات تقرير فحص امتثال الإعلانات العقارية، وما يستلزم مخاطبة الجهات الرسمية والجهات صاحبة الإعلان</p>
+  <dl class="cover__meta">
+    <div><dt>إلى</dt><dd>إدارة شركة رايليست جلوبال</dd></div>
+    <div><dt>من</dt><dd>فريق تشغيل وتطوير منصة RYLIST</dd></div>
+    <div><dt>التاريخ</dt><dd>٢٨ يوليو ٢٠٢٦</dd></div>
+    <div><dt>المرجع</dt><dd>تقرير فحص Prism · ٢٨ يوليو ٢٠٢٦</dd></div>
+  </dl>
+  <p class="cover__note">المرجع النظامي: لائحة التسويق والإعلانات العقارية — الهيئة العامة للعقار، معتمدة ١ مايو ٢٠٢٦</p>
+</section>
+
+<main>
+
+<h2>أولًا · مقدمة</h2>
+
+<p class="lede">استلمنا تقرير فحص امتثال الإعلانات العقارية المُعدّ من وكالة Prism بتاريخ ٢٨ يوليو ٢٠٢٦، والذي راجع الموقع مقابل ضوابط لائحة التسويق والإعلانات العقارية الصادرة عن الهيئة العامة للعقار والمعتمدة في ١ مايو ٢٠٢٦، وقيّم مستوى الامتثال بـ <span class="ltr">6/10</span>، وحصر سبع ملاحظات: اثنتان حرجتان، وثلاث متوسطة، واثنتان منخفضتان.</p>
+
+<p>وقد باشرنا في اليوم نفسه معالجة كل ما يقع ضمن نطاق عملنا التقني. ونعرض في هذا التقرير ما أُنجز وتحقّقنا من ظهوره فعليًا على الموقع، ثم ما لا يمكن استكماله إلا بمخاطبة الجهات الرسمية والجهات صاحبة الإعلان.</p>
+
+<div class="callout">
+  <p><strong>خلاصة الحالة:</strong> أُغلقت ملاحظتان بالكامل، وأُغلقت اثنتان جزئيًا، وأُنجزت البنية الكاملة للملاحظات الثلاث المتبقية بحيث لم يبقَ فيها سوى إدخال الأرقام الصادرة عن الجهات المختصة — دون حاجة إلى أي عمل برمجي جديد.</p>
+</div>
+
+<h2>ثانيًا · ما تم تنفيذه</h2>
+
+<h3>١) صندوق «بيانات الإعلان والتراخيص» في صفحة كل مشروع</h3>
+<p>أُضيف مكوّن ثابت أسفل صفحة كل مشروع من المشاريع الستة، يعرض البيانات الإلزامية للإعلان العقاري بثلاث لغات: العربية والإنجليزية والصينية. ويعرض حاليًا:</p>
+<ul>
+  <li>رقم رخصة فال <span class="ltr">1200047932</span> مع رابط مباشر لصفحة التحقق الرسمية لدى الهيئة.</li>
+  <li>اسم المعلن وصفته: شركة رايليست جلوبال · مسوّق مفوّض بموجب عقد وساطة.</li>
+  <li>اسم المطوّر لكل مشروع.</li>
+  <li>تحفّظ إلزامي: «الصور تصوّر تصميمية وقد تختلف عن الواقع · الأسعار قابلة للتغيير دون إشعار».</li>
+</ul>
+<p>وقد اعتمدنا قاعدة تحريرية واضحة: <strong>أي حقل لم تصلنا قيمته يُحذف سطره من الصفحة كليًا</strong>، ولا يُستبدل بشرطة ولا بعبارة «قيد الإصدار». والسبب أن طباعة بديل مكان رقم ترخيص الإعلان تُقرأ إقرارًا مكتوبًا بغيابه، فتصير دليلًا جاهزًا في يد أي مفتّش أو شكوى مستهلك. الفراغ في هذه الحالة أسلم من الشرطة.</p>
+
+<h3>٢) توحيد فوتر التراخيص على جميع صفحات الموقع</h3>
+<p>كشف الفحص أن المشكلة أوسع مما ورد في التقرير: صفحات المشاريع وصفحات المقالات كانت مبنيّة من قوالب لا تحتوي فوترًا <strong>إطلاقًا</strong>، لا فوتر تراخيص ولا فوتر عادي. أي أن صفحة الإعلان الفعلية — وهي الصفحة التي تحمل السعر والوحدات ويصل إليها المستهلك مباشرة من محرك البحث — كانت أقل صفحات الموقع امتثالًا.</p>
+<p>عولج ذلك ببناء آلية تستخرج الفوتر من مصدر واحد وتُدرجه في جميع الصفحات دون استثناء. وبهذا صار الفوتر مصدرًا واحدًا لا يتفرّع، وأي تحديث مستقبلي على بيانات الترخيص ينتشر تلقائيًا على كل صفحة.</p>
+
+<h3>٣) تصحيح رقم الهاتف في بيانات المعلن</h3>
+<p>رقم الهاتف الفعلي كان مسجّلًا بشكل صحيح في قاعدة البيانات، غير أن الرقم النائب <span class="ltr">+966 11 000 0000</span> كان مكتوبًا في مصدر الصفحات ولا يُستبدل إلا بعد تشغيل البرمجيات في متصفح الزائر. وعليه فإن محركات البحث ومن يعاين مصدر الصفحة كانا يريان الرقم النائب، فضلًا عن أن صفحات المشاريع لا تُشغّل تلك البرمجيات أصلًا.</p>
+<p>عولج ذلك بجعل الرقم يُكتب في مصدر الصفحة وقت البناء، فصار صحيحًا في كل الأحوال. كما صُحّح اتجاه عرضه داخل الصفحات العربية، إذ كان يظهر معكوسًا.</p>
+
+<h3>٤) تسمية المطوّر وتصحيح العبارات غير المُسنَدة</h3>
+<p>أُسنِد اسم المطوّر لكل مشروع من المشاريع الستة. وحُذفت من الصفحة الرئيسية عبارة «جميع المشاريع من مطورين معروفين ومرخصين»، وهي وصف عام غير مُثبَت يمكن تصنيفه بيانًا مضلّلًا عند غياب الإسناد، واستُبدلت بعبارة مُسنَدة تُحيل إلى ما هو معروض فعلًا في صفحة كل مشروع.</p>
+
+<h3>٥) تحفّظ الصور والأسعار وبيانات المنشأة</h3>
+<p>أُضيف تحفّظ الصور والأسعار في فوتر جميع الصفحات وفي صندوق الترخيص بثلاث لغات. كما بُنيت خانات السجل التجاري والرقم الضريبي والعنوان الوطني وتُركت مخفية، وهي مهيّأة للظهور تلقائيًا بمجرد إدخال أرقامها من لوحة التحكم.</p>
+
+<h3>٦) تصنيف البيع</h3>
+<p>أُضيفت شارة «جاهز / على الخارطة» بجانب حالة توفّر كل مشروع، وأُضيف حقل رقم تسجيل المشروع في وافي. وكلاهما مخفي حتى يُصنَّف المشروع رسميًا، إذ إن تصنيفًا مُفترضًا من طرفنا أسوأ من غياب التصنيف: التصنيف هو ما يحدّد أي مسار ترخيص ينطبق على المشروع.</p>
+
+<h3>٧) تهيئة الإدخال المستقبلي دون تطوير برمجي</h3>
+<p>أُضيفت جميع حقول الامتثال إلى لوحة التحكم: رقم ترخيص الإعلان، وتصنيف البيع، ورقم تسجيل المشروع، ورقم المخطط، وحالة العقار، ورقم ترخيص المطوّر، واسم المطوّر بثلاث لغات.</p>
+<p>وبهذا فإن استكمال أي بيان لاحقًا لا يتطلب أي عمل برمجي: يُدخَل الرقم من لوحة التحكم فيظهر سطره في صفحة المشروع تلقائيًا.</p>
+
+<h2>ثالثًا · حالة الملاحظات السبع بعد المعالجة</h2>
+
+<table>
+  <thead>
+    <tr><th class="num">#</th><th>الملاحظة</th><th>الخطورة</th><th>الحالة</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="num">١</td><td>غياب رقم ترخيص الإعلان عن جميع المشاريع</td><td><span class="pill pill--crit">حرجة</span></td><td><span class="pill pill--wait">البنية جاهزة · الرقم مطلوب</span></td></tr>
+    <tr><td class="num">٢</td><td>مشاريع بيع على الخارطة دون إشارة تنظيمية</td><td><span class="pill pill--crit">حرجة</span></td><td><span class="pill pill--wait">البنية جاهزة · التصنيف مطلوب</span></td></tr>
+    <tr><td class="num">٣</td><td>عدم ذكر اسم المطوّر وصفة المعلن</td><td><span class="pill pill--med">متوسطة</span></td><td><span class="pill pill--part">أُغلقت جزئيًا</span></td></tr>
+    <tr><td class="num">٤</td><td>صفحات المشاريع خالية من بيانات التراخيص</td><td><span class="pill pill--med">متوسطة</span></td><td><span class="pill pill--done">أُغلقت</span></td></tr>
+    <tr><td class="num">٥</td><td>بيانات إلزامية ناقصة في الإعلان</td><td><span class="pill pill--med">متوسطة</span></td><td><span class="pill pill--wait">البنية جاهزة · الأرقام مطلوبة</span></td></tr>
+    <tr><td class="num">٦</td><td>رقم هاتف غير حقيقي في الفوتر</td><td><span class="pill pill--low">منخفضة</span></td><td><span class="pill pill--done">أُغلقت</span></td></tr>
+    <tr><td class="num">٧</td><td>غياب بيانات المنشأة وإخلاء المسؤولية عن الصور</td><td><span class="pill pill--low">منخفضة</span></td><td><span class="pill pill--part">أُغلقت جزئيًا</span></td></tr>
+  </tbody>
+</table>
+
+<p class="muted">جميع ما ورد أعلاه منشور ومتحقَّق من ظهوره على الموقع بنسختيه العربية والإنجليزية.</p>
+
+<h2>رابعًا · ما نرجو التكرم بمخاطبة الجهات بشأنه</h2>
+
+<p>ما تبقّى من الملاحظات لا يُستكمل بعمل تقني، لأن مصدره أرقام وإفادات تصدر عن جهات خارج نطاق عملنا. ونرجو من إدارتكم الموقّرة التكرم بمخاطبة الجهات التالية:</p>
+
+<div class="ask">
+  <span class="ask__prio prio--now">أولوية فورية</span>
+  <h3>١) الهيئة العامة للعقار — إصدار تراخيص الإعلان</h3>
+  <p>استخراج <strong>ترخيص إعلان عقاري لكل مشروع</strong> من المشاريع الستة عبر منصة الهيئة.</p>
+  <p>فمسار النشر النظامي يقوم على ثلاث خطوات متتابعة: رخصة فال سارية، ثم عقد وساطة يتضمّن نطاق تسويق، ثم إصدار ترخيص إعلان لكل إعلان على حدة. ورخصة فال وحدها لا تكفي لعرض عقار بسعر مُحدّد.</p>
+  <p>ونوصي باستكمال هذا البند <strong>قبل إطلاق أي حملة إعلانية مدفوعة</strong>، لأن الحملة توسّع مدى انتشار الإعلان فتضاعف أثر أي مخالفة.</p>
+</div>
+
+<div class="ask">
+  <span class="ask__prio prio--now">أولوية فورية</span>
+  <h3>٢) الهيئة العامة للعقار — استيضاح مسار البيع على الخارطة</h3>
+  <p>الحصول على إفادة <strong>كتابية</strong> من الهيئة (<span class="ltr">199011</span> · <span class="ltr">cs@rega.gov.sa</span>) بشأن سؤالين حدّدهما تقرير الفحص، وجوابهما يحدّد حجم العمل المتبقي بالكامل:</p>
+  <ul>
+    <li>هل تُعفى مشاريع البيع على الخارطة من ترخيص الإعلان المنفصل لخضوعها لإطار تنظيمي آخر؟</li>
+    <li>هل يخرج المحتوى التعريفي غير المرتبط بوحدة محدّدة عن نطاق الترخيص؟</li>
+  </ul>
+</div>
+
+<div class="ask">
+  <span class="ask__prio prio--soon">أولوية عاجلة</span>
+  <h3>٣) الجهات صاحبة الإعلان — المطوّرون</h3>
+  <p>مخاطبة كل من <strong>شركة ريبورتاج السعودية</strong> (مشاريع نجد) و<strong>مدينة المعرفة الاقتصادية</strong> (مشروع العلياء) لتزويدنا بالآتي:</p>
+  <ul>
+    <li>رقم ترخيص المطوّر لكل جهة.</li>
+    <li>رقم المخطط لكل مشروع.</li>
+    <li>تصنيف كل مشروع رسميًا: جاهز أم بيع على الخارطة.</li>
+    <li>رقم تسجيل المشروع في منصة وافي لمشاريع البيع على الخارطة.</li>
+    <li>إفادة حالة العقار من حيث وجود رهن أو نزاع أو قيود تصرّف.</li>
+  </ul>
+</div>
+
+<div class="ask">
+  <span class="ask__prio prio--fast">أولوية سريعة</span>
+  <h3>٤) بيانات المنشأة</h3>
+  <p>تزويدنا برقم السجل التجاري، والرقم الضريبي، والعنوان الوطني لشركة رايليست جلوبال.</p>
+</div>
+
+<h2>خامسًا · نموذج تعبئة البيانات المطلوبة</h2>
+
+<p>يُرجى تعبئة الجدول التالي بعد ورود البيانات من الجهات أعلاه. وستُدخَل مباشرة من لوحة التحكم دون الحاجة إلى أي عمل برمجي.</p>
+
+<table>
+  <thead>
+    <tr><th>المشروع</th><th>رقم ترخيص الإعلان</th><th>تصنيف البيع</th><th>رقم وافي</th><th>رقم المخطط</th><th>حالة العقار</th><th>ترخيص المطوّر</th></tr>
+  </thead>
+  <tbody>
+    <tr class="fill"><td>العلياء</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr class="fill"><td>نجد ٢</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr class="fill"><td>نجد ٣</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr class="fill"><td>نجد ٤</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr class="fill"><td>نجد ٥</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr class="fill"><td>نجد ٧</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+
+<table>
+  <thead><tr><th>بيانات المنشأة</th><th>القيمة</th></tr></thead>
+  <tbody>
+    <tr class="fill"><td>السجل التجاري</td><td></td></tr>
+    <tr class="fill"><td>الرقم الضريبي</td><td></td></tr>
+    <tr class="fill"><td>العنوان الوطني</td><td></td></tr>
+  </tbody>
+</table>
+
+<div class="callout">
+  <p><strong>ملاحظة على التعبئة:</strong> حالة العقار تُدخَل بعد تأكيد قانوني لا بالافتراض، إذ إن البيان المضلّل في هذا الحقل يُعدّ مخالفة قائمة بذاتها. وكذلك تصنيف البيع: هو ما يحدّد أي مسار ترخيص ينطبق على المشروع.</p>
+</div>
+
+<h2>سادسًا · خاتمة</h2>
+
+<p>نؤكد أن ما ورد في القسم الثاني منفَّذ ومنشور على الموقع، وأن البنية الكاملة لاستقبال البيانات المتبقية جاهزة. وبمجرد ورود الأرقام من الجهات المذكورة في القسم الرابع، يكتمل امتثال الموقع لضوابط الإعلانات العقارية دون الحاجة إلى دورة تطوير جديدة.</p>
+
+<p>ونبقى على استعداد لتزويد الجهات المختصة بأي بيان تقني تطلبه، أو لتنفيذ أي تعديل يستجدّ بناءً على إفادة الهيئة.</p>
+
+<div class="sign">
+  <p>وتفضلوا بقبول وافر التقدير،</p>
+  <strong>فريق تشغيل وتطوير منصة RYLIST</strong>
+  <p class="muted" style="margin-top:2mm">شركة رايليست جلوبال · رخصة فال <span class="ltr">1200047932</span></p>
+</div>
+
+</main>
+</body>
+</html>
