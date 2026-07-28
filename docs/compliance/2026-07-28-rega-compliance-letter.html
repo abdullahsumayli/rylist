@@ -98,8 +98,39 @@
   .prio--soon{background:#F5EFE0;color:#86713F}
   .prio--fast{background:#EDEFF3;color:#3B4E6B}
 
-  .sign{margin-top:12mm;padding-top:5mm;border-top:1px solid var(--line)}
-  .sign strong{display:block;margin-top:4mm;font-size:11pt}
+  /* ---------- التوقيع والخاتم ---------- */
+  .sign{margin-top:12mm;padding-top:5mm;border-top:1px solid var(--line);break-inside:avoid}
+  .sign__row{
+    display:flex;align-items:flex-end;justify-content:space-between;
+    gap:10mm;margin-top:7mm;
+  }
+  .sign__by{flex:1;min-width:0}
+  .sign__name{font-size:13pt;font-weight:600;margin-bottom:1mm}
+  .sign__title{font-size:10pt;color:var(--gold-deep);margin-bottom:1.5mm}
+  .sign__org{font-size:9.5pt;color:var(--mid);line-height:1.7}
+  /* سطر التوقيع اليدوي — يُوقَّع بعد الطباعة */
+  .sign__line{
+    margin-top:9mm;border-bottom:1px solid var(--ink);width:62mm;height:1px;
+  }
+  .sign__linelbl{font-size:8pt;color:var(--mid);margin-top:1.5mm}
+
+  /* خاتم الشركة: عنصر هوية مرسوم بالـCSS، لا صورة خارجية */
+  .seal{
+    flex:none;width:44mm;height:44mm;border-radius:50%;
+    border:1.6pt solid var(--champ); color:var(--gold-deep);
+    display:grid;place-items:center;text-align:center;
+    transform:rotate(-7deg); opacity:.9; position:relative;
+  }
+  .seal::before{
+    content:"";position:absolute;inset:2.4mm;border-radius:50%;
+    border:.6pt solid var(--champ);
+  }
+  .seal__in{padding:0 7mm;line-height:1.4}
+  .seal__top{font-size:6.6pt;letter-spacing:.01em;font-weight:600}
+  .seal__mark{margin:1.4mm auto 1mm;display:block;width:8mm;height:8mm}
+  .seal__num{font-size:8pt;font-weight:600;direction:ltr;letter-spacing:.05em}
+  .seal__lbl{font-size:5.4pt;color:var(--champ);letter-spacing:.03em}
+  .seal__bot{font-size:5pt;letter-spacing:.14em;color:var(--champ);margin-top:1.2mm}
 
   .ltr{direction:ltr;unicode-bidi:isolate;display:inline-block}
   .muted{color:var(--mid);font-size:9.5pt}
@@ -265,8 +296,30 @@
 
 <div class="sign">
   <p>وتفضلوا بقبول وافر التقدير،</p>
-  <strong>فريق تشغيل وتطوير منصة RYLIST</strong>
-  <p class="muted" style="margin-top:2mm">شركة رايليست جلوبال · رخصة فال <span class="ltr">1200047932</span></p>
+
+  <div class="sign__row">
+    <div class="sign__by">
+      <div class="sign__name">عبدالله الصميلي</div>
+      <div class="sign__title">المدير التقني · منصة RYLIST</div>
+      <div class="sign__org">شركة رايليست جلوبال<br>رخصة فال <span class="ltr">1200047932</span> · ٢٨ يوليو ٢٠٢٦</div>
+      <div class="sign__line"></div>
+      <div class="sign__linelbl">التوقيع</div>
+    </div>
+
+    <div class="seal" role="img" aria-label="خاتم شركة رايليست جلوبال">
+      <div class="seal__in">
+        <div class="seal__top">شركة رايليست جلوبال</div>
+        <svg class="seal__mark" viewBox="0 0 200 200" aria-hidden="true">
+          <path d="M40 150 H160" stroke="currentColor" stroke-width="10" fill="none"/>
+          <path d="M55 150 L100 55 L145 150" stroke="currentColor" stroke-width="16" fill="none" stroke-linecap="square"/>
+          <circle cx="100" cy="55" r="18" fill="currentColor"/>
+        </svg>
+        <div class="seal__lbl">رخصة فال</div>
+        <div class="seal__num">1200047932</div>
+        <div class="seal__bot">R Y L I S T &nbsp;G L O B A L</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 </main>
