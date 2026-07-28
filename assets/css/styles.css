@@ -813,6 +813,11 @@ html[lang="en"] .fahem-fab__label { font-family: var(--font-en-body); letter-spa
   .fahem-fab__label { display: none; }
   .fahem-fab { padding: 0.3rem; padding-inline-end: 0.3rem; }
 }
+/* على الجوال يمتدّ النص لكامل العرض، فالزرّ المثبّت أعلى اليسار كان يغطّي عنوان
+   كل قسم أثناء التمرير. ننقله لأسفل فوق زر واتساب (52px + فاصل) بدل جانب المحتوى. */
+@media (max-width: 860px) {
+  .fahem-fab { inset-block-start: auto; inset-block-end: calc(20px + 52px + 12px); }
+}
 
 /* ==========================================================================
    ظهور تدريجي عند التمرير (Scroll reveal)
@@ -1150,12 +1155,15 @@ html[lang="ar"] .hero .display { white-space: normal; width: auto; max-width: no
 .chip:active { box-shadow: var(--inset); }
 
 .faq { display: grid; gap: var(--sp-4); max-width: 78ch; }
+/* الحشوة الرأسية على <summary> لا على <details>: <summary> وحده هو القابل للضغط،
+   وبدونها يصير هدف اللمس ~25px — أقلّ من الحدّ الأدنى 44px على الجوال. */
 .faq__item {
   background: var(--surf); border-radius: var(--nr); box-shadow: var(--raise);
-  padding: clamp(1rem, 2vw, 1.35rem) clamp(1.1rem, 2.5vw, 1.75rem);
+  padding: 0 clamp(1.1rem, 2.5vw, 1.75rem);
 }
 .faq__q {
   display: flex; align-items: center; gap: var(--sp-4); cursor: pointer; list-style: none;
+  padding-block: clamp(0.9rem, 2vw, 1.2rem);
   font-family: var(--font-en-display); font-size: 1.05rem; line-height: 1.5; color: var(--fg);
 }
 html[lang="ar"] .faq__q { font-family: var(--font-ar-display); }
@@ -1167,7 +1175,7 @@ html[lang="ar"] .faq__q { font-family: var(--font-ar-display); }
   transform: rotate(45deg) translate(-2px, -2px); transition: transform .25s ease;
 }
 .faq__item[open] .faq__q::after { transform: rotate(-135deg); }
-.faq__a { margin-top: var(--sp-3); color: var(--fg-soft); font-size: 0.95rem; line-height: 1.8; }
+.faq__a { margin: 0 0 clamp(0.9rem, 2vw, 1.2rem); color: var(--fg-soft); font-size: 0.95rem; line-height: 1.8; }
 
 /* شعارات الشركاء وصلت بألوان داكنة على خلفية شفافة، فتذوب في السطح الليلي.
    نضع لوحة فاتحة خلفها في الوضع الداكن فقط — الوضع الفاتح لا يحتاجها. */
