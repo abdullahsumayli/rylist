@@ -14,6 +14,9 @@ function localizeHtml(html, locale, dir, siteUrl, pageName, content, theme){
       else { el.set_content(el.getAttribute(`data-${locale}`)); }
     });
     root.querySelectorAll(`[data-${locale}-ph]`).forEach(el=>{ el.setAttribute("placeholder", el.getAttribute(`data-${locale}-ph`)); });
+    // aria-label ليس زينة: زر فاهم يُخفى نصّه الظاهر على الجوال (CSS سطر ~813)
+    // فيبقى aria-label اسمَه الوحيد — بلا ترجمة يسمع الزائر الصيني اسمًا عربيًا.
+    root.querySelectorAll(`[data-${locale}-aria]`).forEach(el=>{ el.setAttribute("aria-label", el.getAttribute(`data-${locale}-aria`)); });
   }
   // overlay DB content (after locale swap so DB overrides the per-language default)
   applyContent(root, content, locale);

@@ -25,6 +25,28 @@ const SRC = `<!doctype html><html lang="ar" dir="rtl"><head>
 <div class="hero__bg" data-cms-img="hero" style="background-image:url('old.jpg')"></div>
 </body></html>`;
 
+// زر فاهم يُخفى نصّه الظاهر على الجوال، فـaria-label هو اسمه الوحيد هناك —
+// بلا ترجمة يسمع الزائر الصيني اسمًا عربيًا في زر مكتوب عليه 咨询法赫姆.
+const ARIA_SRC = `<!doctype html><html lang="ar" dir="rtl"><head></head><body>
+<a class="fahem-fab" aria-label="استشير فاهم" data-en-aria="Ask Fahem" data-zh-aria="咨询法赫姆">
+<span class="fahem-fab__label" data-en="Ask Fahem" data-zh="咨询法赫姆">استشير فاهم</span></a>
+</body></html>`;
+
+test("renderPages localises aria-label, and ar keeps its original", () => {
+  withTempIndex(ARIA_SRC, (dir) => {
+    const out = path.join(dir, "dist");
+    renderPages(out, {
+      locales: [{ code: "ar", dir: "rtl" }, { code: "zh", dir: "ltr" }],
+      home: {}, chrome: {}, theme: {},
+    }, "https://rylist.sa");
+    const zh = fs.readFileSync(path.join(out, "zh", "index.html"), "utf8");
+    const ar = fs.readFileSync(path.join(out, "index.html"), "utf8");
+    assert.match(zh, /aria-label="咨询法赫姆"/);
+    assert.ok(!/[؀-ۿ]/.test(zh.match(/<a class="fahem-fab"[\s\S]*?<\/a>/)[0]), "zh launcher still has Arabic");
+    assert.match(ar, /aria-label="استشير فاهم"/);   // العربية تبقى الأصل
+  });
+});
+
 test("renderPages overlays content + injects theme for ar", () => {
   withTempIndex(SRC, (dir) => {
     const out = path.join(dir, "dist");
