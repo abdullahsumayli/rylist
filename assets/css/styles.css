@@ -1107,7 +1107,7 @@ a.license-card:hover { box-shadow: var(--inset-sm); }
 .badge, .status-pill { border: none; border-radius: 999px; box-shadow: var(--raise-sm); }
 
 /* ----- الفواصل (كانت حدود 1px صريحة) ------------------------------------ */
-.step, .value, .project-card__foot, .channel { border-color: var(--div); }
+.step, .value, .channel { border-color: var(--div); }
 .psec > h2, .pcomp__note { border-color: var(--div); }
 .pcomp__k, .pcomp__note { color: var(--fg-soft); }
 .pcomp__v { color: var(--fg); }
