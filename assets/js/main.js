@@ -94,44 +94,42 @@
     return L("يبدأ من " + n + " ريال", "From SAR " + n, n + " 里亚尔起");
   }
 
-  /* ----- بطاقة مشروع ----- */
+  /* ----- بطاقة مشروع: صورة كاملة + تراكب ----- */
   function projectCard(p) {
     var title = L(p.titleAr, p.titleEn, p.titleZh);
     var city = L(p.cityAr, p.cityEn, p.cityZh);
     var district = L(p.districtAr, p.districtEn, p.districtZh);
-    var type = L(p.typeAr, p.typeEn, p.typeZh);
-    var stKey = (p.status === "sold" || p.status === "reserved" || p.status === "soon") ? p.status : "available";
-    var statusTxt = t(stKey);
-    var statusCls = { sold: "badge--sold", reserved: "badge--reserved", soon: "badge--soon" }[p.status] || "";
-    var soldHtml = p.sold ? (
-      '<div class="sold">' +
-        '<div class="sold__label"><span>' + t("soldPct") + '</span><b>' + p.sold + '%</b></div>' +
-        '<div class="sold__bar"><span class="sold__fill" style="width:' + p.sold + '%"></span></div>' +
-      '</div>'
-    ) : '';
+
+    var chips = chipsFor(p).map(function (c) {
+      return '<span class="pcard__chip ' + c.cls + '">' + c.icon + '<span>' + esc(c.text) + '</span></span>';
+    }).join("");
+
+    var soldHtml = p.sold
+      ? '<div class="pcard__sold"><span class="pcard__sold-fill" style="width:' + Number(p.sold) + '%"></span>' +
+        '<span class="pcard__sold-label">' + t("soldPct") + " " + Number(p.sold) + '%</span></div>'
+      : "";
+
     return '' +
-      '<article class="project-card">' +
+      '<a class="project-card" href="projects/' + p.code + '.html">' +
         '<div class="project-card__media">' +
-          '<img loading="lazy" src="' + p.img + '" alt="' + esc(title) + '">' +
-          '<span class="badge ' + statusCls + '">' + statusTxt + '</span>' +
-        '</div>' +
-        '<div class="project-card__body">' +
-          '<div class="project-card__loc">' +
-            '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>' +
-            '<span>' + esc(district) + L("، ", ", ", "，") + esc(city) + '</span>' +
+          '<img loading="lazy" src="' + esc(p.img) + '" alt="' + esc(title) + '">' +
+          '<span class="pcard__scrim" aria-hidden="true"></span>' +
+          '<div class="pcard__top">' +
+            '<div class="pcard__chips">' + chips + '</div>' +
+            (p.code ? '<span class="pcard__code">' + esc(p.code) + '</span>' : '') +
           '</div>' +
-          '<h3 class="project-card__title">' + esc(title) + '</h3>' +
-          '<div class="project-card__type">' + esc(type) + '</div>' +
-          soldHtml +
-          '<div class="project-card__meta">' + fmtMeta(p) + '</div>' +
-          '<div class="project-card__foot">' +
-            '<div class="project-card__price"><b>' + fmtPrice(p.priceMin, p.priceMax) + '</b>' +
-              '<span class="project-card__code">' + t("code") + " " + p.code + '</span></div>' +
-            '<a class="link-arrow" href="projects/' + p.code + '.html">' + t("view") +
-              '<span aria-hidden="true">' + L("←", "→", "→") + '</span></a>' +
+          '<div class="pcard__bottom">' +
+            '<div class="pcard__head">' +
+              '<h3 class="pcard__title">' + esc(title) + '</h3>' +
+              '<span class="pcard__go" aria-hidden="true">' + L("←", "→", "→") + '</span>' +
+            '</div>' +
+            '<div class="pcard__loc">' + ICON_PIN + '<span>' + esc(district) + L("، ", ", ", "，") + esc(city) + '</span></div>' +
+            '<div class="pcard__rule"></div>' +
+            '<div class="pcard__price">' + esc(fmtPriceFrom(p.priceMin, p.priceMax)) + '</div>' +
+            soldHtml +
           '</div>' +
         '</div>' +
-      '</article>';
+      '</a>';
   }
 
   /* ----- بطاقة خبر ----- */

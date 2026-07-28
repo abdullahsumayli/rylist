@@ -1335,3 +1335,46 @@ a.project-card { display: block; text-decoration: none; color: inherit; }
   display: flex; align-items: flex-start; justify-content: space-between; gap: var(--sp-2);
 }
 .pcard__bottom { inset-block-end: calc(var(--pc-pad) + 12px); }
+
+/* --- الشرائح --- */
+.pcard__chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.pcard__chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 0.32em 0.75em; border-radius: 999px;
+  background: rgb(var(--card-scrim) / .55);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  color: #F6F3EB; font-size: 0.72rem; line-height: 1.6; white-space: nowrap;
+}
+/* الخلفية شبه الشفافة وحدها كافية للتباين متى غاب دعم backdrop-filter */
+.pcard__chip--available { color: #D2C19C; }
+.pcard__chip--reserved  { color: #E0B278; }
+.pcard__chip--sold      { color: rgb(246 243 235 / .62); }
+.pcard__chip--soon      { color: #A9C0D4; }
+.pcard__code {
+  font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.06em;
+  color: rgb(246 243 235 / .55); padding-block-start: 0.4em; white-space: nowrap;
+}
+
+/* --- الجزء السفلي --- */
+.pcard__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--sp-3); }
+.pcard__title {
+  margin: 0; color: #F6F3EB; font-size: clamp(1.15rem, 2.2vw, 1.4rem); line-height: 1.35;
+  font-family: var(--font-en-display);
+}
+html[lang="ar"] .pcard__title { font-family: var(--font-ar-display); }
+.pcard__go { color: #D2C19C; font-size: 1.1rem; line-height: 1; transition: transform .25s ease; }
+.project-card:hover .pcard__go { transform: translateX(-4px); }
+html[lang="en"] .project-card:hover .pcard__go,
+html[lang="zh"] .project-card:hover .pcard__go { transform: translateX(4px); }
+
+.pcard__loc {
+  display: flex; align-items: center; gap: 5px; margin-top: 5px;
+  color: rgb(246 243 235 / .78); font-size: 0.8rem;
+}
+.pcard__rule { height: 1px; margin: 10px 0 8px; background: rgb(210 193 156 / .32); }
+.pcard__price { color: #F6F3EB; font-size: 1.05rem; font-weight: 500; }
+
+/* --- شريط نسبة المبيع (يظهر فقط متى sold > 0) --- */
+.pcard__sold { margin-top: 8px; }
+.pcard__sold-fill { display: block; height: 3px; border-radius: 2px; background: #D2C19C; }
+.pcard__sold-label { display: block; margin-top: 4px; font-size: 0.7rem; color: rgb(246 243 235 / .7); }
