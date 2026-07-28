@@ -126,6 +126,8 @@ export function featuresHtml(D, loc) {
     + `</ul></section>`;
 }
 
+// كل صفحة تكتب اسم العملة بلغتها — «ريال» العربية كانت تتسرّب لصفحات zh.
+const CURRENCY = { ar: "ريال", en: "SAR", zh: "里亚尔" };
 const CTA = { ar: "استفسر عبر واتساب", en: "Enquire on WhatsApp", zh: "通过 WhatsApp 咨询" };
 // البروشور يُطلب ولا يُنزَّل: الزر يفتح واتساب برسالة جاهزة باسم المشروع، فيصير
 // الملف سببَ تواصل بدل تنزيل مجهول. الـPDF يبقى مرفوعًا ليرسله الفريق بنفسه.
@@ -156,7 +158,7 @@ export function renderProjectHtml(tmpl, p, ctx) {
     ctx.contact?.whatsapp ? `https://wa.me/${ctx.contact.whatsapp}?text=${encodeURIComponent(text)}` : "#";
   const wa = waLink(`${t} (${p.code})`);
   const price = p.price_min
-    ? `${p.price_min.toLocaleString("en-US")} – ${(p.price_max || p.price_min).toLocaleString("en-US")} ${loc === "en" ? "SAR" : "ريال"}`
+    ? `${p.price_min.toLocaleString("en-US")} – ${(p.price_max || p.price_min).toLocaleString("en-US")} ${CURRENCY[loc] || CURRENCY.ar}`
     : ({ ar: "السعر عند الطلب", en: "Price on request", zh: "价格待询" }[loc] || "السعر عند الطلب");
   const D = p.details || {};
   // الزر يظهر متى ما وُجد بروشور — سواء كان مرفوعًا (brochure_url) أو محفوظًا عند
