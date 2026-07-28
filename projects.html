@@ -61,30 +61,26 @@
 
   <section class="section">
     <div class="container">
-      <div class="filters">
-        <select id="filterCity" aria-label="City">
-          <option value="all" data-en="All cities" data-zh="所有城市">كل المدن</option>
-          <option value="riyadh" data-en="Riyadh" data-zh="利雅得">الرياض</option>
-          <option value="jeddah" data-en="Jeddah" data-zh="吉达">جدة</option>
-          <option value="eastern" data-en="Eastern Province" data-zh="东部省">المنطقة الشرقية</option>
-          <option value="makkah" data-en="Makkah" data-zh="麦加">مكة المكرمة</option>
-          <option value="madinah" data-en="Madinah" data-zh="麦地那">المدينة المنورة</option>
-        </select>
-        <select id="filterType" aria-label="Type">
-          <option value="all" data-en="All types" data-zh="所有类型">كل الأنواع</option>
-          <option value="villa" data-en="Villas" data-zh="别墅">فلل</option>
-          <option value="apartment" data-en="Apartments" data-zh="公寓">شقق</option>
-          <option value="townhouse" data-en="Townhouses" data-zh="联排别墅">تاون هاوس</option>
-          <option value="land" data-en="Lands" data-zh="地块">أراضٍ</option>
-          <option value="offplan" data-en="Off-plan" data-zh="期房">على الخارطة</option>
-        </select>
-        <select id="filterStatus" aria-label="Status">
-          <option value="all" data-en="All statuses" data-zh="所有状态">كل الحالات</option>
-          <option value="available" data-en="Available" data-zh="可售">متاح</option>
-          <option value="reserved" data-en="Reserved" data-zh="已预订">محجوز</option>
-          <option value="sold" data-en="Sold" data-zh="已售">مباع</option>
-        </select>
-        <span class="filters__count" id="projCount"></span>
+      <div class="filterbar">
+        <p class="filterbar__count" id="projCount"></p>
+
+        <nav class="chips chips--tabs" role="tablist" id="filterCity"
+             aria-label="تصفية حسب المدينة" data-cur="all">
+          <button type="button" class="chip chip--on" role="tab" aria-selected="true"  data-val="all"     data-en="All cities" data-zh="所有城市">كل المدن</button>
+          <button type="button" class="chip"          role="tab" aria-selected="false" data-val="riyadh"  data-en="Riyadh" data-zh="利雅得">الرياض</button>
+          <button type="button" class="chip"          role="tab" aria-selected="false" data-val="jeddah"  data-en="Jeddah" data-zh="吉达">جدة</button>
+          <button type="button" class="chip"          role="tab" aria-selected="false" data-val="madinah" data-en="Madinah" data-zh="麦地那">المدينة المنورة</button>
+          <button type="button" class="chip"          role="tab" aria-selected="false" data-val="eastern" data-en="Eastern Province" data-zh="东部省">المنطقة الشرقية</button>
+          <button type="button" class="chip"          role="tab" aria-selected="false" data-val="makkah"  data-en="Makkah" data-zh="麦加">مكة المكرمة</button>
+        </nav>
+
+        <!-- صفّا النوع والحالة يُبنيان من البيانات في renderFilterRows()، ويبقيان
+             مخفيّين ما لم توجد قيمتان مختلفتان على الأقل. المدن وحدها ثابتة عمدًا:
+             ضغط مدينة بلا مشاريع يطلّع رسالة «قريبًا · تواصل معنا» وهي التقاط عملاء مقصود. -->
+        <nav class="chips chips--sub" role="tablist" id="filterType"
+             aria-label="تصفية حسب النوع" data-cur="all" hidden></nav>
+        <nav class="chips chips--sub" role="tablist" id="filterStatus"
+             aria-label="تصفية حسب الحالة" data-cur="all" hidden></nav>
       </div>
       <div id="projectsGrid" class="grid grid-3"></div>
     </div>

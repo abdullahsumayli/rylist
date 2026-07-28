@@ -1378,3 +1378,29 @@ html[lang="zh"] .project-card:hover .pcard__go { transform: translateX(4px); }
 .pcard__sold { margin-top: 8px; }
 .pcard__sold-fill { display: block; height: 3px; border-radius: 2px; background: #D2C19C; }
 .pcard__sold-label { display: block; margin-top: 4px; font-size: 0.7rem; color: rgb(246 243 235 / .7); }
+
+/* --- شريط الفلاتر: تبويبات دائرية بدل قوائم select --- */
+.filterbar { margin-bottom: clamp(1.5rem, 3vw, 2.5rem); }
+.filterbar__count {
+  margin: 0 0 var(--sp-4); font-size: clamp(1.4rem, 3vw, 1.9rem);
+  font-family: var(--font-en-display); color: var(--fg);
+}
+html[lang="ar"] .filterbar__count { font-family: var(--font-ar-display); }
+
+/* .chip الموجود مصمَّم لـ <a>؛ هذي تسوّي <button> به */
+button.chip { border: 0; font: inherit; cursor: pointer; }
+
+.chips--tabs {
+  margin-bottom: var(--sp-3);
+  flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  padding-block: 4px;            /* حيّز لظلّ --raise-sm كي لا يُقصّ عند التمرير */
+}
+.chips--tabs::-webkit-scrollbar { display: none; }
+.chips--sub { margin-bottom: var(--sp-3); gap: var(--sp-2); }
+
+.chip--on { box-shadow: var(--inset-sm); color: var(--champ); }
+.chip--sm {
+  padding: 0.42em 1.05em; font-size: 0.82rem;
+  background: transparent; box-shadow: none; color: var(--fg-soft);
+}
+.chip--sm.chip--on { background: var(--surf); box-shadow: var(--inset-sm); color: var(--champ); }
