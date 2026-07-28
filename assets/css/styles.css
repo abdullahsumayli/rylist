@@ -442,9 +442,16 @@ html[lang="ar"] .stat__num { font-family: var(--font-ar-display); }
    القريبة من المربّع فتبدو صغيرة داخله، وتتضخّم لوحة الوضع الليلي حولها.
    max-width احتياط لو أُضيف لاحقًا شعار مفرط في العرض. */
 .partner-logo { display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; }
+/* حدّان معًا: الارتفاع يوحّد الشعارات المتقاربة النسب، والعرض يكبح العريضة
+   (دار المزادات 3.66:1) فلا تطغى على الصفّ. النسبة بين الحدّين ثابتة عبر
+   المقاسات حتى لا يتبدّل أيّ شعار يُقيَّد بالعرض عند تغيّر الشاشة. */
 .partner-logo img {
-  height: clamp(40px, 4.4vw, 64px); width: auto; max-width: 200px; object-fit: contain;
+  width: auto; height: auto;
+  max-height: clamp(40px, 4.5vw, 64px);
+  max-width: clamp(99px, 11vw, 158px);
 }
+/* شعار معرض بكين لوحة نصّية كثيفة، يحتاج ارتفاعًا أكبر ليُقرأ بنفس وضوح غيره */
+.partner-logo img[src*="overseas-pi"] { max-height: clamp(45px, 5vw, 72px); }
 
 /* ----- 16. الأخبار / الرؤى ---------------------------------------------- */
 .article-card { display: flex; flex-direction: column; gap: var(--sp-3); }
