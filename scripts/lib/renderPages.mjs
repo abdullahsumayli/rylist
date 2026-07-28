@@ -1,7 +1,8 @@
 import fs from "node:fs"; import { parse } from "node-html-parser";
 import { applyContent } from "./applyContent.mjs";
 import { resolveTheme } from "./theme.mjs";
-const PAGES = ["index.html","projects.html","services.html","about.html","news.html","contact.html","fahem.html"];
+const PAGES = ["index.html","projects.html","services.html","about.html","news.html","contact.html","fahem.html",
+               "privacy.html","terms.html","usage.html"];
 
 function localizeHtml(html, locale, dir, siteUrl, pageName, content, theme){
   const root = parse(html, { comment:true });

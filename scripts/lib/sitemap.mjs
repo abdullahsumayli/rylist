@@ -1,7 +1,8 @@
 import fs from "node:fs";
 export function writeSitemap(out, c, siteUrl){
   const base = siteUrl.replace(/\/$/,"");
-  const pages=["","projects.html","services.html","about.html","news.html","contact.html"];
+  const pages=["","projects.html","services.html","about.html","news.html","contact.html",
+               "privacy.html","terms.html","usage.html"];
   const urls=[];
   for(const L of c.locales){ const pre = L.code==="ar"?"":`/${L.code}`;
     for(const pg of pages) urls.push(`${base}${pre}/${pg}`);

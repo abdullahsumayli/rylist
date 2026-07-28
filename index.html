@@ -255,6 +255,11 @@
           <span class="logo__text"><span class="logo__name">RYLIST</span><span class="logo__sub" data-en="REAL ESTATE" data-zh="房地产">العقارية</span></span>
         </a>
         <p class="site-footer__tag" data-cms="footer_tag" data-en="RYLIST connects buyers with the best real-estate projects from trusted developers in Saudi Arabia, making the search and purchase journey clearer and more confident." data-zh="RYLIST 将买家与沙特可信开发商的优质房地产项目相连接，让寻找与购买之旅更清晰、更放心。">RYLIST منصة تربط المشترين بأفضل المشاريع العقارية من المطورين الموثوقين في المملكة العربية السعودية، لتجعل رحلة البحث والشراء أكثر وضوحًا وثقة.</p>
+        <!-- تظهر تلقائيًا عبر public.js متى ما كان في جدول social_links صفوف مفعّلة -->
+        <div class="footer-social" hidden>
+          <h5 class="footer-social__label" data-en="Follow us" data-zh="关注我们">تابعنا</h5>
+          <div id="social" class="footer-social__icons"></div>
+        </div>
       </div>
       <div class="footer-col">
         <h4 data-cms="footer_explore_head" data-en="Explore" data-zh="探索">تصفّح</h4>
@@ -273,15 +278,39 @@
           <li><a data-phone data-phone-text href="#">+966 11 000 0000</a></li>
           <li><span data-en="Riyadh, Saudi Arabia" data-zh="沙特阿拉伯，利雅得">الرياض، السعودية</span></li>
         </ul>
-        <div class="footer-social" hidden>
-          <h5 class="footer-social__label" data-en="Social media" data-zh="社交媒体">حسابات التواصل الاجتماعي</h5>
-          <div id="social" class="footer-social__icons"></div>
+      </div>
+      <div class="footer-col footer-licenses">
+        <h4 data-cms="footer_licenses_head" data-en="Licensing" data-zh="牌照资质">التراخيص</h4>
+
+        <a class="license-card" href="https://eservicesredp.rega.gov.sa/auth/queries/Brokerage" target="_blank" rel="noopener" data-license="fal">
+          <span class="license-card__qr"><img src="assets/img/fal-qr.svg" alt="" width="72" height="72" loading="lazy" decoding="async"></span>
+          <span class="license-card__body">
+            <span class="license-card__issuer" data-cms="fal_issuer" data-en="Real Estate General Authority" data-zh="沙特房地产总局">الهيئة العامة للعقار</span>
+            <span class="license-card__label" data-cms="fal_activity" data-en="FAL brokerage &amp; marketing licence" data-zh="FAL 房地产经纪与营销牌照">رخصة فال للوساطة والتسويق</span>
+            <span class="license-card__num" dir="ltr" data-cms="fal_number">1200047932</span>
+            <span class="license-card__meta" data-cms="fal_meta" data-en="RYLIST Global Co. · valid until 29/06/2027" data-zh="RYLIST Global 公司 · 有效期至 2027/06/29">شركة رايليست جلوبال · سارية حتى 29/06/2027</span>
+            <span class="license-card__verify" data-en="Verify the licence ↗" data-zh="核验牌照 ↗">تحقّق من الرخصة ↗</span>
+          </span>
+        </a>
+
+        <!-- ترخيص وزارة السياحة: جاهز ومخفي. لتفعيله احذف hidden وعبّي رقم الترخيص. -->
+        <div class="license-card license-card--plain" data-license="tourism" hidden>
+          <span class="license-card__qr license-card__qr--empty" aria-hidden="true"></span>
+          <span class="license-card__body">
+            <span class="license-card__issuer" data-cms="tourism_issuer" data-en="Ministry of Tourism" data-zh="旅游部">وزارة السياحة</span>
+            <span class="license-card__label" data-cms="tourism_activity" data-en="Hospitality units licence" data-zh="住宿单元许可">ترخيص وحدات الضيافة</span>
+            <span class="license-card__num" dir="ltr" data-cms="tourism_number">—</span>
+          </span>
         </div>
       </div>
     </div>
     <div class="site-footer__bottom">
       <span>© <span data-year>2026</span> RYLIST — <span data-cms="footer_rights" data-en="All rights reserved" data-zh="版权所有">جميع الحقوق محفوظة</span></span>
-      <span data-cms="footer_bottom" data-en="Privacy · Terms" data-zh="隐私 · 条款">الخصوصية · الشروط</span>
+      <nav class="footer-legal" aria-label="روابط قانونية">
+        <a href="privacy.html" data-en="Privacy Policy" data-zh="隐私政策">سياسة الخصوصية</a>
+        <a href="terms.html" data-en="Terms &amp; Conditions" data-zh="条款与条件">الشروط والأحكام</a>
+        <a href="usage.html" data-en="How to use the site" data-zh="网站使用说明">طريقة استخدام الموقع</a>
+      </nav>
     </div>
   </div>
 </footer>

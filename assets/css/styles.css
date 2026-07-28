@@ -477,7 +477,7 @@ html[lang="ar"] .preview-flag { font-family: var(--font-ar-body); letter-spacing
 /* ----- 18. الفوتر ------------------------------------------------------- */
 .site-footer { background: var(--ink); color: rgba(246,243,235,0.72); position: relative; }
 .site-footer .container { position: relative; z-index: 1; }
-.site-footer__top { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: clamp(2rem, 4vw, 3.5rem); padding-block: clamp(3rem, 6vw, 4.5rem); }
+.site-footer__top { display: grid; grid-template-columns: 1.5fr 0.8fr 0.9fr 1.2fr; gap: clamp(2rem, 3.5vw, 3rem); padding-block: clamp(3rem, 6vw, 4.5rem); }
 .site-footer .logo { color: var(--bone); }
 .site-footer .logo__sub { color: rgba(246,243,235,0.55); }
 .site-footer__tag { margin-top: var(--sp-6); max-width: 42ch; color: rgba(246,243,235,0.62); font-size: 0.95rem; }
@@ -486,7 +486,7 @@ html[lang="ar"] .footer-col h4 { font-family: var(--font-ar-body); letter-spacin
 .footer-col ul { display: flex; flex-direction: column; gap: var(--sp-3); }
 .footer-col a { color: rgba(246,243,235,0.72); font-size: 0.9rem; transition: color .2s; }
 .footer-col a:hover { color: var(--bone); }
-.footer-social { margin-top: var(--sp-5); }
+.footer-social { margin-top: var(--sp-6); }
 .footer-social[hidden] { display: none; }
 .footer-social__label { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-bright); margin-bottom: var(--sp-3); font-weight: 500; }
 html[lang="ar"] .footer-social__label { font-family: var(--font-ar-body); letter-spacing: 0.06em; text-transform: none; font-size: 0.9rem; }
@@ -501,6 +501,35 @@ html[lang="ar"] .footer-social__label { font-family: var(--font-ar-body); letter
   font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.06em; color: rgba(246,243,235,0.5);
 }
 html[lang="ar"] .site-footer__bottom { font-family: var(--font-ar-body); letter-spacing: 0; }
+.footer-legal { display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-4); }
+.footer-legal a { color: rgba(246,243,235,0.62); transition: color .2s; }
+.footer-legal a:hover { color: var(--bone); text-decoration: underline; text-underline-offset: 3px; }
+/* فاصل «·» بين الروابط بدل كتابته في HTML (يختفي قبل أول رابط ويتأقلم مع RTL) */
+.footer-legal a + a { position: relative; }
+.footer-legal a + a::before { content: "·"; position: absolute; inset-inline-start: calc(var(--sp-4) / -2); transform: translateX(-50%); color: rgba(246,243,235,0.3); }
+html[dir="rtl"] .footer-legal a + a::before { transform: translateX(50%); }
+
+/* بطاقات التراخيص في الفوتر (فال / السياحة) --------------------------------
+   ألوانها ثابتة بالـhex لا بمتغيّرات الثيم: البطاقة فاتحة دائمًا لأن رمز QR
+   يحتاج تباينًا أسود-على-أبيض ليُقرأ بالكاميرا في الوضعين الفاتح والداكن. */
+.footer-licenses { display: flex; flex-direction: column; gap: var(--sp-3); }
+.license-card {
+  display: flex; align-items: center; gap: var(--sp-4);
+  background: #F6F3EB; border-radius: var(--radius); padding: 0.8rem 0.9rem;
+  color: #17140F; text-decoration: none;
+  transition: transform .2s, box-shadow .2s;
+}
+a.license-card:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(0,0,0,0.3); }
+.license-card__qr { flex: none; width: 76px; height: 76px; background: #fff; border-radius: var(--radius); padding: 4px; display: grid; place-items: center; }
+.license-card__qr img { width: 100%; height: 100%; display: block; }
+.license-card__qr--empty { border: 1px dashed rgba(23,20,15,0.2); }
+.license-card__body { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.license-card__issuer { font-size: 0.7rem; color: #86713F; letter-spacing: 0.02em; }
+.license-card__label { font-size: 0.8rem; font-weight: 600; line-height: 1.5; color: #17140F; }
+.license-card__num { font-family: var(--font-mono); font-size: 0.95rem; color: #17140F; letter-spacing: 0.04em; }
+.license-card__meta { font-size: 0.71rem; color: #6B6152; line-height: 1.6; }
+.license-card__verify { font-size: 0.71rem; color: #86713F; margin-top: 2px; }
+a.license-card:hover .license-card__verify { text-decoration: underline; text-underline-offset: 2px; }
 
 /* ----- 19. النماذج ------------------------------------------------------ */
 .form { display: grid; gap: var(--sp-4); }
@@ -520,6 +549,18 @@ html[lang="ar"] .site-footer__bottom { font-family: var(--font-ar-body); letter-
 .page-banner .display, .page-banner h1 { color: var(--bone); }
 .page-banner .lead { color: rgba(246,243,235,0.75); margin-top: var(--sp-4); }
 .page-banner .eyebrow { color: var(--gold-bright); }
+
+/* الصفحات القانونية: الخصوصية / الشروط / طريقة الاستخدام */
+.legal { max-width: 78ch; line-height: 1.95; color: var(--text-dark); }
+.legal > :first-child { margin-top: 0; }
+.legal h2 { font-size: 1.22rem; margin: var(--sp-8) 0 var(--sp-3); }
+.legal p { margin: 0 0 var(--sp-4); }
+/* الـreset العام يلغي النقاط (ul{list-style:none})، فنعيدها هنا لأن القوائم القانونية تُقرأ كبنود */
+.legal ul { margin: 0 0 var(--sp-4); padding-inline-start: 1.35em; list-style: disc; }
+.legal li { margin-bottom: var(--sp-2); }
+.legal a { color: var(--gold-deep); }
+.legal__updated { font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.04em; color: var(--text-mid); }
+html[lang="ar"] .legal__updated { font-family: var(--font-ar-body); letter-spacing: 0; }
 
 /* بطاقات معلومات التواصل */
 .info-card { border: 1px solid var(--line); background: var(--white); border-radius: var(--radius); padding: clamp(1.25rem,2.5vw,1.75rem); }
@@ -1039,6 +1080,12 @@ html, body { background: var(--surf); color: var(--fg); transition: background .
 .footer-col a { color: var(--fg-soft); }
 .footer-col a:hover { color: var(--fg); }
 .site-footer__bottom { border-top: 1px solid var(--div); color: var(--fg-soft); }
+.footer-legal a { color: var(--fg-soft); }
+.footer-legal a:hover { color: var(--fg); }
+.footer-legal a + a::before { color: var(--champ-soft); }
+/* الفوتر هنا فاتح (--surf)، فبطاقة الترخيص تحتاج نتوءًا بدل ظلّ داكن لتنفصل عنه */
+.license-card { box-shadow: var(--raise-sm); }
+a.license-card:hover { box-shadow: var(--inset-sm); }
 .footer-social__icons a { border: 1px solid var(--div); color: var(--fg-soft); box-shadow: var(--raise-sm); }
 .footer-social__icons a:hover { background: var(--surf); color: var(--champ); box-shadow: var(--inset-sm); border-color: transparent; }
 
