@@ -96,11 +96,14 @@ function detectBudget(text: string): { budget_max?: number } {
   return {};
 }
 
-// كود مشروع صريح (NAJD-2 / نجد ٢) — للبحث بالاسم/الكود مباشرة (يعالج استرجاع نجد ٢).
+// كود مشروع صريح (NAJD-2 / نجد ٢ / العلياء) — للبحث بالاسم/الكود مباشرة.
+// «العلياء» تُطابَق بالهمزة فقط كي لا تلتبس بحي «العليا» في الرياض.
 function detectProjectCode(text: string): string | undefined {
   const t = text.replace(/[٠-٩]/g, (d) => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)));
   const m = t.match(/(?:najd|نجد)\s*[-]?\s*([1-9])\b/i);
-  return m ? `NAJD-${m[1]}` : undefined;
+  if (m) return `NAJD-${m[1]}`;
+  if (/العلياء|alalyaa|al[\s-]?alyaa|阿尔雅/i.test(t)) return "ALALYAA";
+  return undefined;
 }
 
 // التقاط اسم/جوال مكتوب داخل الشات (حجز إنلاين بلا ودجت). الجوال السعودي: 05xxxxxxxx أو +9665…
@@ -427,6 +430,9 @@ Deno.serve(async (req) => {
       fallback = props.length ? { message: foundMsg(props.length), properties: props } : { message: noMatchMsg };
       if (!props.length) {
         honestyNote = `CONTEXT (facts only, not a script to read out): The user referenced project ${code}, which we do NOT have. In-stock types: ${inStock}. Be honest about that in one warm sentence, then advise on what exists.`;
+      } else {
+        // الحالة الموجبة كانت مفقودة: بلا حقنة، الموديل ينكر مشروعًا موجودًا لأنه لم يبحث بعد.
+        honestyNote = `CONTEXT (facts only, not a script to read out): The user asked about project ${code}, which we DO have. Verified facts: ${JSON.stringify(props)}. This project EXISTS in our inventory — never say we don't have it, never claim it might be somewhere else, and never ask them to confirm they mean a different place. Answer warmly from these facts.`;
       }
     } else if (detType && !facts.typeKeys.includes(detType)) {
       const notAvail = label(TYPE, detType, lang);
