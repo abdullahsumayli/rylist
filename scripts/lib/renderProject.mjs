@@ -135,7 +135,8 @@ const DL_MSG = {
   en: (t, c) => `Hello, I'd like to receive the brochure for ${t} (${c})`,
   zh: (t, c) => `您好，我想索取${t}（${c}）项目的手册`,
 };
-export const FAHEM = { ar: "استشير فاهم", en: "Ask Fahem", zh: "咨询 فاهم" };
+// اسم فاهم بالصيني = 法赫姆 (نفس ما تستخدمه صفحات الموقع الثابتة — لا تخلط الخطّين).
+export const FAHEM = { ar: "استشير فاهم", en: "Ask Fahem", zh: "咨询法赫姆" };
 export const fahemHref = (loc) => (loc === "ar" ? "/fahem.html" : `/${loc}/fahem.html`);
 const STATUS = {
   available: { ar: "متاح", en: "Available", zh: "可售" },

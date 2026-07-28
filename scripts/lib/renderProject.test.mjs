@@ -204,6 +204,17 @@ test("brochure button is localised and omitted when there is no brochure", () =>
   assert.match(html, /استفسر عبر واتساب/);   // primary CTA still there
 });
 
+test("the Fahem launcher never mixes Arabic script into a non-Arabic page", () => {
+  const base = { base: "https://rylist.sa", tax: stubTax, contact: { whatsapp: "966500000000" } };
+  const arabic = /[؀-ۿ]/;
+  for (const loc of ["en", "zh"]) {
+    const html = renderProjectHtml(TMPL, sampleProject, { ...base, loc, dir: "ltr" });
+    const fab = html.match(/<a class="fahem-fab"[\s\S]*?<\/a>/)[0];
+    assert.ok(!arabic.test(fab), `${loc} launcher still contains Arabic: ${fab}`);
+  }
+  assert.match(renderProjectHtml(TMPL, sampleProject, { ...base, loc: "zh", dir: "ltr" }), /咨询法赫姆/);
+});
+
 test("renderProjectHtml injects theme head when a theme is provided", () => {
   const theme = resolveTheme({ font_preset: "elegant", accent_preset: "green" });
   const html = renderProjectHtml(TMPL, sampleProject, { loc: "ar", dir: "rtl", base: "https://rylist.sa", tax: stubTax, contact: {}, theme });
