@@ -181,6 +181,29 @@ test("renderProjectHtml fills header fields and title", () => {
   assert.match(html, /q=24\.77,46\.73/);
 });
 
+test("brochure button REQUESTS via WhatsApp — it never links the PDF", () => {
+  const ctx = { loc: "ar", dir: "rtl", base: "https://rylist.sa", tax: stubTax, contact: { whatsapp: "966500000000" } };
+  const html = renderProjectHtml(TMPL, sampleProject, ctx);
+  assert.match(html, /اطلب بروشور المشروع/);
+  assert.doesNotMatch(html, /تحميل البروشور/);
+  // the stored PDF must not be exposed as a public download link
+  assert.doesNotMatch(html, /x\/b\.pdf/);
+  // the button opens WhatsApp with the project named in the prefilled message
+  assert.match(html, /href="https:\/\/wa\.me\/966500000000\?text=[^"]*"[^>]*>اطلب بروشور المشروع/);
+  assert.ok(decodeURIComponent(html.match(/wa\.me\/966500000000\?text=([^"]+)"[^>]*>اطلب/)[1])
+    .includes("بروشور مشروع نجد ٢ (najd-2)"));
+});
+
+test("brochure button is localised and omitted when there is no brochure", () => {
+  const base = { dir: "ltr", base: "https://rylist.sa", tax: stubTax, contact: { whatsapp: "966500000000" } };
+  assert.match(renderProjectHtml(TMPL, sampleProject, { ...base, loc: "en" }), /Request the brochure/);
+  assert.match(renderProjectHtml(TMPL, sampleProject, { ...base, loc: "zh" }), /索取项目手册/);
+  const noBrochure = { ...sampleProject, brochure_url: null };
+  const html = renderProjectHtml(TMPL, noBrochure, { ...base, loc: "ar", dir: "rtl" });
+  assert.doesNotMatch(html, /اطلب بروشور المشروع/);
+  assert.match(html, /استفسر عبر واتساب/);   // primary CTA still there
+});
+
 test("renderProjectHtml injects theme head when a theme is provided", () => {
   const theme = resolveTheme({ font_preset: "elegant", accent_preset: "green" });
   const html = renderProjectHtml(TMPL, sampleProject, { loc: "ar", dir: "rtl", base: "https://rylist.sa", tax: stubTax, contact: {}, theme });

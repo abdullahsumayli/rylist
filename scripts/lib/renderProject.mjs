@@ -127,7 +127,14 @@ export function featuresHtml(D, loc) {
 }
 
 const CTA = { ar: "استفسر عبر واتساب", en: "Enquire on WhatsApp", zh: "通过 WhatsApp 咨询" };
-const DL = { ar: "تحميل البروشور", en: "Download brochure", zh: "下载手册" };
+// البروشور يُطلب ولا يُنزَّل: الزر يفتح واتساب برسالة جاهزة باسم المشروع، فيصير
+// الملف سببَ تواصل بدل تنزيل مجهول. الـPDF يبقى مرفوعًا ليرسله الفريق بنفسه.
+const DL = { ar: "اطلب بروشور المشروع", en: "Request the brochure", zh: "索取项目手册" };
+const DL_MSG = {
+  ar: (t, c) => `السلام عليكم، أرغب باستلام بروشور مشروع ${t} (${c})`,
+  en: (t, c) => `Hello, I'd like to receive the brochure for ${t} (${c})`,
+  zh: (t, c) => `您好，我想索取${t}（${c}）项目的手册`,
+};
 export const FAHEM = { ar: "استشير فاهم", en: "Ask Fahem", zh: "咨询 فاهم" };
 export const fahemHref = (loc) => (loc === "ar" ? "/fahem.html" : `/${loc}/fahem.html`);
 const STATUS = {
@@ -144,15 +151,15 @@ export function renderProjectHtml(tmpl, p, ctx) {
   const t = p.i18n?.title?.[loc] || p.i18n?.title?.ar || p.code;
   const url = (l) => `${base}${l === "ar" ? "" : "/" + l}/projects/${p.code}.html`;
   const hreflang = ["ar", "en", "zh"].map((l) => `\n<link rel="alternate" hreflang="${l}" href="${url(l)}">`).join("");
-  const wa = ctx.contact?.whatsapp
-    ? `https://wa.me/${ctx.contact.whatsapp}?text=${encodeURIComponent(`${t} (${p.code})`)}`
-    : "#";
+  const waLink = (text) =>
+    ctx.contact?.whatsapp ? `https://wa.me/${ctx.contact.whatsapp}?text=${encodeURIComponent(text)}` : "#";
+  const wa = waLink(`${t} (${p.code})`);
   const price = p.price_min
     ? `${p.price_min.toLocaleString("en-US")} – ${(p.price_max || p.price_min).toLocaleString("en-US")} ${loc === "en" ? "SAR" : "ريال"}`
     : ({ ar: "السعر عند الطلب", en: "Price on request", zh: "价格待询" }[loc] || "السعر عند الطلب");
   const D = p.details || {};
   const brochure = p.brochure_url
-    ? `<a class="btn btn--ghost" href="${p.brochure_url}" target="_blank" rel="noopener">${DL[loc] || DL.ar}</a>`
+    ? `<a class="btn btn--ghost" href="${waLink((DL_MSG[loc] || DL_MSG.ar)(t, p.code))}" target="_blank" rel="noopener">${DL[loc] || DL.ar}</a>`
     : "";
   return fill(tmpl, {
     lang: loc, dir, title: t, desc: (p.i18n?.description?.[loc] || "").slice(0, 150),
