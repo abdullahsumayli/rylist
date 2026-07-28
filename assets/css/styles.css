@@ -537,6 +537,41 @@ a.license-card:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba
 .license-card__verify { font-size: 0.71rem; color: #86713F; margin-top: 2px; }
 a.license-card:hover .license-card__verify { text-decoration: underline; text-underline-offset: 2px; }
 
+/* تحفّظ الصور والأسعار + بيانات المنشأة — سطر ممتد فوق الشريط السفلي.
+   بيانات المنشأة تبقى hidden لين تُعبّأ من لوحة التحكم (revealFilled). */
+.site-footer__legal {
+  border-top: 1px solid rgba(246,243,235,0.14); padding-block: var(--sp-4);
+  display: flex; flex-direction: column; gap: var(--sp-2);
+  font-size: 0.72rem; line-height: 1.7; color: rgba(246,243,235,0.45);
+}
+.footer-disclaimer, .footer-entity { margin: 0; }
+.footer-entity[hidden] { display: none; }
+.footer-entity span[dir="ltr"] { font-family: var(--font-mono); letter-spacing: 0.04em; }
+
+/* صندوق الترخيص في صفحة المشروع ---------------------------------------------
+   البيانات الإلزامية مرتبطة بالإعلان نفسه لا بالموقع ككل، فتنزل هنا. كل سطر
+   قيمته فارغة لا يصل هذا CSS أصلًا — المولّد يُقصيه قبل الطباعة. */
+.pcompliance { margin-block-start: var(--sp-8); }
+.pcomp__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: var(--sp-4); }
+.pcomp__row { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.pcomp__k { font-size: 0.78rem; color: var(--text-mid); }
+.pcomp__v { font-weight: 600; color: var(--ink); overflow-wrap: anywhere; }
+.pcomp__v a { color: inherit; text-decoration: none; }
+.pcomp__v a:hover .pcomp__verify { text-decoration: underline; text-underline-offset: 2px; }
+.pcomp__verify { display: block; font-size: 0.71rem; font-weight: 400; color: var(--gold-deep); }
+.pcomp__note {
+  margin-block-start: var(--sp-5); padding-block-start: var(--sp-3);
+  border-top: 1px solid var(--line); font-size: 0.75rem; line-height: 1.8; color: var(--text-mid);
+}
+
+/* تصنيف البيع بجانب حالة التوفّر — مفرّغة لا مصمتة كي لا تنافس status-pill */
+.sale-pill {
+  display: inline-block; margin-inline-start: var(--sp-2);
+  border: 1px solid var(--line-strong); color: var(--text-mid);
+  font-size: 0.75rem; letter-spacing: 0.02em; padding: 0.3em 0.85em; border-radius: var(--radius);
+}
+.sale-pill--offplan { border-color: var(--gold-deep); color: var(--gold-deep); }
+
 /* ----- 19. النماذج ------------------------------------------------------ */
 .form { display: grid; gap: var(--sp-4); }
 .field { display: flex; flex-direction: column; gap: var(--sp-2); }
@@ -1086,6 +1121,7 @@ html, body { background: var(--surf); color: var(--fg); transition: background .
 .footer-col a { color: var(--fg-soft); }
 .footer-col a:hover { color: var(--fg); }
 .site-footer__bottom { border-top: 1px solid var(--div); color: var(--fg-soft); }
+.site-footer__legal { border-top: 1px solid var(--div); color: var(--fg-soft); }
 .footer-legal a { color: var(--fg-soft); }
 .footer-legal a:hover { color: var(--fg); }
 .footer-legal a + a::before { color: var(--champ-soft); }
@@ -1100,7 +1136,11 @@ a.license-card:hover { box-shadow: var(--inset-sm); }
 
 /* ----- الفواصل (كانت حدود 1px صريحة) ------------------------------------ */
 .step, .value, .project-card__foot, .channel { border-color: var(--div); }
-.psec > h2 { border-bottom-color: var(--div); }
+.psec > h2, .pcomp__note { border-color: var(--div); }
+.pcomp__k, .pcomp__note { color: var(--fg-soft); }
+.pcomp__v { color: var(--fg); }
+.pcomp__verify, .sale-pill--offplan { color: var(--champ); }
+.sale-pill { border: none; border-radius: 999px; box-shadow: var(--raise-sm); color: var(--fg-soft); }
 .step__n, .value .num, .service-card .num { color: var(--champ); }
 
 /* ----- ودجت فاهم -------------------------------------------------------- */

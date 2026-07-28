@@ -15,7 +15,13 @@ async function taxonomy(kind) {
 const ENUM_AR = {
   available: "متاح", reserved: "محجوز", sold: "مباع", soon: "قريبًا",
   draft: "مسودة", published: "منشور",
+  ready: "جاهز", offplan: "على الخارطة",
+  clear: "خالٍ من الرهن والنزاع", mortgaged: "عليه رهن", disputed: "عليه نزاع",
+  "": "— غير محدّد —",
 };
+// حقول الامتثال اختيارية: خيارها الفارغ يجب أن يُحفظ NULL لا "" — قيود CHECK
+// في القاعدة ترفض السلسلة الفارغة، والفراغ هو ما يُخفي السطر في صندوق الترخيص.
+const normSelect = (v) => (v === "" ? null : v);
 const tabLabel = (code) => (code === "ar" ? "ع" : code === "en" ? "EN" : "中文");
 
 // per-locale editor with language tabs (ع / EN / 中文)
@@ -123,8 +129,8 @@ export async function renderForm(root, ent, row, onDone) {
       const opts = Array.isArray(f.options) ? f.options.map((v) => ({ value: v, label: ENUM_AR[v] || v })) : await taxonomy(f.options.split(":")[1]);
       opts.forEach((o) => { const op = document.createElement("option"); op.value = o.value; op.textContent = o.label; input.appendChild(op); });
       const val = draft[f.n] ?? opts[0]?.value;
-      input.value = val; draft[f.n] = val;
-      input.onchange = () => draft[f.n] = input.value;
+      input.value = val ?? ""; draft[f.n] = normSelect(val);
+      input.onchange = () => draft[f.n] = normSelect(input.value);
       field.appendChild(input);
     } else if (f.t === "image" || f.t === "file") {
       field.appendChild(label);
