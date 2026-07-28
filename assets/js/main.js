@@ -173,10 +173,29 @@
     });
   }
 
+  /* على الجوال تتراصّ البطاقات عمودًا واحدًا فتلتهم ~2500px من التمرير قبل بقية
+     الصفحة. نقصّها إلى ٣ هناك — ورابط «كل المشاريع» في رأس القسم يكمل الباقي.
+     القصّ في الـJS لا بالـCSS حتى لا يُحمّل المتصفّح صور بطاقات لن تُعرض. */
+  var FEATURED_MOBILE = 3, FEATURED_DESKTOP = 6;
+  function featuredLimit() {
+    return (window.matchMedia && window.matchMedia("(max-width: 560px)").matches)
+      ? FEATURED_MOBILE : FEATURED_DESKTOP;
+  }
+  var featuredShown = -1;
   function renderFeatured() {
     var el = document.getElementById("featuredProjects");
     if (!el) return;
-    el.innerHTML = PROJECTS.filter(function (p) { return p.featured; }).slice(0, 6).map(projectCard).join("");
+    var limit = featuredLimit();
+    featuredShown = limit;
+    el.innerHTML = PROJECTS.filter(function (p) { return p.featured; }).slice(0, limit).map(projectCard).join("");
+  }
+
+  // أعِد الرسم فقط عند عبور نقطة الفصل — لا عند كل حركة تدوير أو تغيير ارتفاع.
+  function watchFeaturedBreakpoint() {
+    if (!document.getElementById("featuredProjects")) return;
+    window.addEventListener("resize", function () {
+      if (featuredLimit() !== featuredShown) renderFeatured();
+    });
   }
 
   function renderNews() {
@@ -506,6 +525,7 @@
     wireContactLinks();
     setYear();
     initReveal();
+    watchFeaturedBreakpoint();
 
     // فلاتر المشاريع
     ["filterCity", "filterType", "filterStatus"].forEach(function (id) {
