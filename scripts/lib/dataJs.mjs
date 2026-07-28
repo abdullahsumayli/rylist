@@ -91,10 +91,15 @@ function flatContact(contact) {
   };
 }
 
+// data.js عام يحمّله كل زائر، فلا يخرج فيه رابط بروشور إطلاقًا. البروشور يُطلب
+// عبر واتساب ولا يُنزَّل، والزر يقرّره details.brochure_on_request لا الرابط.
+const withoutBrochure = (projects) =>
+  (projects || []).map(({ brochure_url, ...rest }) => rest);
+
 export function writeDataJs(out, c) {
   const tax = taxIndex(c.taxonomies);
   const raw = {
-    locales: c.locales, taxonomies: c.taxonomies, projects: c.projects,
+    locales: c.locales, taxonomies: c.taxonomies, projects: withoutBrochure(c.projects),
     news: c.news, partners: c.partners, stats: c.stats, contact: c.contact, social: c.social,
   };
   const body =
