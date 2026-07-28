@@ -161,8 +161,80 @@
   function renderInto(id, html) { var el = document.getElementById(id); if (el) el.innerHTML = html; }
 
   function currentFilters() {
-    function v(id) { var el = document.getElementById(id); return el ? el.value : "all"; }
+    function v(id) {
+      var row = document.getElementById(id);
+      if (!row) return "all";
+      var on = row.querySelector('[aria-selected="true"]');
+      return on ? on.getAttribute("data-val") : "all";     // صف مخفي/فارغ = بلا تصفية
+    }
     return { city: v("filterCity"), type: v("filterType"), status: v("filterStatus") };
+  }
+
+  /* يضبط حبّة فعّالة في صف، ويحفظ الاختيار في data-cur ليصمد عبر إعادة الرسم */
+  function setFilter(rowId, val) {
+    var row = document.getElementById(rowId);
+    if (!row) return;
+    row.setAttribute("data-cur", val);
+    var btns = row.querySelectorAll(".chip");
+    for (var i = 0; i < btns.length; i++) {
+      var on = btns[i].getAttribute("data-val") === val;
+      btns[i].classList.toggle("chip--on", on);
+      btns[i].setAttribute("aria-selected", on ? "true" : "false");
+    }
+  }
+
+  /* صفّا النوع والحالة يُبنيان من البيانات: يكبران تلقائيًا عند إضافة فلل أو
+     مشروع مباع، ويختفيان ما دامت القيمة واحدة (حبّة واحدة ليست تصفية). */
+  function renderFilterRow(rowId, key, labelFor) {
+    var row = document.getElementById(rowId);
+    if (!row) return;
+    var keys = [], first = {};
+    for (var i = 0; i < PROJECTS.length; i++) {
+      var k = PROJECTS[i][key];
+      if (!k || first[k]) continue;
+      first[k] = PROJECTS[i]; keys.push(k);
+    }
+    if (keys.length < 2) { row.hidden = true; row.innerHTML = ""; return; }
+    row.hidden = false;
+    var cur = row.getAttribute("data-cur") || "all";
+    row.innerHTML = ["all"].concat(keys).map(function (k) {
+      var on = k === cur;
+      return '<button type="button" class="chip chip--sm' + (on ? " chip--on" : "") + '"' +
+        ' role="tab" aria-selected="' + (on ? "true" : "false") + '" data-val="' + esc(k) + '">' +
+        esc(k === "all" ? t("allLabel") : labelFor(first[k])) + '</button>';
+    }).join("");
+  }
+
+  function renderFilterRows() {
+    renderFilterRow("filterType", "type", function (p) { return L(p.typeAr, p.typeEn, p.typeZh); });
+    renderFilterRow("filterStatus", "status", function (p) {
+      var k = (p.status === "sold" || p.status === "reserved" || p.status === "soon") ? p.status : "available";
+      return t(k);
+    });
+  }
+
+  /* replaceState لا pushState: التصفية ليست تنقّلًا، وزر الرجوع يجب أن يغادر
+     الصفحة لا أن يتراجع خطوة في الفلاتر. */
+  function syncUrl() {
+    var f = currentFilters(), q = [];
+    if (f.city !== "all") q.push("city=" + encodeURIComponent(f.city));
+    if (f.type !== "all") q.push("type=" + encodeURIComponent(f.type));
+    if (f.status !== "all") q.push("status=" + encodeURIComponent(f.status));
+    history.replaceState(null, "", location.pathname + (q.length ? "?" + q.join("&") : ""));
+  }
+
+  function initFilterTabs() {
+    ["filterCity", "filterType", "filterStatus"].forEach(function (id) {
+      var row = document.getElementById(id);
+      if (!row) return;
+      row.addEventListener("click", function (e) {
+        var btn = e.target.closest(".chip");
+        if (!btn || !row.contains(btn)) return;
+        setFilter(id, btn.getAttribute("data-val"));
+        syncUrl();
+        renderProjectsPage();
+      });
+    });
   }
 
   function filteredProjects() {
@@ -198,9 +270,13 @@
     [["city", "filterCity"], ["type", "filterType"], ["status", "filterStatus"]].forEach(function (pair) {
       var val = q.get(pair[0]);
       if (!val) return;
-      var el = document.getElementById(pair[1]);
-      // لا نضبط إلا قيمة موجودة فعلًا في القائمة (يمنع فلترًا فارغًا من رابط خاطئ)
-      if (el && Array.prototype.some.call(el.options, function (o) { return o.value === val; })) el.value = val;
+      var row = document.getElementById(pair[1]);
+      if (!row) return;
+      // لا نضبط إلا قيمة لها حبّة فعلًا (يمنع فلترًا فارغًا من رابط خاطئ)
+      var btns = row.querySelectorAll(".chip");
+      for (var i = 0; i < btns.length; i++) {
+        if (btns[i].getAttribute("data-val") === val) { setFilter(pair[1], val); return; }
+      }
     });
   }
 
@@ -514,6 +590,7 @@
 
   /* ----- إعادة الرسم عند تبديل اللغة ----- */
   function renderDynamic() {
+    renderFilterRows();
     renderFeatured();
     renderProjectsPage();
     renderNews();
@@ -542,6 +619,7 @@
   }
 
   function boot() {
+    renderFilterRows();     // تبني حبوب النوع والحالة
     initFiltersFromUrl();   // قبل أول رسم حتى تُطبَّق الفلاتر القادمة من الرابط
     renderFeatured();
     renderProjectsPage();
@@ -559,10 +637,7 @@
     watchFeaturedBreakpoint();
 
     // فلاتر المشاريع
-    ["filterCity", "filterType", "filterStatus"].forEach(function (id) {
-      var el = document.getElementById(id);
-      if (el) el.addEventListener("change", renderProjectsPage);
-    });
+    initFilterTabs();
 
     document.addEventListener("langchange", function () {
       renderDynamic();
