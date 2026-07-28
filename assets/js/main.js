@@ -28,7 +28,8 @@
     // مدينة مختارة بلا مشاريع بعد — رسالة «قريبًا» بدل «لا توجد نتائج»
     soonCity: { ar: "مشاريعنا في هذه المدينة قريبًا. تواصل معنا ونرشّح لك الأنسب.", en: "Our projects in this city are coming soon. Get in touch and we’ll suggest the best fit.", zh: "我们在该城市的项目即将推出。请联系我们，我们会为您推荐最合适的选择。" },
     contactUs: { ar: "تواصل معنا", en: "Contact us", zh: "联系我们" },
-    count: { ar: "مشروع", en: "projects", zh: "个项目" }
+    count: { ar: "مشروع", en: "projects", zh: "个项目" },
+    allLabel: { ar: "الكل", en: "All", zh: "全部" }
   };
   function t(k) { return L(T[k].ar, T[k].en, T[k].zh); }
 
@@ -59,6 +60,38 @@
     if (isNaN(d.getTime())) return "";               // guard against "Invalid Date"
     try { return d.toLocaleDateString(L("ar-SA", "en-GB", "zh-CN"), { year: "numeric", month: "short", day: "numeric" }); }
     catch (e) { return iso; }
+  }
+
+  /* ----- أيقونات البطاقة (سطرية، بلا طلبات شبكة) ----- */
+  var ICON_PIN = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>';
+  var ICON_BED = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 18V7m0 6h18v5M7 11a2 2 0 1 0 0-.01M11 13h10V9a2 2 0 0 0-2-2h-8z"/></svg>';
+  var ICON_AREA = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M9 4v16M4 9h16"/></svg>';
+
+  /* شرائح البطاقة — كل شريحة تُحذف إذا كان حقلها فارغًا (لا «—») */
+  function chipsFor(p) {
+    var out = [];
+    var stKey = (p.status === "sold" || p.status === "reserved" || p.status === "soon") ? p.status : "available";
+    out.push({ cls: "pcard__chip--" + stKey, icon: "", text: t(stKey) });
+
+    var type = L(p.typeAr, p.typeEn, p.typeZh);
+    if (type) out.push({ cls: "", icon: "", text: type });
+
+    if (p.bedsMax > 0) {
+      var beds = p.bedsMin === p.bedsMax ? String(p.bedsMin) : p.bedsMin + "–" + p.bedsMax;
+      out.push({ cls: "", icon: ICON_BED, text: beds + " " + t("beds") });
+    }
+    if (p.area) out.push({ cls: "", icon: ICON_AREA, text: p.area + " " + t("area") });
+    return out;
+  }
+
+  /* السعر على البطاقة = الحدّ الأدنى فقط. المدى الكامل يلتفّ سطرين داخل التراكب
+     الضيّق على الجوّال؛ المدى يبقى معروضًا في صفحة تفاصيل المشروع.
+     ترتيب الكلمات يختلف بين اللغات («يبدأ من X» مقابل «X 起») فلا يصلح مفتاح T واحد. */
+  function fmtPriceFrom(min, max) {
+    var lo = min || max;
+    if (!lo) return t("priceOnRequest");
+    var n = Number(lo).toLocaleString("en-US");
+    return L("يبدأ من " + n + " ريال", "From SAR " + n, n + " 里亚尔起");
   }
 
   /* ----- بطاقة مشروع ----- */
