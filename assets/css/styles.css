@@ -388,39 +388,11 @@ html[lang="ar"] .badge { font-family: var(--font-ar-body); letter-spacing: 0; te
 .pfeatures, .plocation { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--sp-2) var(--sp-6); }
 .pfeatures li, .plocation li { position: relative; padding-inline-start: 1.4em; color: var(--text-dark); line-height: 1.7; }
 .pfeatures li::before, .plocation li::before { content: "◆"; position: absolute; inset-inline-start: 0; top: 0.35em; color: var(--champagne); font-size: 0.7em; }
-.project-card__body { padding: clamp(1.1rem, 2vw, 1.5rem); display: flex; flex-direction: column; gap: var(--sp-3); flex: 1; }
-.project-card__loc { font-size: 0.8rem; color: var(--text-mid); display: flex; align-items: center; gap: 0.4rem; }
-.project-card__title { font-size: 1.35rem; }
-.project-card__type { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-deep); }
-html[lang="ar"] .project-card__type { font-family: var(--font-ar-body); letter-spacing: 0; text-transform: none; font-size: 0.8rem; }
-.sold {
-  margin-top: var(--sp-1);
-}
-.sold__bar { height: 4px; background: var(--bg-soft); border-radius: 2px; overflow: hidden; }
-.sold__fill { height: 100%; background: var(--champagne); border-radius: 2px; }
-.sold__label { display: flex; justify-content: space-between; font-size: 0.76rem; color: var(--text-mid); margin-bottom: 0.4rem; }
-.sold__label b { color: var(--gold-deep); font-weight: 600; }
-.project-card__foot {
-  margin-top: auto; padding-top: var(--sp-3); border-top: 1px solid var(--line);
-  display: flex; align-items: flex-end; justify-content: space-between; gap: var(--sp-3);
-}
-.project-card__price { line-height: 1.2; }
-.project-card__price b { font-family: var(--font-en-display); font-size: 1.35rem; font-weight: 500; }
-html[lang="ar"] .project-card__price b { font-family: var(--font-ar-display); }
-.project-card__price span { display: block; font-size: 0.72rem; color: var(--text-mid); }
-.project-card__meta { display: flex; gap: var(--sp-4); font-size: 0.78rem; color: var(--text-mid); flex-wrap: wrap; }
-.project-card__code { font-family: var(--font-mono); font-size: 0.66rem; color: var(--text-mid); letter-spacing: 0.06em; }
 .link-arrow { color: var(--ink); font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.4rem; border-bottom: 1px solid var(--champagne); padding-bottom: 2px; transition: gap .2s; }
 .link-arrow:hover { gap: 0.7rem; }
 
 /* ----- 13. الفلترة ------------------------------------------------------ */
 .filters { display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: center; margin-bottom: clamp(1.5rem,3vw,2.5rem); }
-.filters select {
-  padding: 0.65em 1em; background: var(--white); border: 1px solid var(--line-strong); border-radius: var(--radius);
-  font-size: 0.9rem;
-}
-.filters__count { margin-inline-start: auto; font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-mid); }
-html[lang="ar"] .filters__count { font-family: var(--font-ar-body); }
 /* تُحقن داخل شبكة (grid-3) فلولا امتدادها لكل الأعمدة لانحشرت في عمود واحد */
 .empty-state { grid-column: 1 / -1; padding: var(--sp-16) 0; text-align: center; color: var(--text-mid); }
 

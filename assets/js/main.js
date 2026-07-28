@@ -19,10 +19,8 @@
     soon: { ar: "قريبًا", en: "Soon", zh: "即将推出" },
     priceOnRequest: { ar: "السعر عند الطلب", en: "Price on request", zh: "价格面议" },
     soldPct: { ar: "مباع", en: "Sold", zh: "已售" },
-    view: { ar: "شاهد التفاصيل", en: "View details", zh: "查看详情" },
     beds: { ar: "غرف", en: "beds", zh: "卧室" },
     area: { ar: "م²", en: "m²", zh: "㎡" },
-    code: { ar: "كود", en: "Code", zh: "编号" },
     readMore: { ar: "اقرأ المزيد", en: "Read more", zh: "阅读更多" },
     none: { ar: "لا توجد مشاريع مطابقة للفلاتر الحالية.", en: "No projects match the current filters.", zh: "没有符合当前筛选条件的项目。" },
     // مدينة مختارة بلا مشاريع بعد — رسالة «قريبًا» بدل «لا توجد نتائج»
@@ -37,21 +35,6 @@
 
   function waLink(text) {
     return "https://wa.me/" + CONTACT.whatsapp + "?text=" + encodeURIComponent(text);
-  }
-
-  function fmtPrice(min, max) {
-    if (!min && !max) return t("priceOnRequest");
-    var lo = min || max, hi = max || min;
-    function f(x) { return Number(x).toLocaleString("en-US"); }
-    var range = lo === hi ? f(lo) : f(lo) + " – " + f(hi);
-    return L(range + " ريال", "SAR " + range, range + " 里亚尔");
-  }
-
-  function fmtMeta(p) {
-    var parts = [];
-    if (p.area) parts.push(p.area + " " + t("area"));
-    if (p.bedsMax > 0) parts.push((p.bedsMin === p.bedsMax ? String(p.bedsMin) : p.bedsMin + "–" + p.bedsMax) + " " + t("beds"));
-    return parts.join(" · ");
   }
 
   function localeDate(iso) {
