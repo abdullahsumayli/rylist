@@ -437,14 +437,14 @@ html[lang="ar"] .stat__num { font-family: var(--font-ar-display); }
 /* ----- 15. شركاء النجاح ------------------------------------------------- */
 /* شريط الشركاء: شعارات حقيقية فقط، مركزية، ملوّنة وظاهرة دائمًا */
 .partners-logos { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 1.5rem 1.75rem; margin-top: var(--sp-5); }
-/* صندوق واحد بمقاس ثابت لكل شعار: بلا هذا يصطدم الشعار العريض (ريبورتاج 420×81)
-   بحدّ العرض بينما يصطدم الباقي بحدّ الارتفاع، فيطلع بضعف حجمهم. box-sizing
-   يُدخل حشوة اللوحة الليلية داخل الصندوق فيبقى الصفّ بنفس العرض في الوضعين. */
-.partner-logo {
-  display: inline-flex; align-items: center; justify-content: center;
-  box-sizing: border-box; width: clamp(90px, 11vw, 148px); height: 54px;
+/* توحيد بالارتفاع فقط والعرض طبيعي: نسب الشعارات الستة متقاربة (1.35–2.37)
+   فتتوازن بصريًا بلا صندوق ثابت. الصندوق الثابت كان يترك فراغًا حول الشعارات
+   القريبة من المربّع فتبدو صغيرة داخله، وتتضخّم لوحة الوضع الليلي حولها.
+   max-width احتياط لو أُضيف لاحقًا شعار مفرط في العرض. */
+.partner-logo { display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; }
+.partner-logo img {
+  height: clamp(40px, 4.4vw, 64px); width: auto; max-width: 200px; object-fit: contain;
 }
-.partner-logo img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
 
 /* ----- 16. الأخبار / الرؤى ---------------------------------------------- */
 .article-card { display: flex; flex-direction: column; gap: var(--sp-3); }
