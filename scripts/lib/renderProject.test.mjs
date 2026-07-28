@@ -204,6 +204,16 @@ test("brochure button is localised and omitted when there is no brochure", () =>
   assert.match(html, /استفسر عبر واتساب/);   // primary CTA still there
 });
 
+test("the price line uses each page's own currency word", () => {
+  const base = { base: "https://rylist.sa", tax: stubTax, contact: { whatsapp: "966500000000" } };
+  const price = (loc) => renderProjectHtml(TMPL, sampleProject, { ...base, loc, dir: loc === "ar" ? "rtl" : "ltr" })
+    .match(/pdetail__price">([^<]*)/)[1];
+  assert.match(price("ar"), /ريال$/);
+  assert.match(price("en"), /SAR$/);
+  assert.match(price("zh"), /里亚尔$/);       // لا تتسرّب «ريال» العربية لصفحة صينية
+  assert.doesNotMatch(price("zh"), /[؀-ۿ]/);
+});
+
 test("a brochure kept off the public site still shows the request button", () => {
   // نجد ٧: البروشور موجود عند الفريق لكنه لا يُنشر، فلا يوجد brochure_url.
   const onRequest = {
