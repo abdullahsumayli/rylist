@@ -440,6 +440,16 @@ html[lang="ar"] .article-card__date { font-family: var(--font-ar-body); }
 /* ----- 16b. شارة معاينة المسودة (article.html?preview=1) ---------------- */
 .preview-flag { position: sticky; top: 0; z-index: 5; text-align: center; background: var(--gold-deep); color: #fff; font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.06em; padding: 0.5rem 1rem; }
 html[lang="ar"] .preview-flag { font-family: var(--font-ar-body); letter-spacing: 0; }
+.preview-flag.is-gap { background: #9a3412; }
+
+/* شريط معاينة اللغات — راجع المقال بالثلاث لغات قبل النشر */
+.preview-langs { position: sticky; top: 2rem; z-index: 5; display: flex; align-items: center; justify-content: center; gap: 0.4rem; flex-wrap: wrap; background: var(--gold-deep); padding: 0 1rem 0.55rem; }
+.preview-langs__label { color: #fff; font-size: 0.78rem; opacity: 0.85; margin-inline-end: 0.2rem; }
+.preview-langs button { border: 1px solid rgba(255,255,255,0.45); background: transparent; color: #fff; border-radius: 999px; padding: 0.24rem 0.8rem; font-size: 0.8rem; font-weight: 600; cursor: pointer; line-height: 1.6; }
+.preview-langs button:hover { background: rgba(255,255,255,0.16); }
+.preview-langs button.on { background: #fff; color: var(--gold-deep); border-color: #fff; }
+.preview-langs button.is-gap::after { content: " ✗"; opacity: 0.9; }
+.preview-langs button.on.is-gap { color: #9a3412; }
 
 /* ----- 17. شريط CTA ----------------------------------------------------- */
 .cta-band { text-align: center; }

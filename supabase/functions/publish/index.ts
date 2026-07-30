@@ -2,8 +2,10 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { chunkForTranslation } from "./chunk.mjs";
 
 // نشر الموقع: (١) ترجمة تلقائية للحقول الناقصة في الأخبار، ثم (٢) إطلاق بناء Vercel.
+// ولها إجراء ثانٍ: {action:"translate", id} — ترجمة مقال واحد عند الطلب من المحرّر،
+// قبل النشر، حتى يراجع صاحب الموقع المقال بالثلاث لغات قبل أن يخرج للناس.
 //
-// الترجمة التلقائية:
+// الترجمة التلقائية (عند نشر الموقع) شبكة أمان لما فات، والبوابة الحقيقية في المحرّر.
 //   - تشتغل قبل إطلاق البناء، فينشر الموقع بالمحتوى المكتمل.
 //   - تملأ فقط اللغات الفاضية (العنوان/النص) — لا تدوس على شيء مكتوب (بشري أو سابق).
 //   - تُحفظ في قاعدة البيانات، فتصير قابلة للتعديل من الأدمن وتُترجم مرة واحدة فقط.
@@ -26,6 +28,7 @@ const CHUNK_CHARS = 1800;                // سقف طول القطعة الوا�
 const MAX_CONCURRENT = 8;                // طلبات الترجمة المتزامنة
 const MAX_REQUESTS = 90;                 // سقف أمان لعدد الطلبات في النشرة الواحدة
 const TRANSLATE_BUDGET_MS = 105_000;     // ميزانية مرحلة الترجمة — بعدها ننشر بالمتوفّر
+const ONE_BUDGET_MS = 130_000;           // ميزانية ترجمة مقال واحد (لا بناء بعدها، فالسقف أوسع)
 const REQUEST_TIMEOUT_MS = 45_000;       // سقف كل طلب ترجمة على حدة
 const HOOK_TIMEOUT_MS = 15_000;          // سقف طلب إطلاق البناء
 
@@ -150,6 +153,40 @@ async function translateRow(
   return { done, pending: jobs.length - done };
 }
 
+// اللغات المطلوبة قبل النشر، والحقول التي يجب أن تكتمل في كلٍّ منها.
+function missingLocales(i18n: I18n, codes: string[]): string[] {
+  return codes.filter((c) =>
+    FIELDS.some((f) => !String((i18n?.[f] || {})[c] || "").trim())
+  );
+}
+
+// ترجمة مقال واحد بعينه (أي حالة: مسودة أو منشور) — يستدعيها محرّر الأدمن قبل النشر
+// حتى يراجع صاحب الموقع المقال بالثلاث لغات قبل أن يخرج للناس.
+async function translateOne(id: string): Promise<
+  { ok: true; i18n: I18n; translated: number; pending: number; missing: string[] } | { ok: false; error: string }
+> {
+  const key = Deno.env.get("OPENROUTER_API_KEY");
+  if (!key) return { ok: false, error: "OPENROUTER_API_KEY غير مضبوط" };
+  const service = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+  const model = Deno.env.get("TRANSLATE_MODEL") || Deno.env.get("OPENROUTER_MODEL") || "qwen/qwen3.7-plus";
+
+  const { data: locs } = await service.from("locales").select("code").eq("enabled", true);
+  const codes = (locs || []).map((l: { code: string }) => l.code).filter((c: string) => LANG[c]);
+  const { data: row, error } = await service.from("news").select("id,i18n").eq("id", id).maybeSingle();
+  if (error) return { ok: false, error: error.message };
+  if (!row) return { ok: false, error: "المقال غير موجود" };
+
+  const deadline = Date.now() + ONE_BUDGET_MS;
+  const limit = makeLimiter(MAX_CONCURRENT);
+  const budget = { requests: MAX_REQUESTS };
+  const r = await translateRow(service, row as { id: string; i18n: I18n }, codes, key, model, deadline, limit, budget);
+
+  // نعيد قراءة الصف بعد الكتابة حتى يستلم المحرّر النص كما استقر فعلًا في القاعدة.
+  const { data: fresh } = await service.from("news").select("i18n").eq("id", id).maybeSingle();
+  const i18n = (fresh?.i18n || {}) as I18n;
+  return { ok: true, i18n, translated: r.done, pending: r.pending, missing: missingLocales(i18n, codes) };
+}
+
 // يملأ لغات الأخبار الناقصة عبر الترجمة، ويكتبها في قاعدة البيانات، ضمن ميزانية زمنية.
 async function autoTranslateNews(): Promise<{ translated: number; pending: number }> {
   const key = Deno.env.get("OPENROUTER_API_KEY");
@@ -189,6 +226,15 @@ Deno.serve(async (req) => {
   const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_ANON_KEY")!, { global: { headers: { Authorization: auth } } });
   const { data: isAdmin } = await sb.rpc("is_admin");
   if (isAdmin !== true) return json({ error: "unauthorized" }, 401);
+
+  // ترجمة مقال واحد عند الطلب من المحرّر — تُستدعى قبل النشر، ولا تبني الموقع.
+  let payload: { action?: string; id?: string } = {};
+  try { payload = await req.json(); } catch { /* لا جسم للطلب = نشر الموقع كالعادة */ }
+  if (payload?.action === "translate") {
+    if (!payload.id) return json({ error: "id مطلوب" }, 400);
+    const r = await translateOne(payload.id);
+    return r.ok ? json(r) : json({ error: r.error }, 500);
+  }
 
   const hook = Deno.env.get("VERCEL_DEPLOY_HOOK");
   if (!hook) return json({ error: "deploy hook not set" }, 500);

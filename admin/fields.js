@@ -3,6 +3,7 @@ import { LOCALES } from "./config.js";
 import { makeSlug } from "./slug.js";
 import { richEditor } from "./richeditor.js";
 import { checkImageSpec } from "./imageSpec.js";
+import { localeGaps, gapsSentence } from "./i18nStatus.js";
 
 // taxonomy cache (cities / property types) for select fields
 let TAX = null;
@@ -106,6 +107,11 @@ export async function renderForm(root, ent, row, onDone) {
   if (hasI18n) draft.i18n = draft.i18n || {};
   else delete draft.i18n;
 
+  // مقابض حقول اللغات — نحتاجها لنكتب فيها الترجمة الراجعة من الخادم ويشوفها المحرّر فورًا
+  const i18nTabs = {};
+  // يُضبط بعد بناء شريط الحفظ؛ يُستدعى مع كل حرف يكتبه المستخدم ليحدّث مؤشّر اكتمال اللغات
+  let onDraftChange = () => {};
+
   for (const f of ent.fields) {
     const isI18n = f.t.startsWith("i18n-");
     const field = document.createElement("div"); field.className = "field" + (isI18n ? " full" : "");
@@ -116,7 +122,8 @@ export async function renderForm(root, ent, row, onDone) {
       const key = f.n.split(".")[1];
       draft.i18n[key] = draft.i18n[key] || {}; // linked object (so tab-switch keeps typed text on new rows)
       const value = draft.i18n[key];
-      const tabs = localeTabs(f, value, (loc, val) => { value[loc] = val; });
+      const tabs = localeTabs(f, value, (loc, val) => { value[loc] = val; onDraftChange(); });
+      i18nTabs[key] = { tabs, label: f.l || key };
       field.appendChild(tabs.el);
     } else if (f.t === "bool") {
       label.style.flexDirection = "row"; label.style.alignItems = "center"; label.style.gap = "8px";
@@ -192,19 +199,99 @@ export async function renderForm(root, ent, row, onDone) {
     draft.slug = makeSlug(title);
   };
 
-  const persist = () => draft[pk]
-    ? sb.from(ent.table).update(draft).eq(pk, draft[pk])
-    : sb.from(ent.table).insert(draft);
+  // يُرجع الصف المحفوظ حتى يلتقط المقال الجديد مفتاحه — الترجمة تحتاج id فعليًا في القاعدة.
+  const persist = async () => {
+    const res = await (draft[pk]
+      ? sb.from(ent.table).update(draft).eq(pk, draft[pk]).select().maybeSingle()
+      : sb.from(ent.table).insert(draft).select().maybeSingle());
+    if (!res.error && res.data && res.data[pk] != null) draft[pk] = res.data[pk];
+    return res;
+  };
 
   const savebar = document.createElement("div"); savebar.className = "savebar";
   const back = document.createElement("button"); back.className = "btn"; back.type = "button"; back.textContent = "رجوع";
   back.onclick = done;
 
   if (ent.workflow === "draft") {
-    // مسودة / معاينة / نشر — للمدونة: راجِع ثم انشر
+    // مسودة / ترجمة / معاينة / نشر — للمدونة: ترجم، راجِع بالثلاث لغات، ثم انشر
     const publishBtn = document.createElement("button"); publishBtn.className = "btn btn-primary"; publishBtn.type = "button"; publishBtn.textContent = "نشر";
     const draftBtn = document.createElement("button"); draftBtn.className = "btn"; draftBtn.type = "button"; draftBtn.textContent = "حفظ كمسودة";
     const previewBtn = document.createElement("button"); previewBtn.className = "btn"; previewBtn.type = "button"; previewBtn.textContent = "معاينة";
+    const transBtn = document.createElement("button"); transBtn.className = "btn"; transBtn.type = "button"; transBtn.textContent = "ترجم اللغات الناقصة";
+
+    const i18nKeys = ent.fields.filter((f) => f.t.startsWith("i18n-"))
+      .map((f) => ({ key: f.n.split(".")[1], label: f.l || f.n.split(".")[1] }));
+    const codes = LOCALES.map((L) => L.code);
+    const LANG_AR = { ar: "العربي", en: "الإنجليزي", zh: "الصيني" };
+
+    // مؤشّر حيّ لاكتمال اللغات — يتحدّث مع كل حرف، فما يفاجئك المنع عند الضغط على «نشر»
+    const langbar = document.createElement("div"); langbar.className = "langstatus";
+    const gapsNow = () => localeGaps(draft.i18n, i18nKeys, codes);
+    const refreshStatus = () => {
+      const gaps = gapsNow();
+      langbar.innerHTML = "";
+      for (const L of LOCALES) {
+        const ok = !gaps[L.code];
+        const chip = document.createElement("span");
+        chip.className = "langchip " + (ok ? "is-ok" : "is-gap");
+        chip.textContent = (ok ? "✓ " : "✗ ") + (LANG_AR[L.code] || L.code);
+        if (!ok) chip.title = "ناقص: " + gaps[L.code].join(" و");
+        langbar.appendChild(chip);
+      }
+      const ready = !Object.keys(gaps).length;
+      publishBtn.classList.toggle("is-blocked", !ready);
+      publishBtn.title = ready ? "" : "المقال لا يُنشر إلا مترجمًا بالثلاث لغات";
+      transBtn.hidden = ready;
+    };
+    onDraftChange = refreshStatus;
+
+    // يكتب الترجمة الراجعة في حقول المحرّر نفسها، فتصير قابلة للمراجعة والتعديل
+    const applyI18n = (incoming) => {
+      for (const { key } of i18nKeys) {
+        const src = incoming && incoming[key];
+        if (!src) continue;
+        for (const code of codes) {
+          const val = src[code];
+          if (typeof val !== "string" || !val.trim()) continue;
+          if (i18nTabs[key]) i18nTabs[key].tabs.setText(code, val);
+          else { draft.i18n[key] = draft.i18n[key] || {}; draft.i18n[key][code] = val; }
+        }
+      }
+    };
+
+    const busy = (on, label) => {
+      [publishBtn, draftBtn, previewBtn, transBtn, back].forEach((b) => { b.disabled = on; });
+      transBtn.textContent = on ? label : "ترجم اللغات الناقصة";
+    };
+
+    transBtn.onclick = async () => {
+      if (!requireFields()) return;
+      ensureSlug();
+      if (!String(draft.status || "").trim()) draft.status = "draft";
+      busy(true, "جارٍ الحفظ…");
+      const saved = await persist();
+      if (saved.error) { busy(false); alert("تعذّر الحفظ قبل الترجمة: " + saved.error.message); return; }
+      if (!draft[pk]) { busy(false); alert("تعذّر حفظ المقال قبل الترجمة."); return; }
+      busy(true, "جارٍ الترجمة… قد تأخذ دقيقة");
+      try {
+        const { data: { session } } = await sb.auth.getSession();
+        const res = await sb.functions.invoke("publish", {
+          body: { action: "translate", id: draft[pk] },
+          headers: { Authorization: `Bearer ${session?.access_token}` },
+        });
+        if (res.error) throw new Error(res.error.message);
+        if (res.data?.error) throw new Error(res.data.error);
+        applyI18n(res.data?.i18n || {});
+        refreshStatus();
+        const gaps = gapsNow();
+        alert(Object.keys(gaps).length
+          ? "تُرجم جزء وبقي: " + gapsSentence(gaps, LANG_AR) + "\nاضغط «ترجم» مرة ثانية لإكمال الباقي."
+          : "اكتملت الترجمة بالثلاث لغات ✓\nافتح «معاينة» وراجعها بالعربي والإنجليزي والصيني قبل النشر.");
+      } catch (e) {
+        alert("تعذّرت الترجمة: " + (e?.message || e));
+      }
+      busy(false);
+    };
 
     draftBtn.onclick = async () => {
       if (!requireFields()) return;
@@ -229,6 +316,13 @@ export async function renderForm(root, ent, row, onDone) {
 
     publishBtn.onclick = async () => {
       if (!requireFields()) return;
+      // البوابة: ما يخرج مقال للناس ناقص لغة — لا بالعربي وحده ولا بعنوان مترجم ونص عربي
+      const gaps = gapsNow();
+      if (Object.keys(gaps).length) {
+        alert("لا يمكن النشر — المقال ناقص: " + gapsSentence(gaps, LANG_AR)
+          + "\n\nاضغط «ترجم اللغات الناقصة»، ثم راجعه من «معاينة» بالثلاث لغات، وبعدها انشر.");
+        return;
+      }
       ensureSlug(); draft.status = "published";
       if (!String(draft.published_at || "").trim()) draft.published_at = new Date().toISOString();
       publishBtn.disabled = true; publishBtn.textContent = "جارٍ النشر…";
@@ -246,7 +340,8 @@ export async function renderForm(root, ent, row, onDone) {
       done();
     };
 
-    savebar.append(publishBtn, draftBtn, previewBtn, back);
+    savebar.append(langbar, publishBtn, transBtn, draftBtn, previewBtn, back);
+    refreshStatus();
   } else {
     const save = document.createElement("button"); save.className = "btn btn-primary"; save.type = "button"; save.textContent = "حفظ";
     save.onclick = async () => {

@@ -350,8 +350,13 @@
     try { var raw = localStorage.getItem("rylist:news-preview"); if (raw) p = JSON.parse(raw); } catch (e) { p = null; }
     var loc = lang();
     var i18n = (p && p.i18n) || {};
-    var title = (i18n.title && (i18n.title[loc] || i18n.title.ar)) || "";
-    var body = (i18n.body && (i18n.body[loc] || i18n.body.ar)) || "";
+    // المعاينة تقول الصدق: لو اللغة ناقصة نعرض العربي بدلها ونقولها صراحةً،
+    // حتى لا يُنشر مقال ظنًّا أنه مترجَم وهو يعرض العربي احتياطيًّا.
+    var gaps = [];
+    var title = (i18n.title && i18n.title[loc]) || "";
+    var body = (i18n.body && i18n.body[loc]) || "";
+    if (!String(title).trim()) { gaps.push(L("العنوان", "title", "标题")); title = (i18n.title && i18n.title.ar) || ""; }
+    if (!plainText(body)) { gaps.push(L("النص", "body", "正文")); body = (i18n.body && i18n.body.ar) || ""; }
     var img = (p && p.image_url) || "";
     var date = localeDate(((p && p.published_at) || "").slice(0, 10));
     var back = L("عودة إلى المدونة", "Back to blog", "返回博客");
@@ -366,7 +371,40 @@
       '<div class="pdetail__desc adetail__body">' + formatBody(body, title) + '</div>' +
       '<div class="btn-row"><a class="btn btn--primary" href="news.html">' + back + '</a></div>';
     var flag = document.getElementById("previewFlag");
-    if (flag) { flag.textContent = L("معاينة · مسودة (لم تُنشر بعد)", "Preview · draft (not published)", "预览 · 草稿（尚未发布）"); flag.hidden = false; }
+    if (flag) {
+      var base = L("معاينة · مسودة (لم تُنشر بعد)", "Preview · draft (not published)", "预览 · 草稿（尚未发布）");
+      flag.textContent = gaps.length
+        ? base + " · " + L("هذه اللغة ناقصة (" + gaps.join(" و") + ") — المعروض عربي",
+                           "this language is missing its " + gaps.join(" and ") + " — showing Arabic",
+                           "该语言缺少" + gaps.join("和") + "——显示阿拉伯语")
+        : base;
+      flag.classList.toggle("is-gap", gaps.length > 0);
+      flag.hidden = false;
+    }
+    initPreviewLangs(loc, i18n);
+  }
+
+  // نص مجرّد من الوسوم — <p><br></p> فاضية لا مكتوبة
+  function plainText(html) {
+    return String(html == null ? "" : html).replace(/<[^>]*>/g, " ")
+      .replace(/&nbsp;/gi, " ").replace(/\s+/g, " ").trim();
+  }
+
+  // أزرار المعاينة بالثلاث لغات — تبديلها يعيد رسم المقال عبر حدث langchange
+  function initPreviewLangs(loc, i18n) {
+    var bar = document.getElementById("previewLangs");
+    if (!bar) return;
+    bar.hidden = false;
+    bar.querySelectorAll("[data-preview-lang]").forEach(function (btn) {
+      var code = btn.getAttribute("data-preview-lang");
+      var ready = String((i18n.title && i18n.title[code]) || "").trim() && plainText(i18n.body && i18n.body[code]);
+      btn.classList.toggle("on", code === loc);
+      btn.classList.toggle("is-gap", !ready);
+      btn.title = ready ? "" : "هذه اللغة ناقصة";
+      btn.onclick = function () {
+        if (window.RYLIST && window.RYLIST.setLang) window.RYLIST.setLang(code);
+      };
+    });
   }
 
   function renderPartners() {

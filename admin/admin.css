@@ -232,7 +232,16 @@
   .langtabs{display:flex;gap:4px;margin-bottom:2px}
   .langtabs button{padding:5px 13px;border-radius:7px;font-size:12.5px;font-weight:600;color:var(--text-2);border:1px solid transparent}
   .langtabs button.on{background:var(--text);color:var(--surface)}
-  .savebar{grid-column:1/-1;display:flex;gap:10px;justify-content:flex-start;padding-top:6px;border-top:1px solid var(--line);margin-top:4px}
+  .savebar{grid-column:1/-1;display:flex;gap:10px;justify-content:flex-start;align-items:center;flex-wrap:wrap;padding-top:6px;border-top:1px solid var(--line);margin-top:4px}
+
+  /* اكتمال اللغات — يخبرك قبل الضغط لماذا «نشر» ممنوع */
+  .langstatus{display:flex;gap:6px;align-items:center;margin-inline-end:4px}
+  .langchip{display:inline-flex;align-items:center;padding:5px 10px;border-radius:999px;
+    font-size:12px;font-weight:700;border:1px solid var(--line);white-space:nowrap}
+  .langchip.is-ok{color:#127a3e;border-color:#bfe3cd;background:#eefaf2}
+  .langchip.is-gap{color:#9a3412;border-color:#f0cdb4;background:#fdf3ec}
+  .btn.is-blocked{opacity:.55}
+  .btn.is-blocked:hover{filter:none}
 
   /* ===== publish (نشر) ===== */
   .pub-callout{max-width:560px;background:var(--surface);border:2px solid var(--line);
