@@ -53,10 +53,15 @@ export function renderPublish(root){
     btn.disabled = false; label("حاول مرة ثانية");
   };
 
+  // كم ترجمة بقيت ناقصة في آخر عملية نشر (تُكمَّل تلقائيًا في النشرة الجاية).
+  let pending = 0;
+
   const done = () => {
     stopTimer(); setState("ok");
     fill.style.width = "100%";
-    msg.textContent = "✅ تم نشر الموقع بنجاح! لمشاهدة التغييرات افتح الموقع وحدّث الصفحة.";
+    msg.textContent = pending > 0
+      ? "✅ تم نشر الموقع! باقي بعض الترجمات للإنجليزي/الصيني — اضغط «نشر» مرة ثانية بعد شوي وتكتمل."
+      : "✅ تم نشر الموقع بنجاح! لمشاهدة التغييرات افتح الموقع وحدّث الصفحة.";
     const open = document.createElement("a");
     open.className = "pub-open";
     open.textContent = "افتح الموقع ↗";
@@ -81,17 +86,35 @@ export function renderPublish(root){
     timer = setInterval(tick, 1000);
   };
 
+  // قبل البناء، الدالة تترجم اللغات الناقصة — وهذي تأخذ وقتًا. بدون عدّاد يظهر
+  // الزر كأنه معلّق، فيضغط الناس مرة بعد مرة ويظنّون أن النشر ما اشتغل.
+  const runPrep = () => {
+    setState("busy");
+    const start = Date.now();
+    const tick = () => {
+      const elapsed = Math.floor((Date.now() - start) / 1000);
+      fill.style.width = "6%";
+      msg.textContent = `جارٍ تجهيز المحتوى وترجمة اللغات الناقصة… (${elapsed} ثانية) — لا تغلق الصفحة.`;
+    };
+    tick();
+    timer = setInterval(tick, 1000);
+  };
+
   btn.onclick = async () => {
     stopTimer();
     btn.disabled = true; label(MAIN_LABEL);
     panel.hidden = false; setState("busy");
     fill.style.width = "0%";
+    pending = 0;
     msg.textContent = "جارٍ إطلاق النشر…";
     try {
       const { data: { session } } = await sb.auth.getSession();
       if(!session){ showError("انتهت جلسة الدخول. سجّل الدخول من جديد ثم أعد المحاولة."); return; }
+      runPrep();
       const res = await sb.functions.invoke("publish", { headers:{ Authorization:`Bearer ${session.access_token}` } });
+      stopTimer();
       if(res.error){ showError("تعذّر إطلاق النشر: " + res.error.message); return; }
+      pending = Number(res.data?.pendingTranslations) || 0;
       runProgress();
     } catch (e) {
       showError("حدث خطأ غير متوقّع: " + (e?.message || e));
