@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { chunkForTranslation } from "./chunk.mjs";
 
 // نشر الموقع: (١) ترجمة تلقائية للحقول الناقصة في الأخبار، ثم (٢) إطلاق بناء Vercel.
 //
@@ -10,22 +11,39 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 //   - لو المفتاح غير مضبوط أو فشلت الترجمة، تُتخطّى بهدوء والنشر يكمل عادي.
 //
 // الترجمة لا توقف النشر أبدًا:
-//   Edge Function عمرها ١٥٠ ثانية. مقال طويل واحد ممكن يستهلكها كلها، فتموت الدالة
-//   قبل ما تطلق بناء Vercel — يعني المقال ينحفظ «منشور» في القاعدة ولا يظهر على الموقع.
-//   لذلك: للترجمة ميزانية زمنية صارمة، وكل مقال يُترجَم بالتوازي ويُحفظ لحاله (فالتقدّم
-//   الجزئي ما يضيع)، وإطلاق البناء يصير دائمًا بعدها مهما كان الباقي.
+//   Edge Function عمرها ١٥٠ ثانية. فللترجمة ميزانية زمنية صارمة، وإطلاق البناء
+//   يصير دائمًا بعدها مهما كان الباقي — وإلا انحفظ المقال «منشورًا» ولا ظهر أبدًا.
+//
+// النص يُترجَم على قطع:
+//   نص المقال يوصل ١٠ آلاف حرف؛ ترجمته بطلب واحد تتجاوز الدقيقة فتُلغى، وهذا اللي
+//   خلّى العناوين تُترجَم والنصوص لا. الحل: قطع ≤١٨٠٠ حرف تُترجَم بالتوازي ثم تُلصق.
+//   القطع تنتهي عند حدود عناصر HTML العليا فقط (انظر chunk.mjs)، وحقل النص كله
+//   إما ينجح كاملًا أو يُترك للنشرة الجاية — لا نكتب نصًا نصفه عربي ونصفه مترجم.
 
 const LANG: Record<string, string> = { ar: "Arabic", en: "English", zh: "Chinese" };
 const FIELDS = ["title", "body"];        // الحقول المترجَمة (المقتطف يُشتق من النص تلقائيًا)
-const MAX_TRANSLATIONS = 24;             // سقف أمان لكل عملية نشر (يمنع التعليق)
-const TRANSLATE_BUDGET_MS = 90_000;      // ميزانية مرحلة الترجمة — بعدها ننشر بالمتوفّر
-const REQUEST_TIMEOUT_MS = 60_000;       // سقف كل طلب ترجمة على حدة
-const ROW_CONCURRENCY = 3;               // كم مقال يُترجَم بالتوازي
+const CHUNK_CHARS = 1800;                // سقف طول القطعة الواحدة
+const MAX_CONCURRENT = 8;                // طلبات الترجمة المتزامنة
+const MAX_REQUESTS = 90;                 // سقف أمان لعدد الطلبات في النشرة الواحدة
+const TRANSLATE_BUDGET_MS = 105_000;     // ميزانية مرحلة الترجمة — بعدها ننشر بالمتوفّر
+const REQUEST_TIMEOUT_MS = 45_000;       // سقف كل طلب ترجمة على حدة
 const HOOK_TIMEOUT_MS = 15_000;          // سقف طلب إطلاق البناء
 
 type I18n = Record<string, Record<string, string>>;
 
-async function translate(
+// منظّم تزامن بسيط: يشغّل MAX_CONCURRENT طلبًا كحد أقصى في اللحظة الواحدة.
+function makeLimiter(max: number) {
+  let active = 0;
+  const queue: (() => void)[] = [];
+  const release = () => { active--; queue.shift()?.(); };
+  return async <T>(run: () => Promise<T>): Promise<T> => {
+    if (active >= max) await new Promise<void>((r) => queue.push(r));
+    active++;
+    try { return await run(); } finally { release(); }
+  };
+}
+
+async function translateChunk(
   text: string, src: string, tgt: string, key: string, model: string, deadline: number,
 ): Promise<string> {
   const srcName = LANG[src] || src, tgtName = LANG[tgt] || tgt;
@@ -47,6 +65,9 @@ async function translate(
         { role: "system", content:
           `You are a professional translator for a Saudi real-estate company's website. `
           + `Translate the user's text from ${srcName} to ${tgtName}. `
+          + `The text may be an HTML fragment taken from the middle of a longer article: keep every `
+          + `HTML tag, attribute and URL byte-for-byte as given, and translate only the human-readable `
+          + `text between tags. Do not add, remove or reorder markup, and never wrap the output in code fences. `
           + `Preserve the exact paragraph and line-break structure. Translate Saudi place and project `
           + `names naturally and keep numbers and years. Do not add, remove, explain, or comment — `
           + `output ONLY the translated text.` },
@@ -59,6 +80,27 @@ async function translate(
   const out = data?.choices?.[0]?.message?.content?.trim();
   if (!out) throw new Error("empty translation");
   return out;
+}
+
+// يترجم حقلًا كاملًا (عنوان أو نص) على قطع متوازية. كله أو لا شيء.
+async function translateField(
+  text: string, src: string, tgt: string, key: string, model: string,
+  deadline: number, limit: ReturnType<typeof makeLimiter>, budget: { requests: number },
+): Promise<string> {
+  const chunks = chunkForTranslation(text, CHUNK_CHARS);
+  if (!chunks.length) throw new Error("nothing to translate");
+  if (budget.requests < chunks.length) throw new Error("request budget exhausted");
+  budget.requests -= chunks.length;
+
+  const out = await Promise.all(chunks.map((c: string) => limit(async () => {
+    try {
+      return await translateChunk(c, src, tgt, key, model, deadline);
+    } catch (e) {
+      if (Date.now() >= deadline) throw e;          // ما بقي وقت لإعادة المحاولة
+      return await translateChunk(c, src, tgt, key, model, deadline);   // محاولة ثانية
+    }
+  })));
+  return out.join("");
 }
 
 // يختار لغة مصدر فيها محتوى لهذا الحقل (يفضّل العربي ثم الإنجليزي).
@@ -74,11 +116,11 @@ function pickSource(field: Record<string, unknown>, tgt: string, codes: string[]
 async function translateRow(
   // deno-lint-ignore no-explicit-any
   service: any, row: { id: string; i18n: I18n }, codes: string[],
-  key: string, model: string, deadline: number, quota: { left: number },
+  key: string, model: string, deadline: number,
+  limit: ReturnType<typeof makeLimiter>, budget: { requests: number },
 ): Promise<{ done: number; pending: number }> {
   const i18n: I18n = row.i18n || {};
   const jobs: Promise<number>[] = [];
-  let pending = 0;
 
   for (const field of FIELDS) {
     const obj = { ...(i18n[field] || {}) };
@@ -87,11 +129,9 @@ async function translateRow(
       if (typeof obj[tgt] === "string" && obj[tgt].trim()) continue;   // موجود — لا نترجم
       const src = pickSource(obj, tgt, codes);
       if (!src) continue;                                              // لا مصدر — لا شيء نترجمه
-      if (quota.left <= 0) { pending++; continue; }                    // تجاوزنا سقف العملية
-      quota.left--;
       jobs.push((async () => {
         try {
-          obj[tgt] = await translate(obj[src], src, tgt, key, model, deadline);
+          obj[tgt] = await translateField(obj[src], src, tgt, key, model, deadline, limit, budget);
           return 1;
         } catch (e) {
           console.error("[publish] translate failed", row.id, field, tgt, String(e));
@@ -101,13 +141,13 @@ async function translateRow(
     }
   }
 
-  if (!jobs.length) return { done: 0, pending };
+  if (!jobs.length) return { done: 0, pending: 0 };
   const done = (await Promise.all(jobs)).reduce((a, b) => a + b, 0);
   if (done > 0) {
     const { error } = await service.from("news").update({ i18n }).eq("id", row.id);
     if (error) console.error("[publish] write-back failed", row.id, error.message);
   }
-  return { done, pending: pending + (jobs.length - done) };
+  return { done, pending: jobs.length - done };
 }
 
 // يملأ لغات الأخبار الناقصة عبر الترجمة، ويكتبها في قاعدة البيانات، ضمن ميزانية زمنية.
@@ -122,24 +162,17 @@ async function autoTranslateNews(): Promise<{ translated: number; pending: numbe
   const codes = (locs || []).map((l: { code: string }) => l.code).filter((c: string) => LANG[c]);
   const { data: rows } = await service.from("news").select("id,i18n").eq("status", "published");
 
-  const queue = [...((rows || []) as { id: string; i18n: I18n }[])];
-  const quota = { left: MAX_TRANSLATIONS };
-  let translated = 0, pending = 0;
-
-  const worker = async () => {
-    for (;;) {
-      const row = queue.shift();
-      if (!row) return;
-      if (Date.now() >= deadline) {                 // نفدت الميزانية — الباقي للنشرة الجاية
-        pending += FIELDS.length * codes.length;
-        continue;
-      }
-      const r = await translateRow(service, row, codes, key, model, deadline, quota);
-      translated += r.done; pending += r.pending;
-    }
+  // القطع تتزاحم على منظّم تزامن واحد، فالمقالات كلها تُعالَج معًا بلا إغراق للمزوّد.
+  const limit = makeLimiter(MAX_CONCURRENT);
+  const budget = { requests: MAX_REQUESTS };
+  const results = await Promise.all(
+    ((rows || []) as { id: string; i18n: I18n }[])
+      .map((row) => translateRow(service, row, codes, key, model, deadline, limit, budget)),
+  );
+  return {
+    translated: results.reduce((a, r) => a + r.done, 0),
+    pending: results.reduce((a, r) => a + r.pending, 0),
   };
-  await Promise.all(Array.from({ length: Math.min(ROW_CONCURRENCY, queue.length) }, worker));
-  return { translated, pending };
 }
 
 Deno.serve(async (req) => {
