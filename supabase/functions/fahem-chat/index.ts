@@ -10,6 +10,7 @@
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { faqBlock, fewShot } from "./knowledge.ts";
+import { foundLine } from "./countedNoun.mjs";
 
 const DEFAULT_MODEL = "qwen/qwen3.7-plus"; // يُبدّل بالسر OPENROUTER_MODEL.
 const MAX_TURNS = 40; // سقف طول السجل الوارد (حماية إساءة).
@@ -171,6 +172,14 @@ function systemPrompt(lang: Lang, facts: Facts): string {
 
 HOW YOU WRITE (a real person, not a chatbot):
 NEVER use an em dash (—) or a Chinese dash (——) anywhere in your reply. Use a comma, a full stop, or a colon instead. Vary your sentence length; do not fall into a uniform, balanced rhythm. Skip marketing filler and grand three-part lists ("واضح وسريع وموثوق"). Say the thing once, plainly, the way a person texts.
+
+COUNTING IN ARABIC (a native speaker never gets this wrong, and it is the fastest way to sound like a bot):
+When you count things in Arabic, write the number as a WORD and match the noun to it. Never write "2 مشاريع" or "3 شقق".
+- one: مشروع واحد · شقة وحدة
+- two: use the DUAL, never the digit: مشروعين، شقتين، غرفتين، خيارين
+- three to ten: spell the number out and use the plural. "مشروع" is masculine so its number takes the ta: ثلاثة مشاريع، أربعة مشاريع، خمسة مشاريع. "شقة" is feminine so its number drops it: ثلاث شقق، أربع شقق، خمس شقق.
+- Match the verb too: مشروع واحد يناسبك · مشروعين يناسبانك · ثلاثة مشاريع تناسبك.
+KEEP real digits exactly as they are for prices, areas, room ranges, years and phone numbers (820,000 ريال · 147 م² · 2026 · 0501234567). This rule is only about counting things in a sentence.
 
 WHO YOU ARE: this matters more than anything below:
 You are NOT a search engine and NOT a salesman. You are a trusted advisor who first BUILDS A RELATIONSHIP and UNDERSTANDS the person, and only then helps them find the right property. A pushy bot that dumps listings and asks for a phone number is exactly what you must NEVER be. Take your time. Be human. Make the person feel they're talking to someone who genuinely cares, not a form with a chat skin.
@@ -368,16 +377,7 @@ Deno.serve(async (req) => {
     // 3) حقائق المخزون تُحقن في البرومبت وتغني نتيجة البحث الفارغة (صدق بلا اختراع).
     const facts = await inventoryFacts(admin, lang);
     const cityStr = joinList(facts.cities, lang) || (lang === "ar" ? "الرياض" : lang === "zh" ? "利雅得" : "Riyadh");
-    const foundMsg = (n: number) =>
-      lang === "ar"
-        ? n === 1
-          ? `أبشر! لقيت لك مشروعًا يناسب طلبك في ${cityStr}:`
-          : `أبشر! هذي ${n} مشاريع تناسب طلبك في ${cityStr}:`
-        : lang === "zh"
-          ? n === 1
-            ? `好的！我在${cityStr}为您找到一个符合需求的项目：`
-            : `好的！这是${cityStr}符合您需求的 ${n} 个项目：`
-          : `Here ${n > 1 ? "are" : "is"} ${n} matching project${n > 1 ? "s" : ""} in ${cityStr}:`;
+    const foundMsg = (n: number) => foundLine(n, cityStr, lang);
     const noMatchMsg =
       lang === "ar"
         ? "ما لقيت مطابق تمامًا لطلبك، جرّب نطاق ميزانية أوسع أو نوع ثاني."
