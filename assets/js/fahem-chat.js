@@ -6,6 +6,7 @@
    - نفس منطق edge (fahem-chat) والتقاط العميل في جدول leads بمصدر chat.
    ========================================================================== */
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { esc, renderMessage } from "./fahemMarkdown.js";
 
 // نفس القيم العامة المستخدمة في assets/js/public.js و admin/config.js.
 const SUPABASE_URL = "https://ghtcwsbtyvczlznviojj.supabase.co";
@@ -30,10 +31,6 @@ const T = {
   },
 };
 const tr = (k) => T[k][lang()] || T[k].en;
-
-function esc(s) {
-  return String(s == null ? "" : s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-}
 
 function fmtPrice(min, max) {
   if (!min && !max) return tr("priceOnRequest");
@@ -171,9 +168,11 @@ function setLoading(v) {
 
 /* ----- الرسم ----- */
 function bubble(role, content) {
+  // ماركداون النموذج يُحوَّل في ردّه فقط؛ رسالة المستخدم تبقى نصًّا حرفيًا كما كتبها.
+  const body = role === "assistant" ? renderMessage(content) : esc(content);
   return (
     '<div class="fahem-row fahem-row--' + role + '">' +
-    '<div class="fahem-bubble fahem-bubble--' + role + '">' + esc(content) + "</div></div>"
+    '<div class="fahem-bubble fahem-bubble--' + role + '">' + body + "</div></div>"
   );
 }
 
