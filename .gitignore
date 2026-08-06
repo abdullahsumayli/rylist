@@ -24,3 +24,6 @@ Thumbs.db
 
 # إعدادات Claude المحلية — خاصة بالجهاز، وتحتوي أوامر مسموحة فيها مفاتيح مضمّنة
 .claude/settings.local.json
+
+# مخلّفات Supabase CLI (حالة ربط محلية، تتولّد من جديد)
+supabase/.temp/
