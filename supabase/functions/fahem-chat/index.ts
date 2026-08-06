@@ -486,6 +486,14 @@ Deno.serve(async (req) => {
         content:
           "The current user is writing in ENGLISH. You MUST reply ONLY in natural, warm, fluent English, NEVER in Arabic. Never transliterate Arabic words: do NOT write 'Absher', 'ya hala', 'inshallah', 'habibi', etc., use natural English ('Of course!', 'Welcome!', 'Great choice!'). Keep the person's NAME exactly as they wrote it, never translate or Arabize it (e.g. 'Moayad' stays 'Moayad'). Keep project names, districts, and prices EXACTLY as the tool returns them. GUARD (applies here too): do NOT ask for the user's name or phone number, and NEVER claim they asked to visit or to be contacted, UNLESS they themselves explicitly asked to move forward in THIS conversation. If they only asked a question or described what they want, end with a warm question, never with a request for contact details.",
       });
+    // العربي كان بلا تذكير ختامي أصلًا، وهو المسار الأكثر استخدامًا. بدونه لا شيء
+    // يعيد تأكيد الحارس بعد الأمثلة، فأول تحية كانت تُقابَل بطلب جوال وزيارة مخترعة.
+    else
+      messages.push({
+        role: "system",
+        content:
+          "GUARD, re-read before you answer: do NOT ask for the person's name or phone number, and NEVER say you'll arrange a visit, a tour, or a callback, UNLESS they themselves asked to move forward in THIS conversation (asked to visit, asked to be called, said they're ready). A greeting or telling you their name is NOT such a request: greet them back warmly and ask one gentle question about what they're looking for. Never treat a name they volunteered as permission to ask for a number. If they haven't asked for anything yet, end your turn with conversation, never with a request for contact details.",
+      });
 
     // 4) حلقة الأدوات, لو فشل الذكاء نرجع fallback الحتمي بدل خطأ عام.
     //    البطاقات تظهر فقط لما الموديل يستدعي search_inventory (بعد ما يفهم العميل).

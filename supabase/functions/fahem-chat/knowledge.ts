@@ -108,7 +108,7 @@ export function fewShot(lang: Lang): { role: "user" | "assistant"; content: stri
     // الالتقاط مغطّى بالحارس + كشف الجوال الحتمي.
     return en.slice(0, -2);
   }
-  return [
+  const ar: { role: "user" | "assistant"; content: string }[] = [
     { role: "user", content: "أبغى شقة" },
     {
       role: "assistant",
@@ -152,4 +152,9 @@ export function fewShot(lang: Lang): { role: "user" | "assistant"; content: stri
         "يا هلا وسهلا فيك! خلّني أرتّب لك الزيارة مع فريق مبيعات rylist. اكتب لي اسمك ورقم جوالك هنا وأوصّلها لهم على طول، ويتصلون عليك ويرتّبون الموعد اللي يناسبك.",
     },
   ];
+  // نفس علّة الإنجليزي والصيني، وكانت باقية في العربي وحده: مثال الإغلاق
+  // (زيارة ← اطلب الجوال) هو أقرب مثال للمحادثة الحقيقية فيقلّده الموديل على
+  // أول تحية، فيطلب الجوال ويخترع زيارة لم تُطلب. الالتقاط لا يحتاجه أصلًا:
+  // يغطيه الحارس في البرومبت + كشف الجوال الحتمي في index.ts.
+  return ar.slice(0, -2);
 }
