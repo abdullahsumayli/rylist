@@ -359,7 +359,7 @@
     if (!plainText(body)) { gaps.push(L("النص", "body", "正文")); body = (i18n.body && i18n.body.ar) || ""; }
     var img = (p && p.image_url) || "";
     var date = localeDate(((p && p.published_at) || "").slice(0, 10));
-    var back = L("عودة إلى المدونة", "Back to blog", "返回博客");
+    var back = L("عودة إلى مركز المعرفة", "Back to Knowledge Center", "返回知识中心");
     if (title) document.title = title + " · " + L("معاينة", "Preview", "预览");
     view.innerHTML = '' +
       '<a class="pdetail__back" href="news.html">← RYLIST</a>' +

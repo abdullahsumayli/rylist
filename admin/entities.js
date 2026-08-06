@@ -23,7 +23,7 @@ export const ENTITIES = [
     {n:"property_status",t:"select",l:"حالة العقار",options:["","clear","mortgaged","disputed"]},
     {n:"i18n.developer",t:"i18n-text",l:"المطوّر"},
     {n:"developer_license",t:"text",l:"رقم ترخيص المطوّر"} ]},
-  { key:"news", label:"المدونة", table:"news", order:"published_at", title:"i18n.title",
+  { key:"news", label:"مركز المعرفة", table:"news", order:"published_at", title:"i18n.title",
     workflow:"draft", slugFrom:"i18n.title", fields:[
     {n:"i18n.title",t:"i18n-text",l:"العنوان"},
     {n:"image_url",t:"image",l:"الصورة"},
@@ -133,7 +133,7 @@ export const ENTITIES = [
     {n:"i18n.nav_projects",t:"i18n-text",l:"القائمة — المشاريع"},
     {n:"i18n.nav_services",t:"i18n-text",l:"القائمة — الخدمات"},
     {n:"i18n.nav_about",t:"i18n-text",l:"القائمة — من نحن"},
-    {n:"i18n.nav_news",t:"i18n-text",l:"القائمة — المدونة"},
+    {n:"i18n.nav_news",t:"i18n-text",l:"القائمة — مركز المعرفة"},
     {n:"i18n.nav_contact",t:"i18n-text",l:"القائمة — تواصل"},
     {n:"i18n.nav_cta",t:"i18n-text",l:"القائمة — زر الاستشارة"},
     {n:"i18n.topbar_city",t:"i18n-text",l:"الشريط العلوي — المدينة"},

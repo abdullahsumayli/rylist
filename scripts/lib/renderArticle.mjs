@@ -6,7 +6,7 @@ import { tr, fill, FAHEM, fahemHref } from "./renderProject.mjs";
 import { excerptFrom } from "./dataJs.mjs";
 import { sanitizeHtml } from "./sanitizeHtml.mjs";
 
-const BACK = { ar: "عودة إلى المدونة", en: "Back to blog", zh: "返回博客" };
+const BACK = { ar: "عودة إلى مركز المعرفة", en: "Back to Knowledge Center", zh: "返回知识中心" };
 
 // Localized date, matching the card's localeDate() in main.js.
 export function fmtDate(iso, loc) {
