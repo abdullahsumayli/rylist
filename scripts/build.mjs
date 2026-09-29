@@ -1,5 +1,6 @@
 import fs from "node:fs"; import path from "node:path";
 import { fetchContent } from "./lib/fetchContent.mjs";
+import { mirrorMedia } from "./lib/mirrorMedia.mjs";
 import { writeDataJs } from "./lib/dataJs.mjs";
 import { renderPages } from "./lib/renderPages.mjs";
 import { renderProjectPages } from "./lib/projectPages.mjs";
@@ -10,7 +11,8 @@ const OUT = "dist";
 const SITE = process.env.SITE_URL || "https://rylist.sa";
 
 async function main(){
-  const c = await fetchContent();
+  // الوسائط تُنسخ إلى المستودع وتُعاد كتابة روابطها **قبل** نسخ assets إلى dist
+  const c = await mirrorMedia(await fetchContent());
   fs.rmSync(OUT, { recursive:true, force:true }); fs.mkdirSync(OUT, { recursive:true });
   // انسخ الأصول الثابتة
   // article.html = صفحة معاينة المسودة (noindex) — تُنسخ كما هي؛ المقالات المنشورة لها صفحات ثابتة عبر renderNewsPages
